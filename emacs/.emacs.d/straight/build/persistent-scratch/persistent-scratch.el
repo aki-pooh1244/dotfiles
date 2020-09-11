@@ -1,0 +1,1 @@
+/Users/iwata/.emacs.d/straight/repos/persistent-scratch/persistent-scratch.el

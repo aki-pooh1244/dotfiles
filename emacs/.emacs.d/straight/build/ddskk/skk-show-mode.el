@@ -1,0 +1,1 @@
+/Users/iwata/.emacs.d/straight/repos/ddskk/skk-show-mode.el

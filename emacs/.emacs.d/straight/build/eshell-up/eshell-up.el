@@ -1,0 +1,1 @@
+/Users/iwata/.emacs.d/straight/repos/eshell-up/eshell-up.el

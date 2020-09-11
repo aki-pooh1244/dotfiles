@@ -1,0 +1,1 @@
+/Users/iwata/.emacs.d/straight/repos/expand-region.el/subword-mode-expansions.el

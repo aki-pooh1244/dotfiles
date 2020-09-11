@@ -1,0 +1,1 @@
+/Users/iwata/.emacs.d/straight/repos/pretty-mode/pretty-mode.el

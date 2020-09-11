@@ -1,0 +1,1 @@
+/Users/iwata/.emacs.d/straight/repos/treemacs/src/extra/treemacs-icons-dired.el

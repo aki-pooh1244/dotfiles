@@ -1,0 +1,1 @@
+/Users/iwata/.emacs.d/straight/repos/eshell-z/eshell-z.el
