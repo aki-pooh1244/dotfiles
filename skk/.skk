@@ -1,0 +1,48 @@
+(setq skk-use-azik t)
+;; (setq skk-sticky-key )
+(setq skk-egg-like-newline t)
+(setq skk-jisyo-code 'utf-8)
+(setq skk-large-jisyo "~/Library/Application Support/AquaSKK/SKK-JISYO.L")
+(setq skk-server-host "localhost")
+(setq skk-server-portnum 1178)
+(setq skk-share-private-jisyo t)
+(setq skk-latin-mode-string "[_A]")
+(setq skk-hiragana-mode-string "[あ]")
+(setq skk-katakana-mode-string "[ア]")
+(setq skk-jisx0208-latin-mode-string "[A]")
+(setq skk-jisx0201-mode-string "[_ｱ]")
+(setq skk-abbrev-mode-string "[aA]")
+(setq skk-status-indicator 'left)
+(setq skk-dcomp-activate t)
+(setq skk-dcomp-multiple-activate nil)
+(setq skk-dcompmultiple-rows 10)
+(setq skk-use-look t)
+(setq skk-auto-insert-paren t)
+(setq skk-henkan-strict-okuri-precedence t)
+(setq skk-kuten-touten-alist
+      '(
+        (jp    . ("。" . "、"))
+        (jp-en . ("。" . ", "))
+        (en-jp . ("．" . "，"))
+        (en    . (". " . ", "))))
+(setq-default skk-kutouten-type 'en)
+(setq skk-rom-kana-rule-list
+      (append skk-rom-kana-rule-list
+              '(("!" nil "!")
+                (":" nil ":")
+                (";" nil ";")
+                ("?" nil "?")
+                ("z " nil "　")
+                ("\\" nil "\\")
+                ("@" nil "@")
+                )))
+(setq skk-show-inline 'vertical)
+(add-hook 'skk-mode-hook
+          (lambda ()
+            (and (skk-in-minibuffer-p)
+               (skk-mode-exit))))
+(setq skk-isearch-start-mode 'latin)
+
+(use-package ddskk-posframe
+  :hook
+  (skk-mode . ddskk-posframe-mode))

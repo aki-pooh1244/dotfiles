@@ -1,0 +1,1 @@
+/Users/iwata/.emacs.d/straight/repos/treemacs/src/scripts/treemacs-dirs-to-collapse.py

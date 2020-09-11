@@ -1,0 +1,9 @@
+latexmk -pvc equations.tex
+latexmk -pvc equation.tex
+ls
+la
+ls
+..
+q
+ls
+latexmk -pvc hotspot_paper_pop_ver2.4_comment_revise_ver1.0.tex 

@@ -1,0 +1,1 @@
+/Users/iwata/.emacs.d/straight/repos/math-symbol-lists/math-symbol-lists.el

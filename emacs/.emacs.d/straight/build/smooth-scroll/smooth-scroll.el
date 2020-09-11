@@ -1,0 +1,1 @@
+/Users/iwata/.emacs.d/straight/repos/smooth-scroll.el/smooth-scroll.el
