@@ -1,1 +1,0 @@
-/Users/iwata/.emacs.d/straight/repos/ddskk/skk-dcomp.el

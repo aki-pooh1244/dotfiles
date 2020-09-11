@@ -1,1 +1,0 @@
-/Users/iwata/.emacs.d/straight/repos/elscreen/elscreen-color-theme.el

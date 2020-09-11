@@ -1,1 +1,0 @@
-/Users/iwata/.emacs.d/straight/repos/auctex/style/mn2e.el

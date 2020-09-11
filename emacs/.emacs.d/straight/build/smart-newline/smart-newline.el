@@ -1,1 +1,0 @@
-/Users/iwata/.emacs.d/straight/repos/smart-newline.el/smart-newline.el
