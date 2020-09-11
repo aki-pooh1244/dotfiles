@@ -1,1 +1,0 @@
-/Users/iwata/.emacs.d/straight/repos/esh-autosuggest/esh-autosuggest.el

@@ -1,1 +1,0 @@
-/Users/iwata/.emacs.d/straight/repos/auctex/doc/preview-latex.texi
