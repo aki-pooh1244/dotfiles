@@ -4,7 +4,7 @@ This repositry is my own setup files (dotfiles).
 curl https://git.io/fisher --create-dirs -sLo ~/.config/fish/functions/fisher.fish
 
 * fish pulgin
-#+BEGIN_SOURCE bash
+#+BEGIN_SOURCE
 0rax/fish-bd
 decors/fish-ghq
 franciscolourenco/done
