@@ -1,3 +1,9 @@
 #ignore /emacs/.emacs.d/straight
 /straight/*
 *~
+#ignore fish file
+/completions/*
+/conf.d/*
+/functions/*
+fish_variables
+fishfile
