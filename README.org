@@ -1,1 +1,10 @@
 This repositry is my own setup files (dotfiles).
+
+fish pulgin
+
+0rax/fish-bd
+decors/fish-ghq
+franciscolourenco/done
+Gazorby/fish-abbreviation-tips
+jethrokuan/fzf
+jethrokuan/z
