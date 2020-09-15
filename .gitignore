@@ -1,0 +1,20 @@
+#ignore /emacs/.emacs.d/straight
+/emacs/.emacs.d/straight/
+/emacs/.emacs.d/auto-save-list/
+/emacs/.emacs.d/var/
+/emacs/.emacs.d/url/cache/
+.mc-list.el
+.DS_Store
+.recentf
+recentf
+smex-items
+*\~
+#ignore fish file
+/fish/
+/fish/.config/fish/completions/
+/fish/.confi/fish/conf.d/
+/fish/.config/fish/functions/
+fish_variables
+fishfile
+filepos_history
+search_history

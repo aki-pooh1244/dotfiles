@@ -1,0 +1,13 @@
+This repositry is my own setup files (dotfiles).
+
+* fisher install 
+curl https://git.io/fisher --create-dirs -sLo ~/.config/fish/functions/fisher.fish
+
+* fish pulgin
+
+0rax/fish-bd
+decors/fish-ghq
+franciscolourenco/done
+Gazorby/fish-abbreviation-tips
+jethrokuan/fzf
+jethrokuan/z
