@@ -10,9 +10,8 @@ recentf
 smex-items
 *\~
 #ignore fish file
-/fish/
 /fish/.config/fish/completions/
-/fish/.confi/fish/conf.d/
+/fish/.config/fish/conf.d/
 /fish/.config/fish/functions/
 fish_variables
 fishfile
