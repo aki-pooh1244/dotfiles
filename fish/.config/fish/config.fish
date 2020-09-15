@@ -37,7 +37,8 @@ export GOPATH=$HOME/go
 #export PATH=$PATH:$GOPATH/bin
 
 #python anaconda
-export PATH="/anaconda3/bin:$PATH"
+export PATH="/home/aiwata/anaconda3/bin:$PATH"
+
 
 #starship prompt (end line)
 starship init fish | source
