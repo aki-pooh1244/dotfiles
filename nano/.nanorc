@@ -298,4 +298,4 @@ set functioncolor green
 #set multibuffer
 
 ## syntax highlight
-include ".nano/nanorc/*.nanorc"
+include "./.nano/nanorc/*.nanorc"
