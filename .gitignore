@@ -7,3 +7,5 @@
 /functions/*
 fish_variables
 fishfile
+filepos_history
+search_history
