@@ -38,6 +38,7 @@ export GOPATH=$HOME/go
 
 #python anaconda
 export PATH="/home/aiwata/anaconda3/bin:$PATH"
+export PATH="/opt/anaconda3/bin:$PATH"
 
 
 #starship prompt (end line)
