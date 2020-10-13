@@ -1,5 +1,9 @@
 (setq skk-use-azik t)
-;; (setq skk-sticky-key )
+;; (setq skk-rom-kana-rule-list
+;;       (append skk-rom-kana-rule-list
+;;               '(("tt" nil ("ッ" . "っ")))))
+(setq skk-azik-keyboard-type 'us101)
+(setq skk-sticky-key "'")
 (setq skk-egg-like-newline t)
 (setq skk-jisyo-code 'utf-8)
 (setq skk-large-jisyo "~/Library/Application Support/AquaSKK/SKK-JISYO.L")
