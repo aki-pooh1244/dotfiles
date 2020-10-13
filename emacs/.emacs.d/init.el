@@ -37,10 +37,12 @@
  '(anzu-mode-lighter "")
  '(anzu-search-threshold 1000)
  '(company-echo-delay 0 t)
- '(company-idle-delay 0)
- '(company-minimum-prefix-length 1)
+ '(company-idle-delay 0 t)
+ '(company-minimum-prefix-length 1 t)
  '(company-quickhelp-delay 0.8 t)
- '(company-show-numbers t)
+ '(company-show-numbers t t)
+ '(custom-safe-themes
+   '("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default))
  '(inferior-lisp-program "ros -Q run" t)
  '(package-selected-packages
    '(ido-complete-space-or-hyphen crm-custom ido-sort-mtime skk-study helm-swoop company-tabnine company-posframe company-box visual-regexp-steroids zoom-window elscreen-separate-buffer-list projectile company-quickhelp company-math popwin rainbow-delimiters rainbow-mode which-key-posframe use-package quelpa pretty-mode mwim diminish all-the-icons))

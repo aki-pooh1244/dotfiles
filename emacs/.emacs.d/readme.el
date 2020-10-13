@@ -86,9 +86,10 @@
 (delete-selection-mode t)
 (size-indication-mode t)
 (display-line-numbers-mode -1)
-(setq scroll-conservatively 35
+(setq scroll-conservatively 100000
       scroll-margin 0
-      scroll-step 1)
+      scroll-step 1
+  scroll-preserve-screen-position 1)
 
 (setq frame-title-format
       (format "%%f - Emacs@%s" (system-name)))
@@ -100,8 +101,8 @@
 
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
 
-;; (setq show-paren-style 'parethesis)
-;; (show-paren-mode +1)
+(setq show-paren-style 'parethesis)
+(show-paren-mode +1)
 
 (electric-pair-mode +1)
 
@@ -113,18 +114,23 @@
 (add-hook 'prog-mode-hook 'whitespace-mode)
 ;; (global-whitespace-mode +1)
 (setq-default tab-width 4 indent-tabs-mode nil)
+(setq default-tab-width 4)
 (setq vc-follow-symlinks t)
 (setq tab-always-indent 'complete)
 (setq blink-matching-paren nil)
+(setq require-final-newline t)
 
 (use-package crux
   :defer t
   :diminish
   :bind
   ("C-c o" . crux-open-with)
-  ("C-k" . crux-kill-whole-line)
+  ("C-k" . crux-smart-kill-line)
+  ("C-s-RET" . crux-smart-open-line)
+  ("s-RET" . crux-smart-pen-line)
   ("s-j" . crux-top-join-line)
   ("C-<backspace>" . crux-kill-line-backwards)
+  ("C-c d" . crux-duplicate-current-line-or-region)
   ("s-r" . crux-recentf-ido-find-file)
   ("C-c ," . crux-find-user-custom-file)
   ("C-c e" . crux-eval-and-replace)
@@ -187,14 +193,19 @@
   :defer t
   :diminish)
 
+(use-package ibuffer
+  :straight nil
+  :bind
+  ("C-x C-b" . ibuffer-bs-show))
+
 (use-package persistent-scratch
   :defer t
-  :diminish
+  :delight
   :config
   (persistent-scratch-setup-default))
 
 (use-package electric-operator
-  :diminish
+  :delight
   :hook
   (c-mode-hook . electric-operator-mode)
   (c++-mode-hook . electric-operator-mode)
@@ -203,7 +214,7 @@
 
 (use-package aggressive-indent
   :defer t
-  :diminish
+  :delight
   :config
 (global-aggressive-indent-mode 1)
 (add-to-list 'aggressive-indent-excluded-modes 'html-mode))
@@ -223,14 +234,14 @@
   (setq ns-option-modifier (quote super)))
 
 (use-package which-key
-  :diminish
+  :delight
   :hook (after-init . which-key-mode)
   :config
   (use-package which-key-posframe
     :hook (which-key-mode . which-key-posframe-mode)))
 
 (use-package key-chord
-  :diminish
+  :delight
   :hook
   (after-init-hook . key-chord-mode)
   :config
@@ -248,6 +259,7 @@
   (key-chord-define-global "xx" 'execute-extended-command)
   (key-chord-define-global "yy" 'browse-kill-ring)
   (key-chord-define-global "mc" 'mc/mark-all-dwim)
+  (key-chord-define-global "ff" 'dired-sidebar-toggle-sidebar)
   (key-chord-mode +1))
 
 ;; (use-package hydra)
@@ -263,7 +275,7 @@
 ;;   ("M-SPC" . major-mode-hydra))
 
 (use-package prescient
-  :diminish
+  :delight
   :config
   (prescient-persist-mode +1)
   (setq prescient-history-length 1000))
@@ -301,28 +313,31 @@
                            (recentf-save-list)))))
 (use-package recentf-ext
   :defer t
-  :diminish
+  :delight
   :bind
   ("C-c c o" . recentf-open-files))
 
 (use-package super-save
   :defer t
-  :diminish
-  :hook
-  (after-init-hook . super-save-mode)
+  :delight
+  ;; :hook
+  ;; (after-init-hook . super-save-mode)
   :config
+  (add-to-list 'super-save-triggers 'ace-window)
+  (add-to-list 'super-save-triggers 'find-file-hook)
   (setq super-save-auto-save-when-idle t)
+  (setq super-save-remote-files nil)
   (super-save-mode +1))
 (use-package save-place
   :straight nil
   :defer t
-  :diminish
+  :delight
   :config
   (save-place-mode 1))
 (use-package savehist-mode
   :straight nil
   :defer t
-  :diminish
+  :delight
   :config
   (savehist-mode 1)
   (push 'kill-ring savehist-additional-variables)
@@ -330,30 +345,52 @@
 
 (use-package undo-fu
   :defer t
-  :diminish
+  :delight
   :bind
   ("C-/" . undo-fu-only-undo)
   ("M-/" . undo-fu-only-redo))
 (use-package undo-fu-session
   :defer t
-  :diminish
+  :delight
   :hook
   (after-init-hook . undo-fu-session-mode))
 
 (use-package lusty-explorer
+  :disabled t
   :defer t
-  :diminish
+  :delight
   :config
   (lusty-explorer-mode 1))
 (use-package direx
-  :diminish
+  :delight
   :bind
   ("C-x C-j" . direx:jump-to-directory))
 (setq dired-listing-switches "-alh")
 
+(use-package dired-subtree)
+
+(use-package dired-sidebar
+  :defer t
+  :delight
+  :bind ("C-c C-n" . dired-sidebar-toggle-sidebar)
+  :commands (dired-sidebar-toggle-sidebar)
+  :init
+  (add-hook 'dired-sidebar-mode-hook
+            (lambda ()
+              (unless (file-remote-p default-directory)
+                (auto-revert-mode))))
+  :config
+  (push 'toggle-window-split dired-sidebar-toggle-hidden-commands)
+  (push 'rotate-windows dired-sidebar-toggle-hidden-commands)
+
+  (setq dired-sidebar-subtree-line-prefix "__")
+  (setq dired-sidebar-theme 'icons)
+  (setq dired-sidebar-use-term-integration t)
+  (setq dired-sidebar-use-custom-font t))
+
 (use-package peep-dired
   :defer t
-  :diminish
+  :delight
   :bind
   (:map dired-mode-map
         ("P" . peep-dired)))
@@ -482,18 +519,18 @@
 ;;   (ido-mode 1)
 ;;   (ido-everywhere 1)
 ;;   (use-package ido-completing-read+
-;;     :diminish
+;;     :delight
 ;;     :config
 ;;     (ido-ubiquitous-mode t))
 ;;   (use-package ido-vertical-mode
-;;     :diminish
+;;     :delight
 ;;     :config
 ;;     (setq ido-vertical-define-keys 'C-n-C-p-up-down-left-right)
 ;;     (setq ido-vertical-show-count t)
 ;;     (setq ido-use-faces t)
 ;;     (ido-vertical-mode 1))
 ;;   (use-package flx-ido
-;;     :diminish
+;;     :delight
 ;;     :config
 ;;     (flx-ido-mode 1))
 ;;   (use-package amx
@@ -501,7 +538,7 @@
 ;;     ("M-x" . amx))
 ;;   (use-package ido-flex-with-migemo
 ;;     :defer t
-;;     :diminish
+;;     :delight
 ;;     :hook
 ;;     (ido-mode-hook . ido-flex-with-migemo-mode)
 ;;     :config
@@ -518,11 +555,11 @@
 ;;     :config
 ;;     (crm-custom-mode 1))
 ;;   (use-package ido-complete-space-or-hyphen
-;;     :diminish))
+;;     :delight))
 
 ;; (use-package helm
 ;;   :disabled t
-;;   :diminish Helm
+;;   :delight Helm
 ;;   :init
 ;;   (require 'helm-config)
 ;;   :bind
@@ -575,7 +612,7 @@
 
 ;; (use-package helm-smex
 ;;   :defer t
-;;   :diminish
+;;   :delight
 ;;   :bind
 ;;   ("M-x" . helm-smex)
 ;;   ("M-x" . helm-smex-major-mode-commands))
@@ -590,7 +627,7 @@
 ;; (use-package helm-swoop
 ;;   :disabled t
 ;;   :defer t
-;;   :diminish
+;;   :delight
 ;;   :bind
 ;;   (("M-i" . helm-swoop)
 ;;   ("M-I" . helm-swoop-back-to-last-point)
@@ -613,7 +650,7 @@
 ;; (use-package helm-ag
 ;;   :disabled t
 ;;   :defer t
-;;   :diminish
+;;   :delight
 ;;   :bind
 ;;   ("C-M-g" . helm-ag)
 ;;   :config
@@ -623,7 +660,7 @@
 ;; (use-package helm-c-yasnippet
 ;;   :disabled t
 ;;   :defer t
-;;   :diminish
+;;   :delight
 ;;   :bind
 ;;   ("C-c y" . helm-yas-complete)
 ;;   :config
@@ -632,7 +669,7 @@
 ;; (use-package helm-cider
 ;;   :disabled t
 ;;   :defer t
-;;   :diminish
+;;   :delight
 ;;   :config
 ;;   (helm-cider-mode 1))
 
@@ -642,7 +679,7 @@
   :bind
   ("C-c z" . selectrum-repeat))
 (use-package selectrum-prescient
-  :diminish
+  :delight
   :demand t
   :after selectrum
   :config
@@ -655,43 +692,43 @@
   (add-hook 'pdf-isearch-minor-mode-hook (lambda () (ctrlf-local-mode -1))))
 
 (use-package browse-kill-ring
-  :diminish
+  :delight
   :bind
   ("M-y" . browse-kill-ring))
 (use-package easy-kill
-  :diminish
+  :delight
   :bind
   ("M-w" . easy-kill)
   ("C-<SPC>" . easy-mark))
 
-;; (use-package flx-isearch
-;;   :disabled t
-;;   :diminish
-;;   :bind
-;;   ("C-M-s" . flx-isearch-forward)
-;;   ("C-M-r" . flx-isearch-backward))
-;; (use-package isearch-dabbrev
-;;   :disabled t
-;;   :diminish
-;;   :bind
-;;   (:map isearch-mode-map
-;;         ("<tab>" . isearch-dabbrev-expand)))
-;; (use-package swoop
-;;   :disabled t
-;;   :defer t
-;;   :bind
-;;   ("C-o" . swoop)
-;;   ("C-M-o" . swoop-multi)
-;;   ("M-o" . swoop-pcre-regexp)
-;;   ("C-S-o" . swoop-back-to-last-position)
-;;   ("C-M-m" . swoop-migemo)
-;;   :config
-;;   (setq swoop-minibuffer-input-delay 0.4)
-;;   (setq swoop-font-size: 0.8))
+(use-package flx-isearch
+  :disabled t
+  :delight
+  :bind
+  ("C-M-s" . flx-isearch-forward)
+  ("C-M-r" . flx-isearch-backward))
+(use-package isearch-dabbrev
+  :disabled t
+  :delight
+  :bind
+  (:map isearch-mode-map
+        ("<tab>" . isearch-dabbrev-expand)))
+(use-package swoop
+  :disabled t
+  :defer t
+  :bind
+  ("C-o" . swoop)
+  ("C-M-o" . swoop-multi)
+  ("M-o" . swoop-pcre-regexp)
+  ("C-S-o" . swoop-back-to-last-position)
+  ("C-M-m" . swoop-migemo)
+  :config
+  (setq swoop-minibuffer-input-delay 0.4)
+  (setq swoop-font-size: 0.8))
 
 (use-package migemo
-  :defer t
-  :diminish
+  ;; :defer t
+  ;; :delight
   :config
   (setq migemo-command "cmigemo")
   (setq migemo-options '("-q" "--emacs"))
@@ -704,7 +741,7 @@
 (use-package anzu
   :disabled t
   :defer t
-  :diminish
+  :delight
   :config
   (global-anzu-mode +1)
   (custom-set-variables
@@ -713,7 +750,7 @@
 
 (use-package ace-isearch
   :disabled t
-  :diminish
+  :delight
   :config
   (global-ace-isearch-mode +1)
   (setq ace-isearch-jump-delay 0.5)
@@ -724,13 +761,13 @@
 
 (use-package wgrep
   :defer t
-  :diminish
+  :delight
   :config
-  (use-package wgrep-ag :defer t :diminish))
+  (use-package wgrep-ag :defer t :delight))
 
 (use-package ag
   :defer t
-  :diminish
+  :delight
   :bind
   ("M-s a" . ag-project)
   :config
@@ -741,7 +778,7 @@
 (use-package projectile
   :disabled t
   :defer t
-  :diminish proj
+  :delight proj
   :bind
   ("s-p" . projectile-command-map)
   ("C-c p" . projectile-command-map)
@@ -750,7 +787,7 @@
 
 (use-package visual-regexp
   :defer t
-  :diminish
+  :delight
   :bind
   ("C-c r" . vr/replace)
   ("M-%" . vr/query-replace)
@@ -759,13 +796,13 @@
   ("C-c m" . vr/mc-mark)
   :config
   (use-package visual-regexp-steroids
-    :diminish
+    :delight
     :config
     (setq vr/engine 'pcre2el)))       ; If use Python, pcre2el -> python
 
 (use-package multiple-cursors
   :defer t
-  :diminish
+  :delight
   :bind
   (("C-S-l" . mc/edit-lines)
   ("C->" . mc/mark-next-like-this)
@@ -810,13 +847,13 @@
 
 (use-package expand-region
   :defer t
-  :diminish
+  :delight
   :bind
   ("C-=" . er/expand-region))
 
 (use-package avy
   :defer t
-  :diminish
+  :delight
   :bind
   ("C-c C-j" . avy-resume)
   ("C-:" . avy-goto-char)
@@ -828,21 +865,23 @@
   (avy-setup-default))
 (use-package avy-migemo
   :defer t
-  :diminish
+  :delight
   :bind
   ("M-g m m" . avy-migemo-mode)
+  ("C-M-;" . avy-migemo-goto-char-timer)
   :config
-  (avy-migemo-mode 1))
+  (avy-migemo-mode 1)
+  (setq avy-timeout-seconds nil))
 
 (use-package zzz-to-char
   :defer t
-  :diminish
+  :delight
   :bind
   ("M-z" . zzz-up-to-char))
 
 (use-package ace-window
   :defer t
-  :diminish
+  :delight
   :bind
   ("s-w" . ace-window)
   :config
@@ -856,13 +895,13 @@
 
 (use-package beginend
   :defer t
-  :diminish
+  :delight
   :config
   (beginend-global-mode))
 
 (use-package visible-mark
   :defer t
-  :diminish
+  :delight
   :config
   (setq set-mark-command-repeat-pop t)
   (setq visible-mark-max 10)
@@ -870,7 +909,7 @@
 
 (use-package move-text
   :defer t
-  :diminish
+  :delight
   :config
   (move-text-default-bindings))
 
@@ -891,62 +930,61 @@
   (company-minimum-prefix-length 1)
   (company-show-numbers t)
   :hook
-  (after-init . global-company-mode)
+  (after-init-hook . global-company-mode)
   :config
+  (setq company-require-match nil)
+  (setq company-tooltip-align-annotations t)
+  (setq company-eclim-auto-save nil)
+  (setq company-dabbrev-downcase nil)
   (setq company-selection-wrap-around t)
+  (setq company-backends
+        '((company-files
+           company-keywords
+           company-capf)
+          (company-abbrev
+           company-dabbrev)))
+
   ;; (add-to-list 'company-backends #'company-tabnine)
   ;; (add-to-list 'company-backends ')
+
+  ;; Enable downcase only when completing the completion.
+  (defun jcs--company-complete-selection--advice-around (fn)
+    "Advice execute around `company-complete-selection' command."
+    (let ((company-dabbrev-downcase t))
+      (call-interactively fn)))
+  (advice-add 'company-complete-selection
+              :around #'jcs--company-complete-selection--advice-around)
   (use-package company-box
-    :diminish
+    :delight
     :hook
     (company-mode-hook . company-box-mode))
   (use-package company-posframe
-    :diminish
+    :delight
     :hook
     (company-mode-hook . company-posframe-mode))
-  ;; (use-package company-tabnine :diminish)
+  ;; (use-package company-tabnine :delight)
   (use-package company-quickhelp
     :when (display-graphic-p)
-    :diminish
+    :delight
     :bind
     (:map company-active-map
           ("M-h" . company-quickhelp-manual-begin))
     :hook
-    (global-company-mode-hook . company-quickhelp-mode)
+    (company-mode-hook . company-quickhelp-mode)
     :custom
     (company-quickhelp-delay 0.8))
-  (use-package company-auctex
-    :diminish
-    :defer t
-    :config
-    (company-auctex-init))
-  (use-package company-math
-    :diminish
-    :defer t
-    :preface
-    (defun my/latex-mode-setup ()
-      (setq-local company-backends
-                  (append '((company-math-symbols-latex
-                             company-latex-commands
-                             company-math-symbols-unicode))
-                          company-backends)))
+  (use-package company-quickhelp-terminal
+    :delight
     :hook
-    ((org-mode-hook . my/latex-mode-setup)
-     (TeX-mode-hook . my/latex-mode-setup)))
-  ;; (use-package company-math
-  ;;   :diminish
-  ;;   :defer t
-  ;;   :preface
-  ;;   (defun c/latex-mode-setup ()
-  ;;     (setq-local company-backends
-  ;;                 (append '((company-math-symbols-latex
-  ;;                            company-math-symbols-unicode
-  ;;                            company-latex-commands))
-  ;;                         company-backends)))
-  ;;   :hook
-  ;;   ((org-mode-hook . c/latex-mode-setup)
-  ;;    (tex-mode-hook . c/latex-mode-setup)))
-  )
+    (company-mode-hook . company-quickhelp-terminal-mode))
+  (use-package company-fuzzy
+    :delight
+    :hook
+    (company-mode-hook . company-fuzzy-mode))
+  (use-package company-statistics
+    :delight
+    :hook
+    (company-mode-hook . company-statistics-mode)))
 
 (use-package hippie
   :straight nil
@@ -982,7 +1020,7 @@
 
 (use-package yasnippet
   :defer t
-  :diminish
+  :delight
   :bind
   ("C-c s i" . yas-insert-snippet)
   ("C-c s n" . yas-new-snippet)
@@ -996,45 +1034,6 @@
   (yas-global-mode 1))
 (use-package yasnippet-snippets
   :after yasnippet)
-
-(use-package org
-  :straight nil
-  :hook
-  (org-mode-hook . org-indent-mode)
-  :config
-  (setq org-tags-column 0)
-  (setq org-display-inline-images t)
-  (setq org-redisplay-inline-images t)
-  (setq org-startup-with-inline-images "inlineimages")
-  (setq org-hide-emphasis-markers t)
-  (setq org-confirm-elisp-link-function nil)
-  (setq org-link-frame-setup '((file . find-file)))
-  ;; (setq-ligatures! 'org-mode
-  ;;                  :alist '(("TODO " . "")
-  ;;                           ("NEXT " . "")
-  ;;                           ("PROG " . "")
-  ;;                           ("WAIT " . "")
-  ;;                           ("DONE " . "")
-  ;;                           ("FAIL " . "")))
-  (setq org-ellipsis "⋯"))
-
-(use-package org-superstar
-  :config
-  (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
-
-;; Org-Babel tangle
-(require 'ob-tangle)
-;; Setup Babel languages. Can now do Literate Programming
-(org-babel-do-load-languages 'org-babel-load-languages
-                             '((python . t)
-                               (shell . t)
-	                           (emacs-lisp . t)
-	                           (ledger . t)
-	                           (ditaa . t)
-	                           (js . t)
-	                           (C . t)))
-
-;  (use-package recursive-narrow :defer t :diminish)
 
 (use-package auctex
   :defer t
@@ -1065,10 +1064,47 @@
 	           (concat "~" cite))))))
 (use-package cdlatex
   :defer t
-  :diminish
+  :delight
   :hook
   (LaTeX-mode-hook . turn-on-cdlatex)
   (org-mode-hook . turn-on-org-cdlatex))
+
+(use-package company-auctex
+        :delight
+        :defer t
+        :config
+        (company-auctex-init))
+(use-package company-math
+  :delight
+  :defer t
+  :preface
+  (defun my/latex-mode-setup ()
+    (setq-local company-backends
+                (append '((company-math-symbols-latex
+                           company-latex-commands
+                           company-math-symbols-unicode))
+                        company-backends)))
+  :hook
+  ((org-mode-hook . my/latex-mode-setup)
+   (TeX-mode-hook . my/latex-mode-setup)))
+;; (use-package company-math
+;;   :delight
+;;   :defer t
+;;   :preface
+;;   (defun c/latex-mode-setup ()
+;;     (setq-local company-backends
+;;                 (append '((company-math-symbols-latex
+;;                            company-math-symbols-unicode
+;;                            company-latex-commands))
+;;                         company-backends)))
+;;   :hook
+;;   ((org-mode-hook . c/latex-mode-setup)
+;;   (tex-mode-hook . c/latex-mode-setup)))
+
+(use-package eldoc
+  :straight nil
+  :hook
+  ((emacs-lisp-mode-hook lisp-interaction-mode-hook ielm-mode-hook) . (eldoc-mode)))
 
 ;; (use-package slime
 ;;   :defer t
@@ -1089,43 +1125,180 @@
   :custom (inferior-lisp-program "ros -Q run")
   :config
   (add-to-list 'auto-mode-alist '("\\.lisp$" . lisp-mode)))
-(use-package cl-lib :diminish)
+(use-package cl-lib :delight)
 
 (use-package racket-mode
-  :disabled t
   :defer t
-  :diminish
+  :delight
   :bind
   (:map racket-mode-map
         ("<f5>" . racket-run))
+  :hook
+  (racket-mode-hook . racket-xp-mode)
   :config
-(setq tab-always-indent 'complete)
-(setq font-lock-maximum-decoration 3))
+  (setq tab-always-indent 'complete)
+  (setq font-lock-maximum-decoration 3))
 
-;; (use-package cider
-;;   :defer t
-;;   :diminish
-;;   :)
-
-(use-package elpy
+(use-package anaconda-mode
   :defer t
-  :init
-  (advice-add 'python-mode :before 'elpy-enable)
-  :config
-  (setq elpy-rpc-virtualenv-path 'current)
-  (setq elpy-rpc-backend "jedi")
-  (when (load "flycheck" t t)
-    (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-    (add-hook 'elpy-mode-hook 'flycheck-mode)))
+  :hook
+  (python-mode-hook . (anaconda-mode anaconda-eldoc-mode)))
 
-;; (use-package markdown-mode)
+(use-package company-anaconda
+  :defer t
+  :preface
+  (defun my/python-mode-setup ()
+     (setq-local company-backends
+                 (append '((company-anaconda))
+                         company-backends)))
+  :hook
+  (python-mode-hook . my/python-mode-setup))
+
+(use-package py-yapf
+  :defer t
+  :delight
+  :hook
+  (python-mode-hook . py-yapf-enable-on-save))
+
+(use-package importmagic
+  :disabled t
+  :defer t
+  :hook
+  (python-mode-hook . importmagic-mode)
+  :bind
+  (:map importmagic-mode-map
+        ("C-c C-f" . importmagic-fix-symbol-at-point)))
+
+(use-package py-isort
+  :hook
+  (before-save-hook . py-isort-before-save)
+  :config
+  (setq py-isort-options '("--lines=100")))
+
+(use-package python-pytest)
+
+;; (use-package ein
+;;   :defer t
+;;   :config
+;;   (require 'ein-notebook))
+
+(use-package ob-ipython
+  :defer t)
+
+(use-package julia-mode
+  :defer t
+  :delight
+  :init
+  (setq inferior-julia-program-name "/usr/local/bin/julia"))
+
+(use-package julia-repl
+  :defer t
+  :hook
+  (julia-mode-hook . julia-repl-mode))
+
+(use-package markdown-mode
+  :mode
+  (("README\\.md\\'" . gfm-mode)
+   ("\\.md\\'" . markdown-mode)
+   ("\\.markdown\\'" . markdown-mode))
+  :init
+  (setq markdown-command "multimarkdown"))
 
 (use-package quickrun
   :defer t
-  :diminish)
+  :delight)
 
 (use-package dumb-jump
   :disabled t)
+
+(use-package eldoc-box)
+(use-package eldoc-overlay
+  :defer t
+  :init (eldoc-overlay-mode 1))
+
+(use-package flycheck
+  :init (global-flycheck-mode))
+
+(use-package flycheck-color-mode-line
+  :hook
+  (flycheck-mode-hook . flycheck-color-mode-line-mode))
+
+(use-package flycheck-pos-tip
+  :hook
+  (flycheck-mode-hook . flycheck-pos-tip-mode))
+
+(use-package flycheck-status-emoji
+  :hook
+  (flycheck-mode-hook . flycheck-status-emoji-mode))
+
+(use-package imenu-list
+  :bind
+  ("C-'" . imenu-list-smart-toggle)
+  :config
+  (setq imenu-list-focus-after-activation t)
+  (setq imenu-list-auto-resize t))
+
+(use-package flimenu
+  :hook
+  (after-init-hook . flimenu-global-mode))
+
+(use-package polymode
+  :defer t
+  :delight
+  :config
+  (use-package poly-org
+    :defer t
+    :delight
+    :config
+    (add-to-list 'auto-mode-alist
+                 '("\\.org" . poly-org-mode)))
+  (use-package poly-markdown
+    :defer t
+    :delight
+    :config
+    (add-to-list 'auto-mode-alist
+                 '("\\.org" . poly-markdown-mode))))
+
+(use-package org
+  ;; :straight nil
+  :hook
+  (org-mode-hook . (org-indent-mode visual-line-mode variable-pitch-mode))
+  :config
+  (setq org-tags-column 0)
+  (setq org-display-inline-images t)
+  (setq org-redisplay-inline-images t)
+  (setq org-startup-with-inline-images "inlineimages")
+  (setq org-hide-emphasis-markers t)
+  (setq org-confirm-elisp-link-function nil)
+  (setq org-link-frame-setup '((file . find-file)))
+  ;; (setq-ligatures! 'org-mode
+  ;;                  :alist '(("TODO " . "")
+  ;;                           ("NEXT " . "")
+  ;;                           ("PROG " . "")
+  ;;                           ("WAIT " . "")
+  ;;                           ("DONE " . "")
+  ;;                           ("FAIL " . "")))
+  )
+
+(use-package org-superstar
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
+
+;; Org-Babel tangle
+(require 'ob-tangle)
+;; Setup Babel languages. Can now do Literate Programming
+(org-babel-do-load-languages 'org-babel-load-languages
+                             '((python . t)
+                               ;; (ein . t)
+                               (ipython . t)
+                               (shell . t)
+                               (emacs-lisp . t)
+                               (ledger . t)
+                               (ditaa . t)
+                               (js . t)
+                               (C . t)))
+
+;  (use-package recursive-narrow :defer t :delight)
 
 (use-package ispell
   :straight nil
@@ -1139,7 +1312,7 @@
 
 (use-package flyspell
   :defer t
-  :diminish
+  :delight
   :if (executable-find "aspell")
   :bind
   ("<f12>" . flyspell-mode)
@@ -1148,14 +1321,12 @@
   ((prog-mode . flyspell-prog-mode)
    (TeX-mode . flyspell-mode)
    (org-mode . flyspell-mode)
-   (text-mode . flyspell-mode))
-  :config
-  )
+   (text-mode . flyspell-mode)))
 
 (use-package typo
   :disabled t
   :defer t
-  :diminish
+  :delight
   :bind
   ("C-c 8")
   :config
@@ -1192,25 +1363,34 @@
       (list "up" "eshell-up $1")
       (list "pk" "eshell-up-peek $1")
       )))
-  (use-package eshell-z :diminish)
+  (use-package eshell-z :delight)
   (use-package eshell-prompt-extras
-    :diminish
+    :delight
     :defer t
     :config
     (setq eshell-highlight-prompt t
           eshell-prompt-function 'epe-theme-lambda))
   (use-package eshell-did-you-mean
-    :diminish
+    :delight
     :defer t
     :config
     (eshell-did-you-mean-setup))
   (use-package eshell-up
-    :diminish
+    :delight
     :defer t)
   (use-package esh-autosuggest
-    :diminish
+    :delight
     :defer t
-    :hook (eshell-mode . esh-autosuggest-mode)))
+    :hook (eshell-mode . esh-autosuggest-mode))
+  (use-package fish-completion
+    :delight
+    :hook
+    (eshell-mode . global-fish-completion-mode))
+  (use-package esh-help
+    :delight
+    :defer t
+    :config
+    (setup-esh-help-eldoc)))
 
 (use-package shell-pop
   :defer t
@@ -1235,11 +1415,18 @@
 (prefer-coding-system 'utf-8)
 (set-face-attribute 'default nil
 		    :family "Source Code Pro"
-		    :height 125)
+		    :height 130)
 (set-fontset-font
  nil 'japanese-jisx0208
  (font-spec :family "Noto Sans CJK JP"))
 (add-to-list 'face-font-rescale-alist '(".*Noto.*" . 1.2))
+
+(use-package emojify
+  :defer t
+  :hook
+  (after-init . global-emojify-mode))
+
+(set-fontset-font t nil "Symbola")
 
 ;; Test text from https://qiita.com/kaz-yos/items/0f23d53256c2a3bd6b8d
 ;; |012345 678910|
@@ -1279,66 +1466,38 @@
 (use-package all-the-icons)
 ;; pretty-mode
 (use-package pretty-mode
-  :diminish
+  :delight
   :config
   (global-pretty-mode t))
 
-;; (use-package doom-themes
-;;   :disabled t
-;;   :config
-;;   (setq doom-themes-enable-bold t
-;;         doom-themes-enable-italic t)
-;;   (load-theme 'doom-acario-light t)
-;;   ;; (load-theme 'doom-palenight t)
-;;   (doom-themes-visual-bell-config)
-;;   (doom-themes-org-config)
-;;   (setq doom-themes-treemacs-theme "doom-colors") ;use the colorful treemacs theme
-;;   (doom-themes-treemacs-config))
-
-;; (use-package acme-theme
-;;   :disabled t
-;;   :straight (acme-theme :host github
-;;                         :repo "ianpan870102/acme-emacs-theme"
-;;                         :branch "master")
-;;   :config
-;;   (load-theme 'acme t)
-;;   (setq acme-theme-black-fg t))
-
-(use-package berrys-theme
-  :disabled t
+(use-package apropospriate-theme
+  ;; :disabled t
   :config
-  (load-theme 'berrys t)
-  :config ;; for good measure and clarity
-  (setq-default cursor-type '(bar . 2))
-  (setq-default line-spacing 2))
+  (load-theme 'apropospriate-light t)
+  (defvar apropospriate-themes-current-style nil)
+  (defun apropospriate-themes-load-style (style)
+    "Load apropospriate theme variant STYLE.
+    Argument STYLE can be either 'light or 'dark."
 
-(use-package apropospriate-theme)
+    (interactive)
+    (cond ((equal style 'light)
+           (load-theme 'apropospriate-light t))
+          ((equal style 'dark)
+           (load-theme 'apropospriate-dark t))
 
-;; (use-package zerodark-theme
-;;   ;; Dark Theme
-;;   :defer t)
-;; (use-package nord-theme
-;;   :defer t)
-
-(use-package circadian
-  :defer t
-  :config
-  (add-hook 'circadian-after-load-theme-hook
-        #'(lambda (theme)
-            ;; Line numbers appearance
-            (setq linum-format 'linum-format-func)
-            ;; Cursor
-            (set-default 'cursor-type 'box)
-            (set-cursor-color "#00FFFF")))
-  (setq calendar-latitude 34.887760)
-  (setq calendar-longitude 135.799850)
-
-  ;; (setq circadian-themes '(("8:00" . apropospriate-light)
-  ;;                          ("19:30" . apropospriate-dark)))
-
-  (setq circadian-themes '((:sunrise . apropospriate-light)
-                           (:sunset . apropospriate-dark)))
-  (circadian-setup))
+          (t (error (format "Unknown apropospriate theme style: %S" style)))))
+  (defun apropospriate-themes-switch-style()
+    "Toggle between the light and dark style of apropospriate theme."
+    (interactive)
+    (cond ((or (null apropospriate-themes-current-style)
+               (equal apropospriate-themes-current-style 'dark))
+           (apropospriate-themes-load-style 'light)
+           (setq apropospriate-themes-current-style 'light))
+          ((equal apropospriate-themes-current-style 'light)
+           (apropospriate-themes-load-style 'dark)
+           (setq apropospriate-themes-current-style 'dark))
+          (t (error (format "Invalid apropospriate current style: %s"
+                            apropospriate-themes-current-style))))))
 
 (display-time-mode 1)
 (setq display-time-day-and-date t)
@@ -1347,21 +1506,41 @@
 (column-number-mode 1)
 
 (use-package doom-modeline
-  :disabled t
-  :diminish
+  :delight
   :init
   (doom-modeline-mode 1))
 
 (use-package awesome-tray
+  :disabled t
   :straight (awesome-tray :host github
                           :repo "manateelazycat/awesome-tray"
                           :branch "master")
-  :diminish
+  :delight
   :init
   (awesome-tray-mode 1))
 
+(use-package mini-modeline
+  :disabled t
+  :delight
+  :config
+  (mini-modeline-mode t))
+
+(use-package smart-mode-line
+  :delight
+  :config
+  ;; (setq sml/theme 'respectful)
+  (setq sml/read-only-char "%%")
+  (setq sml/modified-char "*")
+  (setq sml/extra-filler -10)
+  (setq sml/no-confirm-load-theme t)
+  (sml/setup))
+
+(use-package hide-mode-line
+  :hook
+  ((treemacs-mode imenu-list-minor-mode) . hide-mode-line-mode))
+
 (use-package dashboard
-  :diminish dashboard-mode
+  :delight dashboard-mode
   :custom
   (dashboard-startup-banner '"~/.emacs.d/image/Larry_Cow.png")
   ;; Value can be
@@ -1396,15 +1575,23 @@
 
 (use-package multicolumn
   :defer t
-  :diminish
+  :delight
   :init
   (multicolumn-global-mode 1)
   :config
   (setq multicolumn-min-width 72))
 
-(use-package smooth-scroll
+(use-package sublimity
+  :defer t
+  ;; :hook
+  ;; (prog-mode-hook . sublimity-mode)
   :config
-  (smooth-scroll-mode t))
+  (setq sublimity-scroll-weight 5
+        sublimity-scroll-drift-length 10)
+  (setq sublimity-map-size 20
+        sublimity-map-fraction 0.3
+        sublimity-map-text-scale -7
+        sublimity-map-set-delay 5))
 
 ;; Windowmove
 
@@ -1415,7 +1602,7 @@
 
 (use-package elscreen
   :defer t
-  :diminish els
+  :delight els
   :bind
   ("C-<tab>" . elscreen-next)
   :config
@@ -1426,13 +1613,13 @@
   (elscreen-start)
   (elscreen-create)
   (use-package elscreen-separate-buffer-list
-    :diminish
+    :delight
     :defer t
     :config
     (elscreen-separate-buffer-list-mode 1))
   (use-package zoom-window
     :defer t
-    :diminish
+    :delight
     :bind
     ("C-x z" . zoom-window-zoom)
     :config
@@ -1443,10 +1630,10 @@
 
 (use-package rainbow-mode
   :disabled t
-  :diminish
+  :delight
   :hook ((emacs-lisp-mode c-mode org-mode) . rainbow-mode))
 (use-package rainbow-delimiters
-  :diminish
+  :delight
   :hook
   (emacs-lisp-mode-hook. rainbow-delimiters-mode)
   (prog-mode-hook . rainbow-delimiters-mode)
@@ -1463,44 +1650,51 @@
   (set-face-foreground 'rainbow-delimiters-depth-8-face "#afafaf")
   (set-face-foreground 'rainbow-delimiters-depth-9-face "#f0f0f0"))
 
-;; Polymode
-(use-package polymode
-  :diminish
-  :config
-  (use-package poly-org)
-  (use-package poly-markdown)
-  (add-to-list 'auto-mode-alist
-               '("\\.md" . poly-markdown-mode)
-               '("\\.org" . poly-org-mode)))
+
 (use-package highlight-stages
   :defer t
-  :diminish
+  :delight
   :config
   (highlight-stages-global-mode 1))
 
 (use-package prism
   :defer t
-  :diminish
+  :delight
   :hook
   (elisp-mode-hook . prism-mode))
 
 (use-package beacon
   :defer t
-  :diminish
+  :delight
   :config
   (beacon-mode 1))
 
 (use-package volatile-highlights
   :defer t
-  :diminish
+  :delight
   :config
   (volatile-highlights-mode t))
 
-(use-package posframe :diminish)
+(use-package highlight-indent-guides
+  :delight
+  :hook
+(prog-mode-hook . highlight-indent-guides-mode)
+:config
+(setq highlight-indent-guides-method 'bitmap))
+
+(use-package line-reminder
+  :defer t
+  :hook
+  (after-init-hook . global-line-reminder-mode)
+  :config
+  (setq line-reminder-show-option 'indicators)
+  (setq line-indicators-fringe-placed 'left-fringe))
+
+(use-package posframe :delight)
 
 (use-package mini-frame
   :disabled t
-  :diminish
+  :delight
   :hook
   (after-init . mini-frame-mode)
   :config
@@ -1511,11 +1705,18 @@
        (left . 0.5)
        (height . 20)))))
 
-(use-package popwin :diminish)
+(use-package popwin :delight)
+
+(use-package keypression
+  :defer t
+  :delight
+  :config
+  (setq keypression-x-offset 100
+        keypression-y-offset 100))
 
 (use-package symon
   :defer t
-  :diminish
+  :delight
   :config
   (when (eq system-type 'darwin)
     (setq symon-monitors
@@ -1543,7 +1744,7 @@
 (use-package git-gutter
   :disabled t
   :defer t
-  :diminish
+  :delight
   :config
   (global-git-gutter-mode +1)
   (custom-set-variables
@@ -1562,17 +1763,32 @@
    '(git-gutter:hide-gutter t)))
 (use-package diff-hl
   :defer t
-  :diminish
+  :delight
   :init
   (global-diff-hl-mode))
 
 (use-package pdf-tools
+  :defer t
+  :magic
+  ("%PDF" . pdf-view-mode)
+  :hook
+  ((pdf-view-mode-hook . (lambda () (display-line-numbers-mode -1)))
+   (pdf-view-mode-hook . pdf-tools-enable-minor-modes))
   :config
   (pdf-tools-install)
   (add-hook 'pdf-view-mode-hook (lambda () (cua-mode 0)))
   (setq-default pdf-view-display-size 'fit-page)
   (setq pdf-annot-activate-created-annotations t)
   (setq pdf-view-resize-factor 1.1))
+
+(use-package pdf-view-restore
+  :after pdf-tools
+  :config
+  (add-hook 'pdf-view-mode-hook 'pdf-view-restore-mode))
+
+(use-package org-pdftools
+  :hook
+  (org-load-hook . org-pdftools-setup-link))
 
 (use-package olivetti
   :defer t
