@@ -36,9 +36,9 @@ set -U __done_notify_sound 1
 export GOPATH=$HOME/go
 #export PATH=$PATH:$GOPATH/bin
 
-#python anaconda
-export PATH="/home/aiwata/anaconda3/bin:$PATH"
-export PATH="/opt/anaconda3/bin:$PATH"
+##python anaconda now not using
+#export PATH="/home/aiwata/anaconda3/bin:$PATH"
+#export PATH="/opt/anaconda3/bin:$PATH"
 
 
 #starship prompt (end line)
