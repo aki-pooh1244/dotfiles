@@ -1,6 +1,6 @@
 #+TITLE: My Emacs configuration
 #+AUTHOR: Akihiro Iwata
-#+DATE:
+#+DATE:<2020-10-19 Mon>
 #+STARTUP: overview
 Last-Updated:<2020-September-25 16:36:01>
 * Configuration
@@ -109,12 +109,13 @@ Setup use-package
 #+BEGIN_SRC emacs-lisp
   (use-package f)
   (use-package s)
+  (use-package dash)
 #+END_SRC
 ** Generic
 *** Useful defaults
 **** defaults
 #+BEGIN_SRC emacs-lisp
-  (setq-default cursor-type 'bar)
+  (setq-default cursor-type 'box)
   (menu-bar-mode 1)
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
@@ -161,7 +162,7 @@ Setup use-package
  #+BEGIN_SRC emacs-lisp
    (use-package crux
      :defer t
-     :diminish
+     :delight
      :bind
      ("C-c o" . crux-open-with)
      ("C-k" . crux-smart-kill-line)
@@ -180,7 +181,7 @@ Setup use-package
  #+BEGIN_SRC emacs-lisp
    (use-package comment-dwim-2
      :defer t
-     :diminish
+     :delight
      :bind
      ("M-;" . comment-dwim-2))
  #+END_SRC
@@ -188,9 +189,9 @@ Setup use-package
 #+BEGIN_SRC emacs-lisp
   (use-package smartparens
     :defer t
-    :diminish
-    ;; :hook
-    ;; (after-init . show-smartparens-global-mode)
+    :delight
+    :hook
+    (after-init . show-smartparens-global-mode)
     :config
     (require 'smartparens-config)
     ;; (sp-pair "=" "=" :actions '(wrap))
@@ -206,7 +207,7 @@ Setup use-package
 *** paren-completer
 #+BEGIN_SRC emacs-lisp
   (use-package paren-completer
-    :diminish
+    :delight
     :bind
     ("M-)" . paren-completer-add-single-delimiter))
 #+END_SRC
@@ -214,7 +215,7 @@ Setup use-package
 #+BEGIN_SRC emacs-lisp
   (use-package smart-newline
     :defer t
-    :diminish
+    :delight
     :hook
     (after-init . smart-newline-mode)
     :bind
@@ -230,19 +231,43 @@ Setup use-package
             (call-interactively (key-binding (kbd "C-m"))))))))
 #+END_SRC
 *** buffer
-#+BEGIN_SRC emacs-lisp
-  (use-package bs-show
-    :straight nil
-    :bind
-    ("C-x C-b" . bs-show)
-    ;; ("C-x b" , bs-show)
-    ("M-]" . bs-cycle-next)
-    ("M-[" . bs-cycle-previous))
-  (use-package bs-ext
-    :defer t
-    :diminish)
-  #+END_SRC
-*** ibuffer
+    I use ibuffer.el.
+    #+caption: ibuffer key bind
+    | Key    | motion                   |
+    |--------+--------------------------|
+    | h, ?   | help                     |
+    | g      | refresh                  |
+    | `      | change format            |
+    | SPC    | next line                |
+    | C-p    | previous line            |
+    | q      | quit                     |
+    | RET    | open                     |
+    | o      | open other window        |
+    | b      | not display              |
+    |--------+--------------------------|
+    | m      | mark                     |
+    | u      | unmark                   |
+    | t      | transpose                |
+    | d      | delete                   |
+    |--------+--------------------------|
+    | S      | save                     |
+    | A      | open current frame       |
+    | D      | delete buffer            |
+    | k      | delete from ibuffer list |
+    | x      | delete buffer?           |
+    |--------+--------------------------|
+    | /m     | filter w/ major-mode     |
+    | />, /< | filter w/ file size      |
+    | /p     | delete prime filter      |
+    | //     | delete all filter        |
+    |--------+--------------------------|
+    | ,      | swap sorts               |
+    | si     | reverse sort             |
+    | sf     | sort w/ file name        |
+    | sv     | sort w/ time             |
+    | ss     | sort w/ buffer size      |
+    | sm     | sort w/ major-mode       |
+
 #+BEGIN_SRC emacs-lisp
 (use-package ibuffer
   :straight nil
@@ -275,9 +300,18 @@ Setup use-package
   :defer t
   :delight
   :config
-(global-aggressive-indent-mode 1)
-(add-to-list 'aggressive-indent-excluded-modes 'html-mode))
+  (global-aggressive-indent-mode 1)
+  (add-to-list 'aggressive-indent-excluded-modes 'html-mode))
 #+END_SRC
+*** async
+#+begin_src emacs-lisp :tangle yes
+  (use-package async
+    :delight
+    :hook after-init
+    :config
+    (autoload 'dired-async-mode "dired-async.el" nil t)
+    (dired-async-mode 1))
+#+end_src
 ** Key Binds
 *** Basics
 #+BEGIN_SRC emacs-lisp
@@ -355,14 +389,6 @@ Setup use-package
     (prescient-persist-mode +1)
     (setq prescient-history-length 1000))
 #+END_SRC
-*** dash
-    #+BEGIN_SRC emacs-lisp
-      ;; (use-package dash)
-    #+END_SRC
-*** s
-    #+BEGIN_SRC emacs-lisp
-      ;; (use-package s)
-    #+END_SRC
 
 ** SKK
 #+BEGIN_SRC emacs-lisp
@@ -444,22 +470,199 @@ Setup use-package
     :hook
     (after-init-hook . undo-fu-session-mode))
 #+END_SRC
-*** filer(dired)
-#+BEGIN_SRC emacs-lisp
-  (use-package lusty-explorer
-    :disabled t
-    :defer t
-    :delight
-    :config
-    (lusty-explorer-mode 1))
-  (use-package direx
-    :delight
-    :bind
-    ("C-x C-j" . direx:jump-to-directory))
-  (setq dired-listing-switches "-alh")
+*** file manager (dired)
+    Manipulation
+    #+caption: Dired Key configuration
+    | Key    | Manipulation                               |
+    |--------+--------------------------------------------|
+    | C-x d  | open dired                                 |
+    |--------+--------------------------------------------|
+    | n      | next                                       |
+    | p      | previous                                   |
+    | RET, f | open file                                  |
+    | o      | open file w/ other flame                   |
+    | v      | open file w/ view-mode                     |
+    | q      | quit dired                                 |
+    | +      | mkdir                                      |
+    | X      | execute shell command @ cursor             |
+    | Z      | compress files                             |
+    |--------+--------------------------------------------|
+    | C      | copy                                       |
+    | D      | delete                                     |
+    | R      | rename, move                               |
+    | H      | make hard link                             |
+    | S      | make symbolic link                         |
+    |--------+--------------------------------------------|
+    | m      | mark file @ cursor                         |
+    | u      | unmark file @ cursor                       |
+    | t      | reverse mark                               |
+    | U      | unmark all files                           |
+    | M-{    | forward next mark                          |
+    | M-}    | backward previous mark                     |
+    | %m     | mark files with regexp                     |
+    | *%     | mark files with regexp                     |
+    | %g     | 内容が正規表現にマッチするファイルをマーク |
+    |--------+--------------------------------------------|
+    | d      | delete flag @ cursor                       |
+    | x      | delete files which have delete flags       |
+    | #      | auto-save files = delete flags             |
+    | ~      | back up files = delete flags               |
+    | %&     | garbage files = delete flags               |
+    | %d     | files w/ regexp = delete flags             |
+    | *c*D   | mark -> delete flag                        |
+    | *c D * | delete flag -> mark                        |
+    |--------+--------------------------------------------|
+    | /      | filter                                     |
+    | i      | dired-subtree-toggle                       |
 
-  (use-package dired-subtree)
-  
+#+BEGIN_SRC emacs-lisp
+  (use-package dired
+    :straight nil
+    :delight Dired
+    :bind
+    ((:map dired-mode-map
+           ("(" . dired-hide-details-mode)
+           (")" . dired-hide-details-mode)))
+    :custom
+    (dired-listing-switches "-alh")
+    (dired-dwim-target t)
+    (dired-recursive-copies 'always)
+    (dired-recursive-deletes 'always)
+    (delete-by-moving-to-trash t)
+    (dired-isearch-filenames 'dwim)
+    (dired-ls-F-marks-symlinks t)
+    :config
+    ;; (add-to-list 'dired-compress-file-suffixes '("\\.zip\\'" ".zip" "unzip"))
+    (use-package wdired
+      :straight nil
+      :delight Wdired
+      :demand dired
+      :after dired
+      :bind
+      ((:map dired-mode-map
+             ("e" . wdired-change-to-wdired-mode)))
+      :custom
+      (wdired-allow-to-change-permissions t))
+    (use-package dired-aux
+      :straight nil
+      :after dired)
+    (use-package all-the-icons-dired
+      :delight
+      :after all-the-icons
+      :hook
+      (dired-mode . all-the-icons-dired-mode))
+    ;; dired-hack packages
+    (use-package dired-hacks-utils
+      :delight
+      :after dired)
+    (use-package dired-filter
+      :delight filter
+      :after dired
+      :bind
+      ((:map dired-mode-map
+             ("/" . dired-filter-map))))
+    (use-package dired-rainbow
+      :config
+      (progn
+        (dired-rainbow-define-chmod directory
+                                    "#6cb2eb" "d.*")
+        (dired-rainbow-define html
+                              "#eb5286"
+                              ("css" "less" "sass" "scss" "htm" "html" "jhtm" "mht" "eml" "mustache" "xhtml"))
+        (dired-rainbow-define xml
+                              "#f2d024"
+                              ("xml" "xsd" "xsl" "xslt" "wsdl" "bib" "json" "msg" "pgn" "rss" "yaml" "yml" "rdata"))
+        (dired-rainbow-define document
+                              "#9561e2"
+                              ("docm" "doc" "docx" "odb" "odt" "pdb" "pdf" "ps" "rtf" "djvu" "epub" "odp" "ppt" "pptx"))
+        (dired-rainbow-define markdown
+                              "#ffed4a"
+                              ("org" "etx" "info" "markdown" "md" "mkd" "nfo" "pod" "rst" "tex" "textfile" "txt"))
+        (dired-rainbow-define database
+                              "#6574cd"
+                              ("xlsx" "xls" "csv" "accdb" "db" "mdb" "sqlite" "nc"))
+        (dired-rainbow-define media
+                              "#de751f"
+                              ("mp3" "mp4" "MP3" "MP4" "avi" "mpeg" "mpg" "flv" "ogg" "mov" "mid" "midi" "wav" "aiff" "flac"))
+        (dired-rainbow-define image
+                              "#f66d9b"
+                              ("tiff" "tif" "cdr" "gif" "ico" "jpeg" "jpg" "png" "psd" "eps" "svg"))
+        (dired-rainbow-define log
+                              "#c17d11"
+                              ("log"))
+        (dired-rainbow-define shell
+                              "#f6993f"
+                              ("awk" "bash" "bat" "sed" "sh" "zsh" "vim"))
+        (dired-rainbow-define interpreted
+                              "#38c172"
+                              ("py" "ipynb" "rb" "pl" "t" "msql" "mysql" "pgsql" "sql" "r" "clj" "cljs" "scala" "js"))
+        (dired-rainbow-define compiled
+                              "#4dc0b5"
+                              ("asm" "cl" "lisp" "el" "c" "h" "c++" "h++" "hpp" "hxx" "m" "cc" "cs" "cp" "cpp" "go" "f" "for" "ftn" "f90" "f95" "f03" "f08" "s" "rs" "hi" "hs" "pyc" ".java"))
+        (dired-rainbow-define executable
+                              "#8cc4ff"
+                              ("exe" "msi"))
+        (dired-rainbow-define compressed
+                              "#51d88a"
+                              ("7z" "zip" "bz2" "tgz" "txz" "gz" "xz" "z" "Z" "jar" "war" "ear" "rar" "sar" "xpi" "apk" "xz" "tar"))
+        (dired-rainbow-define packaged
+                              "#faad63"
+                              ("deb" "rpm" "apk" "jad" "jar" "cab" "pak" "pk3" "vdf" "vpk" "bsp"))
+        (dired-rainbow-define encrypted
+                              "#ffed4a"
+                              ("gpg" "pgp" "asc" "bfe" "enc" "signature" "sig" "p12" "pem"))
+        (dired-rainbow-define fonts
+                              "#6cb2eb"
+                              ("afm" "fon" "fnt" "pfb" "pfm" "ttf" "otf"))
+        (dired-rainbow-define partition
+                              "#e3342f"
+                              ("dmg" "iso" "bin" "nrg" "qcow" "toast" "vcd" "vmdk" "bak"))
+        (dired-rainbow-define vc
+                              "#0074d9"
+                              ("git" "gitignore" "gitattributes" "gitmodules"))
+        (dired-rainbow-define-chmod executable-unix "#38c172" "-.*x.*")))
+    (use-package dired-collapse
+      :delight
+      :after dired)
+    (use-package dired-avfs
+      :delight
+      :after dired)
+    (use-package dired-subtree
+      :delight
+      :after dired
+      :bind
+      ((:map dired-mode-map
+             ("i" . dired-subtree-toggle))))
+    ;; dired-hack packages end here
+    (use-package peep-dired
+      :delight peep
+      :defer t
+      :bind
+      ((:map dired-mode-map
+             ("P" . pddp-dired))))
+    (use-package quick-preview
+      :delight preview
+      :init
+      :bind
+      ("C-c q" . quick-preview-at-point)
+      (:map dired-mode-map
+            ("Q" . quick-preview-at-point)))
+    (use-package runner
+      :delight
+      :after dired)
+    (use-package dired-toggle-sudo
+      :delight sudo
+      :after dired
+      :bind
+      ((:map dired-mode-map
+             ("C-c C-s" . dired-toggle-sudo)))
+      :config
+      (with-eval-after-load 'tramp
+        ;; Allow to use : /sudo:user@host:/path/to/file
+        (add-to-list 'tramp-default-proxies-alist
+                     '(".*" "\\'.+\\" "/ssh:%h:"))))
+    )
+
   (use-package dired-sidebar
     :defer t
     :delight
@@ -479,16 +682,8 @@ Setup use-package
     (setq dired-sidebar-use-term-integration t)
     (setq dired-sidebar-use-custom-font t))
   
+  
   #+END_SRC
-*** peep-dired
-#+BEGIN_SRC emacs-lisp
-  (use-package peep-dired
-    :defer t
-    :delight
-    :bind
-    (:map dired-mode-map
-          ("P" . peep-dired)))
-#+END_SRC
 *** treemacs
 #+BEGIN_SRC emacs-lisp
 (use-package treemacs
@@ -621,200 +816,258 @@ Setup use-package
                                          orig-fg))))
     #+END_SRC
 ** Search/Replace
-**** ido
-     #+BEGIN_SRC emacs-lisp
-       ;; (use-package ido
-       ;;   :straight nil
-       ;;   :bind
-       ;;   ("C-x C-f" . ido-find-file)
-       ;;   ("C-x b" . ido-switch-buffer)
-       ;;   ("C-x C-d" . ido-dired)
-       ;;   ;; ("C-x C-r" . ido-recentf-open)
-       ;;   ;; :init
-       ;;   ;; (defun ido-recentf-open ()
-       ;;   ;;   "Use 'ido-completing-read' to \\[find-file] a recent file"
-       ;;   ;;   (interactive)
-       ;;   ;;   (if (find-file
-       ;;   ;;        (ido-completing-read "Find recent file: " recentf-list))
-       ;;   ;;       (message "Opening file...")
-       ;;   ;;     (message "Aborting")))
-       ;;   :config
-       ;;   (setq ido-max-window-height 0.75)
-       ;;   (setq ido-enable-flex-matching t)
-       ;;   (setq ido-confirm-unique-completion t)
-       ;;   (ido-mode 1)
-       ;;   (ido-everywhere 1)
-       ;;   (use-package ido-completing-read+
-       ;;     :delight
-       ;;     :config
-       ;;     (ido-ubiquitous-mode t))
-       ;;   (use-package ido-vertical-mode
-       ;;     :delight
-       ;;     :config
-       ;;     (setq ido-vertical-define-keys 'C-n-C-p-up-down-left-right)
-       ;;     (setq ido-vertical-show-count t)
-       ;;     (setq ido-use-faces t)
-       ;;     (ido-vertical-mode 1))
-       ;;   (use-package flx-ido
-       ;;     :delight
-       ;;     :config
-       ;;     (flx-ido-mode 1))
-       ;;   (use-package amx
-       ;;     :bind
-       ;;     ("M-x" . amx))
-       ;;   (use-package ido-flex-with-migemo
-       ;;     :defer t
-       ;;     :delight
-       ;;     :hook
-       ;;     (ido-mode-hook . ido-flex-with-migemo-mode)
-       ;;     :config
-       ;;     (add-to-list 'ido-flex-with-migemo-excluded-func-list
-       ;;                  '(amx ido-switch-buffer))
-       ;;     (setq ido-flex-with-migemo-least-char 5))
-       ;;   (use-package ido-sort-mtime
-       ;;     :config
-       ;;     (ido-sort-mtime-mode 1)
-       ;;     ;; (setq ido-sort-mtime-tramp-files-at-end nil)
-       ;;     (setq ido-sort-mtime-dot-at-beginning t)
-       ;;     (setq ido-sort-mtime-limit 2000))
-       ;;   (use-package crm-custom
-       ;;     :config
-       ;;     (crm-custom-mode 1))
-       ;;   (use-package ido-complete-space-or-hyphen
-       ;;     :delight))
-     #+END_SRC
-**** helm/helm-swoop
- #+BEGIN_SRC emacs-lisp
-   ;; (use-package helm
-   ;;   :disabled t
-   ;;   :delight Helm
-   ;;   :init
-   ;;   (require 'helm-config)
-   ;;   :bind
-   ;;   (("M-x" . helm-M-x)
-   ;;    ("C-x C-f" . helm-find-files)
-   ;;    ("C-x C-r" . helm-recentf)
-   ;;    ("C-x C-b" . helm-buffers-list)
-   ;;    ("C-x b" . helm-mini)
-   ;;    ("M-y" . helm-show-kill-ring)
-   ;;    ("C-c SPC" . helm-all-mark-rings)
-   ;;    ("C-c h g" . helm-google-suggest)
-   ;;    (:map helm-map
-   ;;          ("C-h" . delete-backward-char)
-   ;;          ("<tab>" . helm-execute-persistent-action)
-   ;;          ("C-z" . helm-select-action))
-   ;;    (:map helm-find-files-map
-   ;;          ("C-h" . delete-backward-char)))
-   ;;   :config
-   ;;   (global-set-key (kbd "C-c h") 'helm-command-prefix)
-   ;;   (global-unset-key (kbd "C-x c"))
-   ;;   (when (executable-find "curl")
-   ;;     (setq helm-google-suggest-use-curl-p t))
-   ;;   (setq helm-split-window-in-side-p t
-   ;;         helm-move-line-cycle-in-source t
-   ;;         helm-echo-input-in-header-line t
-   ;;         helm-candidate-number-limit 100)
-   ;;   (defun spacemacs//helm-hide-minibuffer-maybe ()
-   ;;     "Hide minibuffer in Helm session if we use the header line as input field."
-   ;;     (when (with-helm-buffer helm-echo-input-in-header-line)
-   ;;       (let ((ov (make-overlay (point-min) (point-max) nil nil t)))
-   ;;         (overlay-put ov 'window (selected-window))
-   ;;         (overlay-put ov 'face
-   ;;                      (let ((bg-color (face-background 'default nil)))
-   ;;                        `(:background ,bg-color :foreground ,bg-color)))
-   ;;         (setq-local cursor-type nil))))
-   ;;   (add-hook 'helm-minibuffer-set-up-hook
-   ;;             'spacemacs//helm-hide-minibuffer-maybe)
-   ;;   (setq helm-autoresize-max-height 0
-   ;;         helm-autoresize-min-height 20)
-   ;;   (helm-autoresize-mode 1)
-   ;;   (setq helm-M-x-fuzzy-match t
-   ;;         helm-buffers-fuzzy-matching t
-   ;;         helm-recentf-fuzzy-match t
-   ;;         helm-imenu-fuzzy-match t
-   ;;         helm-apropos-fuzzy-match t
-   ;;         helm-lisp-fuzzy-completion t)
-   ;;   ;; (setq helm-surfraw-default-browser-function 'browse-url-generic
-   ;;   ;;       browse-url-generic-program "google-chrome")
-   ;;   (helm-mode 1))
+*** ido
+    #+BEGIN_SRC emacs-lisp
+      ;; (use-package ido
+      ;;   :straight nil
+      ;;   :bind
+      ;;   ("C-x C-f" . ido-find-file)
+      ;;   ("C-x b" . ido-switch-buffer)
+      ;;   ("C-x C-d" . ido-dired)
+      ;;   ;; ("C-x C-r" . ido-recentf-open)
+      ;;   ;; :init
+      ;;   ;; (defun ido-recentf-open ()
+      ;;   ;;   "Use 'ido-completing-read' to \\[find-file] a recent file"
+      ;;   ;;   (interactive)
+      ;;   ;;   (if (find-file
+      ;;   ;;        (ido-completing-read "Find recent file: " recentf-list))
+      ;;   ;;       (message "Opening file...")
+      ;;   ;;     (message "Aborting")))
+      ;;   :config
+      ;;   (setq ido-max-window-height 0.75)
+      ;;   (setq ido-enable-flex-matching t)
+      ;;   (setq ido-confirm-unique-completion t)
+      ;;   (ido-mode 1)
+      ;;   (ido-everywhere 1)
+      ;;   (use-package ido-completing-read+
+      ;;     :delight
+      ;;     :config
+      ;;     (ido-ubiquitous-mode t))
+      ;;   (use-package ido-vertical-mode
+      ;;     :delight
+      ;;     :config
+      ;;     (setq ido-vertical-define-keys 'C-n-C-p-up-down-left-right)
+      ;;     (setq ido-vertical-show-count t)
+      ;;     (setq ido-use-faces t)
+      ;;     (ido-vertical-mode 1))
+      ;;   (use-package flx-ido
+      ;;     :delight
+      ;;     :config
+      ;;     (flx-ido-mode 1))
+      ;;   (use-package amx
+      ;;     :bind
+      ;;     ("M-x" . amx))
+      ;;   (use-package ido-flex-with-migemo
+      ;;     :defer t
+      ;;     :delight
+      ;;     :hook
+      ;;     (ido-mode-hook . ido-flex-with-migemo-mode)
+      ;;     :config
+      ;;     (add-to-list 'ido-flex-with-migemo-excluded-func-list
+      ;;                  '(amx ido-switch-buffer))
+      ;;     (setq ido-flex-with-migemo-least-char 5))
+      ;;   (use-package ido-sort-mtime
+      ;;     :config
+      ;;     (ido-sort-mtime-mode 1)
+      ;;     ;; (setq ido-sort-mtime-tramp-files-at-end nil)
+      ;;     (setq ido-sort-mtime-dot-at-beginning t)
+      ;;     (setq ido-sort-mtime-limit 2000))
+      ;;   (use-package crm-custom
+      ;;     :config
+      ;;     (crm-custom-mode 1))
+      ;;   (use-package ido-complete-space-or-hyphen
+      ;;     :delight))
+    #+END_SRC
+*** ivy/counsel/swiper
+#+begin_src emacs-lisp :tangle yes
 
-   ;; (use-package helm-smex
-   ;;   :defer t
-   ;;   :delight
-   ;;   :bind
-   ;;   ("M-x" . helm-smex)
-   ;;   ("M-x" . helm-smex-major-mode-commands))
+  (use-package counsel
+    :delight Ivy Counsel
+    :bind
+    (("M-i" . swiper)
+     ("M-x" . counsel-M-x)
+     ("M-y" . counsel-yank-pop)
+     ("C-x C-f" . counsel-find-file)
+     :map ivy-minibuffer-map
+     ("C-k" . ivy-kill-line)
+     ("C-j" . ivy-immediate-done)
+     ("RET" . ivy-alt-done)
+     ("C-h" . ivy-backward-char))
+    :hook
+    (after-init . ivy-mode)
+    (ivy-mode . counsel-mode)
+    :custom
+    (counsel-yank-pop-height 15)
+    (enable-recursive-minibuffers t)
+    (ivy-use-selectable-prompt t)
+    (ivy-use-virtual-buffers t)
+    :config
+    (use-package ivy-prescient
+      :delight
+      :demand t
+      :after ivy
+      :config
+      (ivy-prescient-mode +1))
+    (use-package ivy-posframe
+      :delight
+      :after ivy
+      :custom
+      (ivy-posframe-display-functions-alist
+       '((swiper . nil)
+         (swiper-avy . nil)
+         (swiper-isearch . nil)
+         (counsel-M-x . ivy-posframe-display-at-point)
+         (counsel-recentf . ivy-posframe-display-at-frma-center)
+         (complete-symbol . ivy-posframe-display-at-point)
+         (t . ivy-posframe-display)))
+      (ivy-posframe-parameters
+       '((left-fringe . 5)
+         (right-fringe . 5)))
+      (ivy-posframe-height-alist
+       '((t . 15)))
+      :config
+      (ivy-posframe-mode +1))
+    (use-package ivy-rich
+      :delight
+      :after ivy
+      :config
+      (ivy-rich-mode 1))
+    (use-package all-the-icons-ivy
+      :init (add-hook 'after-init-hook 'all-the-icons-ivy-setup)))
   
-   ;; (use-package helm-fuzzy
-   ;;   :init
-   ;;   (with-eval-after-load 'helm
-   ;;     (helm-fuzzy-mode 1))
-   ;;   :config
-   ;;   (setq helm-fuzzy-not-allow-fuzzy '("*helm-ag*")))
+#+end_src
+*** helm/helm-swoop
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package helm  
+  ;;   :disabled t
+  ;;   :delight Helm
+  ;;   :init
+  ;;   (require 'helm-config)
+  ;;   :bind
+  ;;   (("M-x" . helm-M-x)
+  ;;    ("C-x C-f" . helm-find-files)
+  ;;    ("C-x C-r" . helm-recentf)
+  ;;    ("C-x C-b" . helm-buffers-list)
+  ;;    ("C-x b" . helm-mini)
+  ;;    ("M-y" . helm-show-kill-ring)
+  ;;    ("C-c SPC" . helm-all-mark-rings)
+  ;;    ("C-c h g" . helm-google-suggest)
+  ;;    (:map helm-map
+  ;;          ("C-h" . delete-backward-char)
+  ;;          ("<tab>" . helm-execute-persistent-action)
+  ;;          ("C-z" . helm-select-action))
+  ;;    (:map helm-find-files-map
+  ;;          ("C-h" . delete-backward-char)))
+  ;;   :config
+  ;;   (global-set-key (kbd "C-c h") 'helm-command-prefix)
+  ;;   (global-unset-key (kbd "C-x c"))
+  ;;   (when (executable-find "curl")
+  ;;     (setq helm-google-suggest-use-curl-p t))
+  ;;   (setq helm-split-window-in-side-p t
+  ;;         helm-move-line-cycle-in-source t
+  ;;         helm-echo-input-in-header-line t
+  ;;         helm-candidate-number-limit 100)
+  ;;   (defun spacemacs//helm-hide-minibuffer-maybe ()
+  ;;     "Hide minibuffer in Helm session if we use the header line as input field."
+  ;;     (when (with-helm-buffer helm-echo-input-in-header-line)
+  ;;       (let ((ov (make-overlay (point-min) (point-max) nil nil t)))
+  ;;         (overlay-put ov 'window (selected-window))
+  ;;         (overlay-put ov 'face
+  ;;                      (let ((bg-color (face-background 'default nil)))
+  ;;                        `(:background ,bg-color :foreground ,bg-color)))
+  ;;         (setq-local cursor-type nil))))
+  ;;   (add-hook 'helm-minibuffer-set-up-hook
+  ;;             'spacemacs//helm-hide-minibuffer-maybe)
+  ;;   (setq helm-autoresize-max-height 0
+  ;;         helm-autoresize-min-height 20)
+  ;;   (helm-autoresize-mode 1)
+  ;;   (setq helm-M-x-fuzzy-match t
+  ;;         helm-buffers-fuzzy-matching t
+  ;;         helm-recentf-fuzzy-match t
+  ;;         helm-imenu-fuzzy-match t
+  ;;         helm-apropos-fuzzy-match t
+  ;;         helm-lisp-fuzzy-completion t)
+  ;;   ;; (setq helm-surfraw-default-browser-function 'browse-url-generic
+  ;;   ;;       browse-url-generic-program "google-chrome")
+  ;;   (helm-mode 1))
+
+  ;; (use-package helm-smex
+  ;;   :defer t
+  ;;   :delight
+  ;;   :bind
+  ;;   ("M-x" . helm-smex)
+  ;;   ("M-x" . helm-smex-major-mode-commands))
   
-   ;; (use-package helm-swoop
-   ;;   :disabled t
-   ;;   :defer t
-   ;;   :delight
-   ;;   :bind
-   ;;   (("M-i" . helm-swoop)
-   ;;   ("M-I" . helm-swoop-back-to-last-point)
-   ;;   ("C-c M-i" . helm-multi-swoop)
-   ;;   ("C-x M-i" . helm-multi-swoop-all)
-   ;;   (:map helm-swoop-map
-   ;;         ("M-i" . helm-multi-swoop-all-from-helm-swoop)
-   ;;         ("M-m" . helm-multi-swoop-current-mode-from-helm-swoop)
-   ;;         ("C-r" . helm-previous-line)
-   ;;         ("C-s" . helm-next-line))
-   ;;   (:map helm-multi-swoop-map
-   ;;         ("C-r" . helm-previous-line)
-   ;;         ("C-s" . helm-next-line)))
-   ;;   :config
-   ;;   (setq helm-swoop-split-with-multiple-windows t)
-   ;;   (setq helm-swoop-split-direction 'split-window-vertically)
-   ;;   (setq helm-swoop-move-to-line-cycle t)
-   ;;   (setq helm-swoop-use-fuzzy-match t))
+  ;; (use-package helm-fuzzy
+  ;;   :init
+  ;;   (with-eval-after-load 'helm
+  ;;     (helm-fuzzy-mode 1))
+  ;;   :config
+  ;;   (setq helm-fuzzy-not-allow-fuzzy '("*helm-ag*")))
+  
+  ;; (use-package helm-swoop
+  ;;   :disabled t
+  ;;   :defer t
+  ;;   :delight
+  ;;   :bind
+  ;;   (("M-i" . helm-swoop)
+  ;;   ("M-I" . helm-swoop-back-to-last-point)
+  ;;   ("C-c M-i" . helm-multi-swoop)
+  ;;   ("C-x M-i" . helm-multi-swoop-all)
+  ;;   (:map helm-swoop-map
+  ;;         ("M-i" . helm-multi-swoop-all-from-helm-swoop)
+  ;;         ("M-m" . helm-multi-swoop-current-mode-from-helm-swoop)
+  ;;         ("C-r" . helm-previous-line)
+  ;;         ("C-s" . helm-next-line))
+  ;;   (:map helm-multi-swoop-map
+  ;;         ("C-r" . helm-previous-line)
+  ;;         ("C-s" . helm-next-line)))
+  ;;   :config
+  ;;   (setq helm-swoop-split-with-multiple-windows t)
+  ;;   (setq helm-swoop-split-direction 'split-window-vertically)
+  ;;   (setq helm-swoop-move-to-line-cycle t)
+  ;;   (setq helm-swoop-use-fuzzy-match t))
 
-   ;; (use-package helm-ag
-   ;;   :disabled t
-   ;;   :defer t
-   ;;   :delight
-   ;;   :bind
-   ;;   ("C-M-g" . helm-ag)
-   ;;   :config
-   ;;   (setq helm-ag-base-command "rg -S --vimgrep --no-heading")
-   ;;   (setq helm-ag-insert-at-point 'symbol))
+  ;; (use-package helm-ag
+  ;;   :disabled t
+  ;;   :defer t
+  ;;   :delight
+  ;;   :bind
+  ;;   ("C-M-g" . helm-ag)
+  ;;   :config
+  ;;   (setq helm-ag-base-command "rg -S --vimgrep --no-heading")
+  ;;   (setq helm-ag-insert-at-point 'symbol))
 
-   ;; (use-package helm-c-yasnippet
-   ;;   :disabled t
-   ;;   :defer t
-   ;;   :delight
-   ;;   :bind
-   ;;   ("C-c y" . helm-yas-complete)
-   ;;   :config
-   ;;   (setq helm-yas-space-match-any-greedy t))
+  ;; (use-package helm-c-yasnippet
+  ;;   :disabled t
+  ;;   :defer t
+  ;;   :delight
+  ;;   :bind
+  ;;   ("C-c y" . helm-yas-complete)
+  ;;   :config
+  ;;   (setq helm-yas-space-match-any-greedy t))
 
-   ;; (use-package helm-cider
-   ;;   :disabled t
-   ;;   :defer t
-   ;;   :delight
-   ;;   :config
-   ;;   (helm-cider-mode 1))
- #+END_SRC
+  ;; (use-package helm-cider
+  ;;   :disabled t
+  ;;   :defer t
+  ;;   :delight
+  ;;   :config
+  ;;   (helm-cider-mode 1))
+#+END_SRC
 *** selectrum
 #+BEGIN_SRC emacs-lisp
 
-  (use-package selectrum
-    :init
-    (selectrum-mode +1)
-    :bind
-    ("C-c z" . selectrum-repeat))
-  (use-package selectrum-prescient
-    :delight
-    :demand t
-    :after selectrum
-    :config
-    (selectrum-prescient-mode +1))
+  ;; (use-package selectrum
+  ;;   :init
+  ;;   (selectrum-mode +1)
+  ;;   :bind
+  ;;   ("C-c z" . selectrum-repeat))
+  ;; (use-package selectrum-prescient
+  ;;   :delight
+  ;;   :demand t
+  ;;   :after selectrum
+  ;;   :config
+  ;;   (selectrum-prescient-mode +1))
   
 #+END_SRC
 *** ctrl-f
@@ -829,6 +1082,7 @@ Setup use-package
 *** kill-ring
     #+BEGIN_SRC emacs-lisp
       (use-package browse-kill-ring
+        :disabled t
         :delight
         :bind
         ("M-y" . browse-kill-ring))
@@ -1086,6 +1340,21 @@ Setup use-package
         :config
         (move-text-default-bindings))
     #+END_SRC
+*** spatial navigation
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package spatial-navigate
+  ;;   :defer t
+  ;;   :delight
+  ;;   :bind
+  ;;   ("<M-up>" . spatial-navigate-backward-vertical-bar)
+  ;;   ("<M-down>" . spatial-navigate-forward-vertical-bar)
+  ;;   ("<M-left>" . spatial-navigate-backward-horizontal-bar)
+  ;;   ("<M-right>" . spatial-navigate-forward-horizontal-bar)
+  ;;   :hook
+  ;;   (after-init-hook . spatial-navigate-mode)
+  ;;   )
+#+END_SRC
+
 ** Completion
 *** Company
     #+BEGIN_SRC emacs-lisp
@@ -1131,6 +1400,11 @@ Setup use-package
             (call-interactively fn)))
         (advice-add 'company-complete-selection
                     :around #'jcs--company-complete-selection--advice-around)
+        (use-package company-prescient
+          :delight
+          :after company
+          :config
+          (company-prescient-mode +1))
         (use-package company-box
           :delight
           :hook
@@ -1227,7 +1501,8 @@ Setup use-package
     :hook
     (LaTeX-mode-hook . (turn-on-reftex
                         LaTeX-math-mode
-                        outline-minor-mode))
+                        outline-minor-mode
+                        visual-line-mode))
     :mode
     (("\\.tex\\'" . LaTeX-mode)
      ("\\.sty\\'" . LaTeX-mode)
@@ -1335,36 +1610,41 @@ Setup use-package
 #+END_SRC
 *** Python
 #+BEGIN_SRC emacs-lisp
-  
-  (use-package anaconda-mode
-    :defer t
-    :hook
-    (python-mode-hook . (anaconda-mode anaconda-eldoc-mode)))
 
-  (use-package company-anaconda
+  (use-package elpy
     :defer t
-    :preface
-    (defun my/python-mode-setup ()
-       (setq-local company-backends
-                   (append '((company-anaconda))
-                           company-backends)))
-    :hook
-    (python-mode-hook . my/python-mode-setup))
+    :init
+    (advice-add 'python-mode :before 'elpy-enable))
 
-  (use-package py-yapf
-    :defer t
-    :delight
-    :hook
-    (python-mode-hook . py-yapf-enable-on-save))
+  ;; (use-package anaconda-mode
+  ;;   :defer t
+  ;;   :hook
+  ;;   (python-mode-hook . (anaconda-mode anaconda-eldoc-mode)))
 
-  (use-package importmagic
-    :disabled t
-    :defer t
-    :hook
-    (python-mode-hook . importmagic-mode)
-    :bind
-    (:map importmagic-mode-map
-          ("C-c C-f" . importmagic-fix-symbol-at-point)))
+  ;; (use-package company-anaconda
+  ;;   :defer t
+  ;;   :preface
+  ;;   (defun my/python-mode-setup ()
+  ;;      (setq-local company-backends
+  ;;                  (append '((company-anaconda))
+  ;;                          company-backends)))
+  ;;   :hook
+  ;;   (python-mode-hook . my/python-mode-setup))
+
+  ;; (use-package py-yapf
+  ;;   :defer t
+  ;;   :delight
+  ;;   :hook
+  ;;   (python-mode-hook . py-yapf-enable-on-save))
+
+  ;; (use-package importmagic
+  ;;   :disabled t
+  ;;   :defer t
+  ;;   :hook
+  ;;   (python-mode-hook . importmagic-mode)
+  ;;   :bind
+  ;;   (:map importmagic-mode-map
+  ;;         ("C-c C-f" . importmagic-fix-symbol-at-point)))
 
   (use-package py-isort
     :hook
@@ -1374,14 +1654,9 @@ Setup use-package
 
   (use-package python-pytest)
 
-  ;; (use-package ein
-  ;;   :defer t
-  ;;   :config
-  ;;   (require 'ein-notebook))
-
   (use-package ob-ipython
     :defer t)
-  
+
 #+END_SRC
 *** Julia
 #+BEGIN_SRC emacs-lisp
@@ -1466,20 +1741,19 @@ Setup use-package
 
   (use-package polymode
     :defer t
+    :delight)
+  (use-package poly-org
+    :after polymode
     :delight
     :config
-    (use-package poly-org
-      :defer t
-      :delight
-      :config
-      (add-to-list 'auto-mode-alist
-                   '("\\.org" . poly-org-mode)))
-    (use-package poly-markdown
-      :defer t
-      :delight
-      :config
-      (add-to-list 'auto-mode-alist
-                   '("\\.org" . poly-markdown-mode))))
+    (add-to-list 'auto-mode-alist
+      '("\\.org" . poly-org-mode)))
+  (use-package poly-markdown
+    :after polymode
+    :delight
+    :config
+    (add-to-list 'auto-mode-alist
+      '("\\.md" . poly-markdown-mode)))
   
 #+END_SRC
 
@@ -1487,9 +1761,8 @@ Setup use-package
 *** org-setup
 #+BEGIN_SRC emacs-lisp
   (use-package org
-    ;; :straight nil
     :hook
-    (org-mode-hook . (org-indent-mode visual-line-mode variable-pitch-mode))
+    (org-mode . (org-indent-mode visual-line-mode variable-pitch-mode))
     :config
     (setq org-tags-column 0)
     (setq org-display-inline-images t)
@@ -1512,6 +1785,7 @@ Setup use-package
   (use-package org-superstar
     :config
     (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
+    
 #+END_SRC
 *** org-babel
 #+BEGIN_SRC emacs-lisp
@@ -1962,9 +2236,9 @@ C-x n w: recursive-wide
   (use-package highlight-indent-guides
     :delight
     :hook
-  (prog-mode-hook . highlight-indent-guides-mode)
-  :config
-  (setq highlight-indent-guides-method 'bitmap))
+    (prog-mode-hook . highlight-indent-guides-mode)
+    :config
+    (setq highlight-indent-guides-method 'bitmap))
 
   (use-package line-reminder
     :defer t

@@ -182,17 +182,6 @@
         (let (smart-newline-mode)
           (call-interactively (key-binding (kbd "C-m"))))))))
 
-(use-package bs-show
-  :straight nil
-  :bind
-  ("C-x C-b" . bs-show)
-  ;; ("C-x b" , bs-show)
-  ("M-]" . bs-cycle-next)
-  ("M-[" . bs-cycle-previous))
-(use-package bs-ext
-  :defer t
-  :diminish)
-
 (use-package ibuffer
   :straight nil
   :bind
@@ -355,12 +344,6 @@
   :hook
   (after-init-hook . undo-fu-session-mode))
 
-(use-package lusty-explorer
-  :disabled t
-  :defer t
-  :delight
-  :config
-  (lusty-explorer-mode 1))
 (use-package direx
   :delight
   :bind
@@ -387,6 +370,12 @@
   (setq dired-sidebar-theme 'icons)
   (setq dired-sidebar-use-term-integration t)
   (setq dired-sidebar-use-custom-font t))
+
+(use-package all-the-icons-dired
+  :delight
+  :after all-the-icons
+  :hook
+  (dered-mode-hook . all-the-icons-dired-mode))
 
 (use-package peep-dired
   :defer t
@@ -913,6 +902,18 @@
   :config
   (move-text-default-bindings))
 
+;; (use-package spatial-navigate
+;;   :defer t
+;;   :delight
+;;   :bind
+;;   ("<M-up>" . spatial-navigate-backward-vertical-bar)
+;;   ("<M-down>" . spatial-navigate-forward-vertical-bar)
+;;   ("<M-left>" . spatial-navigate-backward-horizontal-bar)
+;;   ("<M-right>" . spatial-navigate-forward-horizontal-bar)
+;;   :hook
+;;   (after-init-hook . spatial-navigate-mode)
+;;   )
+
 (use-package company
   :defer t
   :bind
@@ -1040,7 +1041,8 @@
   :hook
   (LaTeX-mode-hook . (turn-on-reftex
                       LaTeX-math-mode
-                      outline-minor-mode))
+                      outline-minor-mode
+                      visual-line-mode))
   :mode
   (("\\.tex\\'" . LaTeX-mode)
    ("\\.sty\\'" . LaTeX-mode)
@@ -1139,35 +1141,40 @@
   (setq tab-always-indent 'complete)
   (setq font-lock-maximum-decoration 3))
 
-(use-package anaconda-mode
+(use-package elpy
   :defer t
-  :hook
-  (python-mode-hook . (anaconda-mode anaconda-eldoc-mode)))
+  :init
+  (advice-add 'python-mode :before 'elpy-enable))
 
-(use-package company-anaconda
-  :defer t
-  :preface
-  (defun my/python-mode-setup ()
-     (setq-local company-backends
-                 (append '((company-anaconda))
-                         company-backends)))
-  :hook
-  (python-mode-hook . my/python-mode-setup))
+;; (use-package anaconda-mode
+;;   :defer t
+;;   :hook
+;;   (python-mode-hook . (anaconda-mode anaconda-eldoc-mode)))
 
-(use-package py-yapf
-  :defer t
-  :delight
-  :hook
-  (python-mode-hook . py-yapf-enable-on-save))
+;; (use-package company-anaconda
+;;   :defer t
+;;   :preface
+;;   (defun my/python-mode-setup ()
+;;      (setq-local company-backends
+;;                  (append '((company-anaconda))
+;;                          company-backends)))
+;;   :hook
+;;   (python-mode-hook . my/python-mode-setup))
 
-(use-package importmagic
-  :disabled t
-  :defer t
-  :hook
-  (python-mode-hook . importmagic-mode)
-  :bind
-  (:map importmagic-mode-map
-        ("C-c C-f" . importmagic-fix-symbol-at-point)))
+;; (use-package py-yapf
+;;   :defer t
+;;   :delight
+;;   :hook
+;;   (python-mode-hook . py-yapf-enable-on-save))
+
+;; (use-package importmagic
+;;   :disabled t
+;;   :defer t
+;;   :hook
+;;   (python-mode-hook . importmagic-mode)
+;;   :bind
+;;   (:map importmagic-mode-map
+;;         ("C-c C-f" . importmagic-fix-symbol-at-point)))
 
 (use-package py-isort
   :hook
@@ -1176,11 +1183,6 @@
   (setq py-isort-options '("--lines=100")))
 
 (use-package python-pytest)
-
-;; (use-package ein
-;;   :defer t
-;;   :config
-;;   (require 'ein-notebook))
 
 (use-package ob-ipython
   :defer t)
@@ -1244,25 +1246,23 @@
 
 (use-package polymode
   :defer t
+  :delight)
+(use-package poly-org
+  :after polymode
   :delight
   :config
-  (use-package poly-org
-    :defer t
-    :delight
-    :config
-    (add-to-list 'auto-mode-alist
-                 '("\\.org" . poly-org-mode)))
-  (use-package poly-markdown
-    :defer t
-    :delight
-    :config
-    (add-to-list 'auto-mode-alist
-                 '("\\.org" . poly-markdown-mode))))
+  (add-to-list 'auto-mode-alist
+    '("\\.org" . poly-org-mode)))
+(use-package poly-markdown
+  :after polymode
+  :delight
+  :config
+  (add-to-list 'auto-mode-alist
+    '("\\.md" . poly-markdown-mode)))
 
 (use-package org
-  ;; :straight nil
   :hook
-  (org-mode-hook . (org-indent-mode visual-line-mode variable-pitch-mode))
+  (org-mode . (org-indent-mode visual-line-mode variable-pitch-mode))
   :config
   (setq org-tags-column 0)
   (setq org-display-inline-images t)
@@ -1678,9 +1678,9 @@
 (use-package highlight-indent-guides
   :delight
   :hook
-(prog-mode-hook . highlight-indent-guides-mode)
-:config
-(setq highlight-indent-guides-method 'bitmap))
+  (prog-mode-hook . highlight-indent-guides-mode)
+  :config
+  (setq highlight-indent-guides-method 'bitmap))
 
 (use-package line-reminder
   :defer t
