@@ -77,8 +77,9 @@
 
 (use-package f)
 (use-package s)
+(use-package dash)
 
-(setq-default cursor-type 'bar)
+(setq-default cursor-type 'box)
 (menu-bar-mode 1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
@@ -122,7 +123,7 @@
 
 (use-package crux
   :defer t
-  :diminish
+  :delight
   :bind
   ("C-c o" . crux-open-with)
   ("C-k" . crux-smart-kill-line)
@@ -139,15 +140,15 @@
 
 (use-package comment-dwim-2
   :defer t
-  :diminish
+  :delight
   :bind
   ("M-;" . comment-dwim-2))
 
 (use-package smartparens
   :defer t
-  :diminish
-  ;; :hook
-  ;; (after-init . show-smartparens-global-mode)
+  :delight
+  :hook
+  (after-init . show-smartparens-global-mode)
   :config
   (require 'smartparens-config)
   ;; (sp-pair "=" "=" :actions '(wrap))
@@ -161,13 +162,13 @@
   (show-smartparens-global-mode +1))
 
 (use-package paren-completer
-  :diminish
+  :delight
   :bind
   ("M-)" . paren-completer-add-single-delimiter))
 
 (use-package smart-newline
   :defer t
-  :diminish
+  :delight
   :hook
   (after-init . smart-newline-mode)
   :bind
@@ -205,8 +206,15 @@
   :defer t
   :delight
   :config
-(global-aggressive-indent-mode 1)
-(add-to-list 'aggressive-indent-excluded-modes 'html-mode))
+  (global-aggressive-indent-mode 1)
+  (add-to-list 'aggressive-indent-excluded-modes 'html-mode))
+
+(use-package async
+  :delight
+  :hook after-init
+  :config
+  (autoload 'dired-async-mode "dired-async.el" nil t)
+  (dired-async-mode 1))
 
 (define-key global-map [?¥] [?\\])
 (define-key key-translation-map (kbd "C-h") (kbd "<DEL>"))
@@ -268,10 +276,6 @@
   :config
   (prescient-persist-mode +1)
   (setq prescient-history-length 1000))
-
-;; (use-package dash)
-
-;; (use-package s)
 
 (use-package ddskk
   :defer t
@@ -344,13 +348,152 @@
   :hook
   (after-init-hook . undo-fu-session-mode))
 
-(use-package direx
-  :delight
+(use-package dired
+  :straight nil
+  :delight Dired
   :bind
-  ("C-x C-j" . direx:jump-to-directory))
-(setq dired-listing-switches "-alh")
-
-(use-package dired-subtree)
+  ((:map dired-mode-map
+	 ("(" . dired-hide-details-mode)
+	 (")" . dired-hide-details-mode)))
+  :custom
+  (dired-listing-switches "-alh")
+  (dired-dwim-target t)
+  (dired-recursive-copies 'always)
+  (dired-recursive-deletes 'always)
+  (delete-by-moving-to-trash t)
+  (dired-isearch-filenames 'dwim)
+  (dired-ls-F-marks-symlinks t)
+  :config
+  ;; (add-to-list 'dired-compress-file-suffixes '("\\.zip\\'" ".zip" "unzip"))
+  (use-package wdired
+    :straight nil
+    :delight Wdired
+    :demand dired
+    :after dired
+    :bind
+    ((:map dired-mode-map
+	   ("e" . wdired-change-to-wdired-mode)))
+    :custom
+    (wdired-allow-to-change-permissions t))
+  (use-package dired-aux
+    :straight nil
+    :after dired)
+  (use-package all-the-icons-dired
+    :delight
+    :after all-the-icons
+    :hook
+    (dired-mode . all-the-icons-dired-mode))
+  ;; dired-hack packages
+  (use-package dired-hacks-utils
+    :delight
+    :after dired)
+  (use-package dired-filter
+    :delight filter
+    :after dired
+    :bind
+    ((:map dired-mode-map
+	   ("/" . dired-filter-map))))
+  (use-package dired-rainbow
+    :config
+    (progn
+      (dired-rainbow-define-chmod directory
+				  "#6cb2eb" "d.*")
+      (dired-rainbow-define html
+			    "#eb5286"
+			    ("css" "less" "sass" "scss" "htm" "html" "jhtm" "mht" "eml" "mustache" "xhtml"))
+      (dired-rainbow-define xml
+			    "#f2d024"
+			    ("xml" "xsd" "xsl" "xslt" "wsdl" "bib" "json" "msg" "pgn" "rss" "yaml" "yml" "rdata"))
+      (dired-rainbow-define document
+			    "#9561e2"
+			    ("docm" "doc" "docx" "odb" "odt" "pdb" "pdf" "ps" "rtf" "djvu" "epub" "odp" "ppt" "pptx"))
+      (dired-rainbow-define markdown
+			    "#ffed4a"
+			    ("org" "etx" "info" "markdown" "md" "mkd" "nfo" "pod" "rst" "tex" "textfile" "txt"))
+      (dired-rainbow-define database
+			    "#6574cd"
+			    ("xlsx" "xls" "csv" "accdb" "db" "mdb" "sqlite" "nc"))
+      (dired-rainbow-define media
+			    "#de751f"
+			    ("mp3" "mp4" "MP3" "MP4" "avi" "mpeg" "mpg" "flv" "ogg" "mov" "mid" "midi" "wav" "aiff" "flac"))
+      (dired-rainbow-define image
+			    "#f66d9b"
+			    ("tiff" "tif" "cdr" "gif" "ico" "jpeg" "jpg" "png" "psd" "eps" "svg"))
+      (dired-rainbow-define log
+			    "#c17d11"
+			    ("log"))
+      (dired-rainbow-define shell
+			    "#f6993f"
+			    ("awk" "bash" "bat" "sed" "sh" "zsh" "vim"))
+      (dired-rainbow-define interpreted
+			    "#38c172"
+			    ("py" "ipynb" "rb" "pl" "t" "msql" "mysql" "pgsql" "sql" "r" "clj" "cljs" "scala" "js"))
+      (dired-rainbow-define compiled
+			    "#4dc0b5"
+			    ("asm" "cl" "lisp" "el" "c" "h" "c++" "h++" "hpp" "hxx" "m" "cc" "cs" "cp" "cpp" "go" "f" "for" "ftn" "f90" "f95" "f03" "f08" "s" "rs" "hi" "hs" "pyc" ".java"))
+      (dired-rainbow-define executable
+			    "#8cc4ff"
+			    ("exe" "msi"))
+      (dired-rainbow-define compressed
+			    "#51d88a"
+			    ("7z" "zip" "bz2" "tgz" "txz" "gz" "xz" "z" "Z" "jar" "war" "ear" "rar" "sar" "xpi" "apk" "xz" "tar"))
+      (dired-rainbow-define packaged
+			    "#faad63"
+			    ("deb" "rpm" "apk" "jad" "jar" "cab" "pak" "pk3" "vdf" "vpk" "bsp"))
+      (dired-rainbow-define encrypted
+			    "#ffed4a"
+			    ("gpg" "pgp" "asc" "bfe" "enc" "signature" "sig" "p12" "pem"))
+      (dired-rainbow-define fonts
+			    "#6cb2eb"
+			    ("afm" "fon" "fnt" "pfb" "pfm" "ttf" "otf"))
+      (dired-rainbow-define partition
+			    "#e3342f"
+			    ("dmg" "iso" "bin" "nrg" "qcow" "toast" "vcd" "vmdk" "bak"))
+      (dired-rainbow-define vc
+			    "#0074d9"
+			    ("git" "gitignore" "gitattributes" "gitmodules"))
+      (dired-rainbow-define-chmod executable-unix "#38c172" "-.*x.*")))
+  (use-package dired-collapse
+    :delight
+    :after dired)
+  (use-package dired-avfs
+    :delight
+    :after dired)
+  (use-package dired-subtree
+    :delight
+    :after dired
+    :bind
+    ((:map dired-mode-map
+	   ("i" . dired-subtree-toggle))))
+  ;; dired-hack packages end here
+  (use-package peep-dired
+    :delight peep
+    :defer t
+    :bind
+    ((:map dired-mode-map
+	   ("P" . pddp-dired))))
+  (use-package quick-preview
+    :delight preview
+    :init
+    :bind
+    ("C-c q" . quick-preview-at-point)
+    (:map dired-mode-map
+	  ("Q" . quick-preview-at-point)))
+  (use-package runner
+    :delight
+    :after dired)
+  (use-package dired-toggle-sudo
+    :delight sudo
+    :after dired
+    :bind
+    ((:map dired-mode-map
+	   ("C-c C-s" . dired-toggle-sudo)))
+    :config
+    (with-eval-after-load 'tramp
+      ;; Allow to use : /sudo:user@host:/path/to/file
+      (add-to-list 'tramp-default-proxies-alist
+		   '(".*" "\\'.+\\" "/ssh:%h:"))))
+  )
 
 (use-package dired-sidebar
   :defer t
@@ -359,9 +502,9 @@
   :commands (dired-sidebar-toggle-sidebar)
   :init
   (add-hook 'dired-sidebar-mode-hook
-            (lambda ()
-              (unless (file-remote-p default-directory)
-                (auto-revert-mode))))
+	    (lambda ()
+	      (unless (file-remote-p default-directory)
+		(auto-revert-mode))))
   :config
   (push 'toggle-window-split dired-sidebar-toggle-hidden-commands)
   (push 'rotate-windows dired-sidebar-toggle-hidden-commands)
@@ -370,19 +513,6 @@
   (setq dired-sidebar-theme 'icons)
   (setq dired-sidebar-use-term-integration t)
   (setq dired-sidebar-use-custom-font t))
-
-(use-package all-the-icons-dired
-  :delight
-  :after all-the-icons
-  :hook
-  (dered-mode-hook . all-the-icons-dired-mode))
-
-(use-package peep-dired
-  :defer t
-  :delight
-  :bind
-  (:map dired-mode-map
-        ("P" . peep-dired)))
 
 (use-package treemacs
   :ensure t
@@ -546,7 +676,61 @@
 ;;   (use-package ido-complete-space-or-hyphen
 ;;     :delight))
 
-;; (use-package helm
+(use-package counsel
+  :delight Ivy Counsel
+  :bind
+  (("M-i" . swiper)
+   ("M-x" . counsel-M-x)
+   ("M-y" . counsel-yank-pop)
+   ("C-x C-f" . counsel-find-file)
+   :map ivy-minibuffer-map
+   ("C-k" . ivy-kill-line)
+   ("C-j" . ivy-immediate-done)
+   ("RET" . ivy-alt-done)
+   ("C-h" . ivy-backward-char))
+  :hook
+  (after-init . ivy-mode)
+  (ivy-mode . counsel-mode)
+  :custom
+  (counsel-yank-pop-height 15)
+  (enable-recursive-minibuffers t)
+  (ivy-use-selectable-prompt t)
+  (ivy-use-virtual-buffers t)
+  :config
+  (use-package ivy-prescient
+    :delight
+    :demand t
+    :after ivy
+    :config
+    (ivy-prescient-mode +1))
+  (use-package ivy-posframe
+    :delight
+    :after ivy
+    :custom
+    (ivy-posframe-display-functions-alist
+     '((swiper . nil)
+       (swiper-avy . nil)
+       (swiper-isearch . nil)
+       (counsel-M-x . ivy-posframe-display-at-point)
+       (counsel-recentf . ivy-posframe-display-at-frma-center)
+       (complete-symbol . ivy-posframe-display-at-point)
+       (t . ivy-posframe-display)))
+    (ivy-posframe-parameters
+     '((left-fringe . 5)
+       (right-fringe . 5)))
+    (ivy-posframe-height-alist
+     '((t . 15)))
+    :config
+    (ivy-posframe-mode +1))
+  (use-package ivy-rich
+    :delight
+    :after ivy
+    :config
+    (ivy-rich-mode 1))
+  (use-package all-the-icons-ivy
+    :init (add-hook 'after-init-hook 'all-the-icons-ivy-setup)))
+
+;; (use-package helm  
 ;;   :disabled t
 ;;   :delight Helm
 ;;   :init
@@ -662,17 +846,17 @@
 ;;   :config
 ;;   (helm-cider-mode 1))
 
-(use-package selectrum
-  :init
-  (selectrum-mode +1)
-  :bind
-  ("C-c z" . selectrum-repeat))
-(use-package selectrum-prescient
-  :delight
-  :demand t
-  :after selectrum
-  :config
-  (selectrum-prescient-mode +1))
+;; (use-package selectrum
+;;   :init
+;;   (selectrum-mode +1)
+;;   :bind
+;;   ("C-c z" . selectrum-repeat))
+;; (use-package selectrum-prescient
+;;   :delight
+;;   :demand t
+;;   :after selectrum
+;;   :config
+;;   (selectrum-prescient-mode +1))
 
 (use-package ctrlf
   :init
@@ -681,6 +865,7 @@
   (add-hook 'pdf-isearch-minor-mode-hook (lambda () (ctrlf-local-mode -1))))
 
 (use-package browse-kill-ring
+  :disabled t
   :delight
   :bind
   ("M-y" . browse-kill-ring))
@@ -955,6 +1140,11 @@
       (call-interactively fn)))
   (advice-add 'company-complete-selection
               :around #'jcs--company-complete-selection--advice-around)
+  (use-package company-prescient
+    :delight
+    :after company
+    :config
+    (company-prescient-mode +1))
   (use-package company-box
     :delight
     :hook
