@@ -304,11 +304,17 @@
                        '(lambda ()
                           (with-suppressed-message
                            (recentf-save-list)))))
-(use-package recentf-ext
+;; (use-package recentf-ext
+;;   :defer t
+;;   :delight
+;;   :bind
+;;   ("C-c c o" . recentf-open-files))
+
+(use-package frecentf
+  :delight Recentf
   :defer t
-  :delight
-  :bind
-  ("C-c c o" . recentf-open-files))
+  :hook
+  (after-init . frecentf-mode))
 
 (use-package super-save
   :defer t
@@ -679,7 +685,7 @@
 (use-package counsel
   :delight Ivy Counsel
   :bind
-  (("M-i" . swiper)
+  (("C-s" . swiper)
    ("M-x" . counsel-M-x)
    ("M-y" . counsel-yank-pop)
    ("C-x C-f" . counsel-find-file)
@@ -697,6 +703,7 @@
   (ivy-use-selectable-prompt t)
   (ivy-use-virtual-buffers t)
   :config
+  (ivy-mode 1)
   (use-package ivy-prescient
     :delight
     :demand t
@@ -858,11 +865,11 @@
 ;;   :config
 ;;   (selectrum-prescient-mode +1))
 
-(use-package ctrlf
-  :init
-  (ctrlf-mode +1)
-  :config
-  (add-hook 'pdf-isearch-minor-mode-hook (lambda () (ctrlf-local-mode -1))))
+;; (use-package ctrlf
+;;   :init
+;;   (ctrlf-mode +1)
+;;   :config
+;;   (add-hook 'pdf-isearch-minor-mode-hook (lambda () (ctrlf-local-mode -1))))
 
 (use-package browse-kill-ring
   :disabled t
@@ -962,6 +969,7 @@
 (use-package visual-regexp
   :defer t
   :delight
+  :after multiple-cursor
   :bind
   ("C-c r" . vr/replace)
   ("M-%" . vr/query-replace)
@@ -969,16 +977,22 @@
   ("C-M-R" . vr/isearch-backward)
   ("C-c m" . vr/mc-mark)
   :config
+  (use-package pcre2el
+    :defer t
+    :delight)
   (use-package visual-regexp-steroids
+    :after visual-regexp
     :delight
     :config
     (setq vr/engine 'pcre2el)))       ; If use Python, pcre2el -> python
 
 (use-package multiple-cursors
-  :defer t
+  :hook
+  (after-init . multiple-cursors)
   :delight
   :bind
-  (("C-S-l" . mc/edit-lines)
+  (("C-x r t" . mc/edit-lines)
+   ("C-M-SPC" . mc/mark-all-dwim)
   ("C->" . mc/mark-next-like-this)
   ("C-<" . mc/mark-previous-like-this)
   ("C-c C-<" . mc/mark-all-like-this)
@@ -1819,26 +1833,12 @@
 (use-package transpose-frame)
 
 (use-package rainbow-mode
-  :disabled t
   :delight
   :hook ((emacs-lisp-mode c-mode org-mode) . rainbow-mode))
 (use-package rainbow-delimiters
   :delight
   :hook
-  (emacs-lisp-mode-hook. rainbow-delimiters-mode)
-  (prog-mode-hook . rainbow-delimiters-mode)
-  :config
-  (setq rainbow-delimiters-outermost-only-face-count 1)
-  (rainbow-delimiters-mode 1)
-  (set-face-foreground 'rainbow-delimiters-depth-1-face "#9a4040")
-  (set-face-foreground 'rainbow-delimiters-depth-2-face "#ff5e5e")
-  (set-face-foreground 'rainbow-delimiters-depth-3-face "#ffaa77")
-  (set-face-foreground 'rainbow-delimiters-depth-4-face "#dddd77")
-  (set-face-foreground 'rainbow-delimiters-depth-5-face "#80ee80")
-  (set-face-foreground 'rainbow-delimiters-depth-6-face "#66bbff")
-  (set-face-foreground 'rainbow-delimiters-depth-7-face "#da6bda")
-  (set-face-foreground 'rainbow-delimiters-depth-8-face "#afafaf")
-  (set-face-foreground 'rainbow-delimiters-depth-9-face "#f0f0f0"))
+  (prog-mode . rainbow-delimiters-mode))
 
 
 (use-package highlight-stages
@@ -1854,10 +1854,11 @@
   (elisp-mode-hook . prism-mode))
 
 (use-package beacon
-  :defer t
+  :hook
+  (after-init . beacon-mode)
   :delight
-  :config
-  (beacon-mode 1))
+  :custom
+  (beacon-color "#f1fa8c"))
 
 (use-package volatile-highlights
   :defer t
@@ -1901,6 +1902,13 @@
   :defer t
   :delight
   :config
+  (setq keypression-use-child-frame nil
+        keypression-fade-out-delya 1.0
+        keypression-frame-justify 'keypression-left-justified
+        keypression-cast-command-name t
+        keypression-cast-command-name-format "%s %s"
+        keypression-combine-same-keystrokes t
+        keypression-font-face-attribute '(:width normal :height 200 :weight bold))
   (setq keypression-x-offset 100
         keypression-y-offset 100))
 
@@ -1930,6 +1938,12 @@
   (setq symon-sparkline-width 50)
   (setq symon-sparkline-thickness 2)
   (symon-mode 1))
+
+(use-package schrute
+  :delight
+  :defer t
+  :config
+  (schrute-mode 1))
 
 (use-package git-gutter
   :disabled t

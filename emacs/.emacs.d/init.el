@@ -36,6 +36,7 @@
  ;; If there is more than one, they won't work right.
  '(anzu-mode-lighter "")
  '(anzu-search-threshold 1000)
+ '(beacon-mode t)
  '(company-echo-delay 0 t)
  '(company-idle-delay 0 t)
  '(company-minimum-prefix-length 1 t)
@@ -50,7 +51,9 @@
  '(time-stamp-end ">" t)
  '(time-stamp-format "%:y-%03:b-%02d %02H:%02M:%02S from %s by %u" t)
  '(time-stamp-line-limit 20 t)
- '(time-stamp-start "[lL]ast[ -][uU]pdated[ 	]*:[ 	]*<" t))
+ '(time-stamp-start "[lL]ast[ -][uU]pdated[ 	]*:[ 	]*<" t)
+ '(warning-suppress-types '((use-package) (use-package)))
+ '(which-key-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
