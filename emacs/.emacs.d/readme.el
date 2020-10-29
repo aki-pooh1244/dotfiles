@@ -477,7 +477,7 @@
     :defer t
     :bind
     ((:map dired-mode-map
-	   ("P" . pddp-dired))))
+	   ("P" . peep-dired))))
   (use-package quick-preview
     :delight preview
     :init
@@ -622,6 +622,134 @@
                                                  'mode-line fg))
                                    orig-fg))))
 
+(use-package counsel
+  :delight Ivy Counsel
+  :bind
+  (("C-s" . swiper)
+   ("M-x" . counsel-M-x)
+   ("M-y" . counsel-yank-pop)
+   ("C-x C-f" . counsel-find-file)
+   ("C-x b" . counsel-ibuffer)
+   :map ivy-minibuffer-map
+   ("C-k" . ivy-kill-line)
+   ("C-j" . ivy-immediate-done)
+   ("RET" . ivy-alt-done)
+   ("C-h" . ivy-backward-char))
+  :hook
+  (after-init . ivy-mode)
+  (ivy-mode . counsel-mode)
+  :custom
+  (counsel-yank-pop-height 15)
+  (enable-recursive-minibuffers t)
+  (ivy-use-selectable-prompt t)
+  (ivy-use-virtual-buffers t)
+  :config
+  (ivy-mode 1)
+  (use-package ivy-prescient
+    :delight
+    :demand t
+    :after ivy
+    :config
+    (ivy-prescient-mode +1))
+  (use-package ivy-posframe
+    :delight
+    :after ivy
+    :hook
+    (ivy-mode . ivy-posframe-mode)
+    :custom
+    (ivy-posframe-display-functions-alist
+     '((swiper . nil)
+       (swiper-avy . nil)
+       (swiper-isearch . nil)
+       (counsel-M-x . ivy-posframe-display-at-point)
+       (counsel-recentf . ivy-posframe-display-at-frma-center)
+       (complete-symbol . ivy-posframe-display-at-point)
+       (t . ivy-posframe-display)))
+    (ivy-posframe-parameters
+     '((left-fringe . 5)
+       (right-fringe . 5)))
+    (ivy-posframe-height-alist
+     '((t . 15)))
+    :config
+    (ivy-posframe-mode +1))
+  (use-package ivy-rich
+    :delight
+    :after ivy
+    :config
+    (ivy-rich-mode 1))
+  (use-package all-the-icons-ivy
+    :hook (after-init . all-the-icons-ivy-setup)))
+
+(use-package easy-kill
+  :delight
+  :bind
+  ("M-w" . easy-kill)
+  ("C-<SPC>" . easy-mark))
+
+(use-package migemo
+  ;; :defer t
+  ;; :delight
+  :config
+  (setq migemo-command "cmigemo")
+  (setq migemo-options '("-q" "--emacs"))
+  (when (eq system-type 'drwin)
+    (setq migemo-dictionary "/usr/local/share/migemo/utf-8/migemo-dict"))
+  (setq migemo-user-dictionary nil)
+  (setq migemo-regex-dictionary nil)
+  (setq migemo-coding-system 'utf-8-unix))
+
+(use-package wgrep
+  :defer t
+  :delight
+  :config
+  (use-package wgrep-ag :defer t :delight))
+
+(use-package ag
+  :defer t
+  :delight
+  :bind
+  ("M-s a" . ag-project)
+  :config
+  (ag-highlight-search t)
+  (ag-reuse-buffer t)
+  (ag-reuse-window t))
+
+(use-package projectile
+  :disabled t
+  :defer t
+  :delight proj
+  :bind
+  ("s-p" . projectile-command-map)
+  ("C-c p" . projectile-command-map)
+  :config
+  (projectile-mode +1))
+
+(use-package visual-regexp
+  :defer t
+  :delight
+  :after multiple-cursor
+  :bind
+  ("C-c r" . vr/replace)
+  ("M-%" . vr/query-replace)
+  ("C-M-S" . vr/isearch-forward)
+  ("C-M-R" . vr/isearch-backward)
+  ("C-c m" . vr/mc-mark)
+  :config
+  (use-package pcre2el
+    :defer t
+    :delight)
+  (use-package visual-regexp-steroids
+    :after visual-regexp
+    :delight
+    :config
+    (setq vr/engine 'pcre2el)))       ; If use Python, pcre2el -> python
+
+;; (use-package ctrlf
+;;   :init
+;;   (ctrlf-mode +1)
+;;   :config
+;;   (add-hook 'pdf-isearch-minor-mode-hook (lambda () (ctrlf-local-mode -1))))
+
 ;; (use-package ido
 ;;   :straight nil
 ;;   :bind
@@ -681,61 +809,6 @@
 ;;     (crm-custom-mode 1))
 ;;   (use-package ido-complete-space-or-hyphen
 ;;     :delight))
-
-(use-package counsel
-  :delight Ivy Counsel
-  :bind
-  (("C-s" . swiper)
-   ("M-x" . counsel-M-x)
-   ("M-y" . counsel-yank-pop)
-   ("C-x C-f" . counsel-find-file)
-   :map ivy-minibuffer-map
-   ("C-k" . ivy-kill-line)
-   ("C-j" . ivy-immediate-done)
-   ("RET" . ivy-alt-done)
-   ("C-h" . ivy-backward-char))
-  :hook
-  (after-init . ivy-mode)
-  (ivy-mode . counsel-mode)
-  :custom
-  (counsel-yank-pop-height 15)
-  (enable-recursive-minibuffers t)
-  (ivy-use-selectable-prompt t)
-  (ivy-use-virtual-buffers t)
-  :config
-  (ivy-mode 1)
-  (use-package ivy-prescient
-    :delight
-    :demand t
-    :after ivy
-    :config
-    (ivy-prescient-mode +1))
-  (use-package ivy-posframe
-    :delight
-    :after ivy
-    :custom
-    (ivy-posframe-display-functions-alist
-     '((swiper . nil)
-       (swiper-avy . nil)
-       (swiper-isearch . nil)
-       (counsel-M-x . ivy-posframe-display-at-point)
-       (counsel-recentf . ivy-posframe-display-at-frma-center)
-       (complete-symbol . ivy-posframe-display-at-point)
-       (t . ivy-posframe-display)))
-    (ivy-posframe-parameters
-     '((left-fringe . 5)
-       (right-fringe . 5)))
-    (ivy-posframe-height-alist
-     '((t . 15)))
-    :config
-    (ivy-posframe-mode +1))
-  (use-package ivy-rich
-    :delight
-    :after ivy
-    :config
-    (ivy-rich-mode 1))
-  (use-package all-the-icons-ivy
-    :init (add-hook 'after-init-hook 'all-the-icons-ivy-setup)))
 
 ;; (use-package helm  
 ;;   :disabled t
@@ -865,126 +938,57 @@
 ;;   :config
 ;;   (selectrum-prescient-mode +1))
 
-;; (use-package ctrlf
-;;   :init
-;;   (ctrlf-mode +1)
+;; (use-package browse-kill-ring
+;;   :disabled t
+;;   :delight
+;;   :bind
+;;   ("M-y" . browse-kill-ring))
+
+;; (use-package flx-isearch
+;;   :disabled t
+;;   :delight
+;;   :bind
+;;   ("C-M-s" . flx-isearch-forward)
+;;   ("C-M-r" . flx-isearch-backward))
+;; (use-package isearch-dabbrev
+;;   :disabled t
+;;   :delight
+;;   :bind
+;;   (:map isearch-mode-map
+;;         ("<tab>" . isearch-dabbrev-expand)))
+;; (use-package swoop
+;;   :disabled t
+;;   :defer t
+;;   :bind
+;;   ("C-o" . swoop)
+;;   ("C-M-o" . swoop-multi)
+;;   ("M-o" . swoop-pcre-regexp)
+;;   ("C-S-o" . swoop-back-to-last-position)
+;;   ("C-M-m" . swoop-migemo)
 ;;   :config
-;;   (add-hook 'pdf-isearch-minor-mode-hook (lambda () (ctrlf-local-mode -1))))
+;;   (setq swoop-minibuffer-input-delay 0.4)
+;;   (setq swoop-font-size: 0.8))
 
-(use-package browse-kill-ring
-  :disabled t
-  :delight
-  :bind
-  ("M-y" . browse-kill-ring))
-(use-package easy-kill
-  :delight
-  :bind
-  ("M-w" . easy-kill)
-  ("C-<SPC>" . easy-mark))
+;; (use-package ace-isearch
+;;   :disabled t
+;;   :delight
+;;   :config
+;;   (global-ace-isearch-mode +1)
+;;   (setq ace-isearch-jump-delay 0.5)
+;;   (setq ace-isearch-function 'avy-goto-char)
+;;   (setq ace-isearch-function-from-isearch 'swoop-from-isearch)
+;;   (setq ace-isearch-use-function-from-isearch t)
+;;   (setq ace-isearch-fallback-function 'swoop-from-isearch))
 
-(use-package flx-isearch
-  :disabled t
-  :delight
-  :bind
-  ("C-M-s" . flx-isearch-forward)
-  ("C-M-r" . flx-isearch-backward))
-(use-package isearch-dabbrev
-  :disabled t
-  :delight
-  :bind
-  (:map isearch-mode-map
-        ("<tab>" . isearch-dabbrev-expand)))
-(use-package swoop
-  :disabled t
-  :defer t
-  :bind
-  ("C-o" . swoop)
-  ("C-M-o" . swoop-multi)
-  ("M-o" . swoop-pcre-regexp)
-  ("C-S-o" . swoop-back-to-last-position)
-  ("C-M-m" . swoop-migemo)
-  :config
-  (setq swoop-minibuffer-input-delay 0.4)
-  (setq swoop-font-size: 0.8))
-
-(use-package migemo
-  ;; :defer t
-  ;; :delight
-  :config
-  (setq migemo-command "cmigemo")
-  (setq migemo-options '("-q" "--emacs"))
-  (when (eq system-type 'drwin)
-    (setq migemo-dictionary "/usr/local/share/migemo/utf-8/migemo-dict"))
-  (setq migemo-user-dictionary nil)
-  (setq migemo-regex-dictionary nil)
-  (setq migemo-coding-system 'utf-8-unix))
-
-(use-package anzu
-  :disabled t
-  :defer t
-  :delight
-  :config
-  (global-anzu-mode +1)
-  (custom-set-variables
-   '(anzu-mode-lighter "")
-   '(anzu-search-threshold 1000)))
-
-(use-package ace-isearch
-  :disabled t
-  :delight
-  :config
-  (global-ace-isearch-mode +1)
-  (setq ace-isearch-jump-delay 0.5)
-  (setq ace-isearch-function 'avy-goto-char)
-  (setq ace-isearch-function-from-isearch 'swoop-from-isearch)
-  (setq ace-isearch-use-function-from-isearch t)
-  (setq ace-isearch-fallback-function 'swoop-from-isearch))
-
-(use-package wgrep
-  :defer t
-  :delight
-  :config
-  (use-package wgrep-ag :defer t :delight))
-
-(use-package ag
-  :defer t
-  :delight
-  :bind
-  ("M-s a" . ag-project)
-  :config
-  (ag-highlight-search t)
-  (ag-reuse-buffer t)
-  (ag-reuse-window t))
-
-(use-package projectile
-  :disabled t
-  :defer t
-  :delight proj
-  :bind
-  ("s-p" . projectile-command-map)
-  ("C-c p" . projectile-command-map)
-  :config
-  (projectile-mode +1))
-
-(use-package visual-regexp
-  :defer t
-  :delight
-  :after multiple-cursor
-  :bind
-  ("C-c r" . vr/replace)
-  ("M-%" . vr/query-replace)
-  ("C-M-S" . vr/isearch-forward)
-  ("C-M-R" . vr/isearch-backward)
-  ("C-c m" . vr/mc-mark)
-  :config
-  (use-package pcre2el
-    :defer t
-    :delight)
-  (use-package visual-regexp-steroids
-    :after visual-regexp
-    :delight
-    :config
-    (setq vr/engine 'pcre2el)))       ; If use Python, pcre2el -> python
+;; (use-package anzu
+;;   :disabled t
+;;   :defer t
+;;   :delight
+;;   :config
+;;   (global-anzu-mode +1)
+;;   (custom-set-variables
+;;    '(anzu-mode-lighter "")
+;;    '(anzu-search-threshold 1000)))
 
 (use-package multiple-cursors
   :hook
@@ -1449,8 +1453,7 @@
   (after-init-hook . flimenu-global-mode))
 
 (use-package polymode
-  :defer t
-  :delight)
+  :delight Poly)
 (use-package poly-org
   :after polymode
   :delight
@@ -1618,8 +1621,8 @@
 (set-default-coding-systems 'utf-8)
 (prefer-coding-system 'utf-8)
 (set-face-attribute 'default nil
-		    :family "Source Code Pro"
-		    :height 130)
+		    :family "IBM Plex Mono"
+		    :height 140)
 (set-fontset-font
  nil 'japanese-jisx0208
  (font-spec :family "Noto Sans CJK JP"))
@@ -1677,7 +1680,7 @@
 (use-package apropospriate-theme
   ;; :disabled t
   :config
-  (load-theme 'apropospriate-light t)
+  (load-theme 'apropospriate-dark t)
   (defvar apropospriate-themes-current-style nil)
   (defun apropospriate-themes-load-style (style)
     "Load apropospriate theme variant STYLE.
@@ -2016,3 +2019,16 @@
   :custom
   (google-translate-default-source-language "en")
   (google-translate-default-target-language "jp"))
+
+(use-package atomic-chrome
+  :defer t
+  :delight
+  :config
+  (atomic-chrome-start-server)
+  (setq atomic-chrome-buffer-open-style 'split))
+
+(use-package igor-mode
+  :straight (igor-mode :host github
+                       :repo "yamad/igor-mode"
+                       :branch "master")
+  :defer t)

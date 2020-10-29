@@ -1803,6 +1803,7 @@ Setup use-package
 *** org-superstar
 #+BEGIN_SRC emacs-lisp
   (use-package org-superstar
+    :after org
     :config
     (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
     
