@@ -2,12 +2,21 @@
 /emacs/.emacs.d/straight/
 /emacs/.emacs.d/auto-save-list/
 /emacs/.emacs.d/var/
-/emacs/.emacs.d/url/cache/
+/emacs/.emacs.d/url/
+/emacs/.emacs.d/thumbs/
+/emacs/.emacs.d/transient
+/emacs/.emacs.d/undo-fu-session/
 .mc-list.el
 .DS_Store
 .recentf
 recentf
 smex-items
+runner-conf.el
+places
+/emacs/.emacs.d/persist/
+/emacs/.emacs.d/.cache/
+.persistent-scratch
+
 *\~
 #ignore fish file
 /fish/.config/fish/completions/
