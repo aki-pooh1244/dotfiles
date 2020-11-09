@@ -3,10 +3,14 @@
 
 (setq url-cookie-storage
  '((".google.com"
-  [url-cookie "NID" "204=J6U46tCDa12MhVikbceG9d0w9810g3tn8qg7O3p24tQKdZMbQGCt2pHtc3-oHbvPyb4as38_iPNIexbt8tvX7CaxDWyRG2CpDASk2z-mxs6-oHG5Mh8yPpDoWZveMCmVd9u7XreMSrREIpqWMGqOboB2RhHdrYXxe-DDisw3NsE" "Thu, 15-Apr-2021 02:34:06 GMT" "/" ".google.com" nil]))
+  [url-cookie "NID" "204=clI7gbYWrgssR52El-ysb4Q_F9VtIyDZArzSsqxPDcGip6zTSCj62AhTFIthxwkG-TTcBSJXx-3wSkIvtAuCWN5LHzyNaCdD4W9Xy7O9yEaZEXujg72a8920kcQpcqkho8yCw7vfOQSJtWqKR30aKrPEB1y0piEejldfmiidz7M" "Fri, 30-Apr-2021 15:41:15 GMT" "/" ".google.com" nil]
+  [url-cookie "CGIC" "Ik10ZXh0L2h0bWwsIHRleHQvcGxhaW4sIHRleHQvc2dtbCwgdGV4dC9jc3MsIGFwcGxpY2F0aW9uL3hodG1sK3htbCwgKi8qO3E9MC4wMQ" "Tue, 27-Apr-2021 15:41:24 GMT" "/complete/search" ".google.com" nil]
+  [url-cookie "CGIC" "Ik10ZXh0L2h0bWwsIHRleHQvcGxhaW4sIHRleHQvc2dtbCwgdGV4dC9jc3MsIGFwcGxpY2F0aW9uL3hodG1sK3htbCwgKi8qO3E9MC4wMQ" "Tue, 27-Apr-2021 15:41:24 GMT" "/search" ".google.com" nil]))
 )
 (setq url-cookie-secure-storage
- 'nil)
+ '((".google.com"
+  [url-cookie "1P_JAR" "2020-10-29-15" "Sat, 28-Nov-2020 15:41:45 GMT" "/" ".google.com" t]))
+)
 
 ;; Local Variables:
 ;; version-control: never

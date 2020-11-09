@@ -120,6 +120,7 @@
 (setq tab-always-indent 'complete)
 (setq blink-matching-paren nil)
 (setq require-final-newline t)
+(global-auto-revert-mode t)
 
 (use-package crux
   :defer t
@@ -216,6 +217,9 @@
   (autoload 'dired-async-mode "dired-async.el" nil t)
   (dired-async-mode 1))
 
+(use-package delight
+  :defer t)
+
 (define-key global-map [?¥] [?\\])
 (define-key key-translation-map (kbd "C-h") (kbd "<DEL>"))
 (define-key global-map (kbd "C-x ?") 'help-command)
@@ -257,7 +261,8 @@
   (key-chord-define-global "yy" 'browse-kill-ring)
   (key-chord-define-global "mc" 'mc/mark-all-dwim)
   (key-chord-define-global "ff" 'dired-sidebar-toggle-sidebar)
-  (key-chord-mode +1))
+  (key-chord-mode +1)
+  (use-package use-package-chords))
 
 ;; (use-package hydra)
 ;; (use-package hydra-posframe
@@ -343,20 +348,23 @@
   (push 'command-history savehist-ignored-variables))
 
 (use-package undo-fu
-  :defer t
   :delight
+  :hook
+  (after-init . undo-fu)
   :bind
   ("C-/" . undo-fu-only-undo)
   ("M-/" . undo-fu-only-redo))
 (use-package undo-fu-session
-  :defer t
+  :after undo-fu
   :delight
-  :hook
-  (after-init-hook . undo-fu-session-mode))
+  :config
+  (undo-fu-session-mode t))
 
 (use-package dired
   :straight nil
-  :delight Dired
+  :delight Dir
+  :hook
+  (dired-mode . auto-revert-mode)
   :bind
   ((:map dired-mode-map
 	 ("(" . dired-hide-details-mode)
@@ -373,7 +381,7 @@
   ;; (add-to-list 'dired-compress-file-suffixes '("\\.zip\\'" ".zip" "unzip"))
   (use-package wdired
     :straight nil
-    :delight Wdired
+    :delight Wdir
     :demand dired
     :after dired
     :bind
@@ -394,71 +402,78 @@
     :delight
     :after dired)
   (use-package dired-filter
-    :delight filter
+    :delight Fil
     :after dired
     :bind
     ((:map dired-mode-map
-	   ("/" . dired-filter-map))))
+	       ("/" . dired-filter-map))))
+  (use-package dired-narrow
+    :disabled t
+    :delight Nar
+    :after dired
+    :bind
+    ((:map dired-mode-map
+           ("f" . dired-narrow-fuzzy))))
   (use-package dired-rainbow
     :config
     (progn
-      (dired-rainbow-define-chmod directory
-				  "#6cb2eb" "d.*")
-      (dired-rainbow-define html
-			    "#eb5286"
-			    ("css" "less" "sass" "scss" "htm" "html" "jhtm" "mht" "eml" "mustache" "xhtml"))
-      (dired-rainbow-define xml
-			    "#f2d024"
-			    ("xml" "xsd" "xsl" "xslt" "wsdl" "bib" "json" "msg" "pgn" "rss" "yaml" "yml" "rdata"))
-      (dired-rainbow-define document
-			    "#9561e2"
-			    ("docm" "doc" "docx" "odb" "odt" "pdb" "pdf" "ps" "rtf" "djvu" "epub" "odp" "ppt" "pptx"))
-      (dired-rainbow-define markdown
-			    "#ffed4a"
-			    ("org" "etx" "info" "markdown" "md" "mkd" "nfo" "pod" "rst" "tex" "textfile" "txt"))
-      (dired-rainbow-define database
-			    "#6574cd"
-			    ("xlsx" "xls" "csv" "accdb" "db" "mdb" "sqlite" "nc"))
-      (dired-rainbow-define media
-			    "#de751f"
-			    ("mp3" "mp4" "MP3" "MP4" "avi" "mpeg" "mpg" "flv" "ogg" "mov" "mid" "midi" "wav" "aiff" "flac"))
-      (dired-rainbow-define image
-			    "#f66d9b"
-			    ("tiff" "tif" "cdr" "gif" "ico" "jpeg" "jpg" "png" "psd" "eps" "svg"))
-      (dired-rainbow-define log
-			    "#c17d11"
-			    ("log"))
-      (dired-rainbow-define shell
-			    "#f6993f"
-			    ("awk" "bash" "bat" "sed" "sh" "zsh" "vim"))
-      (dired-rainbow-define interpreted
-			    "#38c172"
-			    ("py" "ipynb" "rb" "pl" "t" "msql" "mysql" "pgsql" "sql" "r" "clj" "cljs" "scala" "js"))
-      (dired-rainbow-define compiled
-			    "#4dc0b5"
-			    ("asm" "cl" "lisp" "el" "c" "h" "c++" "h++" "hpp" "hxx" "m" "cc" "cs" "cp" "cpp" "go" "f" "for" "ftn" "f90" "f95" "f03" "f08" "s" "rs" "hi" "hs" "pyc" ".java"))
-      (dired-rainbow-define executable
-			    "#8cc4ff"
-			    ("exe" "msi"))
-      (dired-rainbow-define compressed
-			    "#51d88a"
-			    ("7z" "zip" "bz2" "tgz" "txz" "gz" "xz" "z" "Z" "jar" "war" "ear" "rar" "sar" "xpi" "apk" "xz" "tar"))
-      (dired-rainbow-define packaged
-			    "#faad63"
-			    ("deb" "rpm" "apk" "jad" "jar" "cab" "pak" "pk3" "vdf" "vpk" "bsp"))
-      (dired-rainbow-define encrypted
-			    "#ffed4a"
-			    ("gpg" "pgp" "asc" "bfe" "enc" "signature" "sig" "p12" "pem"))
-      (dired-rainbow-define fonts
-			    "#6cb2eb"
-			    ("afm" "fon" "fnt" "pfb" "pfm" "ttf" "otf"))
-      (dired-rainbow-define partition
-			    "#e3342f"
-			    ("dmg" "iso" "bin" "nrg" "qcow" "toast" "vcd" "vmdk" "bak"))
-      (dired-rainbow-define vc
-			    "#0074d9"
-			    ("git" "gitignore" "gitattributes" "gitmodules"))
-      (dired-rainbow-define-chmod executable-unix "#38c172" "-.*x.*")))
+	  (dired-rainbow-define-chmod directory
+				                  "#6cb2eb" "d.*")
+	  (dired-rainbow-define html
+			                "#eb5286"
+			                ("css" "less" "sass" "scss" "htm" "html" "jhtm" "mht" "eml" "mustache" "xhtml"))
+	  (dired-rainbow-define xml
+			                "#f2d024"
+			                ("xml" "xsd" "xsl" "xslt" "wsdl" "bib" "json" "msg" "pgn" "rss" "yaml" "yml" "rdata"))
+	  (dired-rainbow-define document
+			                "#9561e2"
+			                ("docm" "doc" "docx" "odb" "odt" "pdb" "pdf" "ps" "rtf" "djvu" "epub" "odp" "ppt" "pptx"))
+	  (dired-rainbow-define markdown
+			                "#ffed4a"
+			                ("org" "etx" "info" "markdown" "md" "mkd" "nfo" "pod" "rst" "tex" "textfile" "txt"))
+	  (dired-rainbow-define database
+			                "#6574cd"
+			                ("xlsx" "xls" "csv" "accdb" "db" "mdb" "sqlite" "nc"))
+	  (dired-rainbow-define media
+			                "#de751f"
+			                ("mp3" "mp4" "MP3" "MP4" "avi" "mpeg" "mpg" "flv" "ogg" "mov" "mid" "midi" "wav" "aiff" "flac"))
+	  (dired-rainbow-define image
+			                "#f66d9b"
+			                ("tiff" "tif" "cdr" "gif" "ico" "jpeg" "jpg" "png" "psd" "eps" "svg"))
+	  (dired-rainbow-define log
+			                "#c17d11"
+			                ("log"))
+	  (dired-rainbow-define shell
+			                "#f6993f"
+			                ("awk" "bash" "bat" "sed" "sh" "zsh" "vim"))
+	  (dired-rainbow-define interpreted
+			                "#38c172"
+			                ("py" "ipynb" "rb" "pl" "t" "msql" "mysql" "pgsql" "sql" "r" "clj" "cljs" "scala" "js"))
+	  (dired-rainbow-define compiled
+			                "#4dc0b5"
+			                ("asm" "cl" "lisp" "el" "c" "h" "c++" "h++" "hpp" "hxx" "m" "cc" "cs" "cp" "cpp" "go" "f" "for" "ftn" "f90" "f95" "f03" "f08" "s" "rs" "hi" "hs" "pyc" ".java"))
+	  (dired-rainbow-define executable
+			                "#8cc4ff"
+			                ("exe" "msi"))
+	  (dired-rainbow-define compressed
+			                "#51d88a"
+			                ("7z" "zip" "bz2" "tgz" "txz" "gz" "xz" "z" "Z" "jar" "war" "ear" "rar" "sar" "xpi" "apk" "xz" "tar"))
+	  (dired-rainbow-define packaged
+			                "#faad63"
+			                ("deb" "rpm" "apk" "jad" "jar" "cab" "pak" "pk3" "vdf" "vpk" "bsp"))
+	  (dired-rainbow-define encrypted
+			                "#ffed4a"
+			                ("gpg" "pgp" "asc" "bfe" "enc" "signature" "sig" "p12" "pem"))
+	  (dired-rainbow-define fonts
+			                "#6cb2eb"
+			                ("afm" "fon" "fnt" "pfb" "pfm" "ttf" "otf"))
+	  (dired-rainbow-define partition
+			                "#e3342f"
+			                ("dmg" "iso" "bin" "nrg" "qcow" "toast" "vcd" "vmdk" "bak"))
+	  (dired-rainbow-define vc
+			                "#0074d9"
+			                ("git" "gitignore" "gitattributes" "gitmodules"))
+	  (dired-rainbow-define-chmod executable-unix "#38c172" "-.*x.*")))
   (use-package dired-collapse
     :delight
     :after dired)
@@ -477,14 +492,14 @@
     :defer t
     :bind
     ((:map dired-mode-map
-	   ("P" . peep-dired))))
+	   ("g" . peep-dired))))
   (use-package quick-preview
     :delight preview
     :init
     :bind
     ("C-c q" . quick-preview-at-point)
     (:map dired-mode-map
-	  ("Q" . quick-preview-at-point)))
+	      ("Q" . quick-preview-at-point)))
   (use-package runner
     :delight
     :after dired)
@@ -624,6 +639,7 @@
 
 (use-package counsel
   :delight Ivy Counsel
+  :init (ivy-mode 1)
   :bind
   (("C-s" . swiper)
    ("M-x" . counsel-M-x)
@@ -636,7 +652,6 @@
    ("RET" . ivy-alt-done)
    ("C-h" . ivy-backward-char))
   :hook
-  (after-init . ivy-mode)
   (ivy-mode . counsel-mode)
   :custom
   (counsel-yank-pop-height 15)
@@ -644,7 +659,6 @@
   (ivy-use-selectable-prompt t)
   (ivy-use-virtual-buffers t)
   :config
-  (ivy-mode 1)
   (use-package ivy-prescient
     :delight
     :demand t
@@ -679,6 +693,10 @@
     (ivy-rich-mode 1))
   (use-package all-the-icons-ivy
     :hook (after-init . all-the-icons-ivy-setup)))
+
+(use-package loccur
+  :delight loccur
+  )
 
 (use-package easy-kill
   :delight
@@ -1056,7 +1074,7 @@
   :config
   (avy-setup-default))
 (use-package avy-migemo
-  :defer t
+  :after avy
   :delight
   :bind
   ("M-g m m" . avy-migemo-mode)
@@ -1064,12 +1082,11 @@
   :config
   (avy-migemo-mode 1)
   (setq avy-timeout-seconds nil))
-
-(use-package zzz-to-char
-  :defer t
-  :delight
+(use-package avy-zap
+  :after avy
+  :delight Zap
   :bind
-  ("M-z" . zzz-up-to-char))
+  ("M-z" . avy-zap-up-to-char-dwim))
 
 (use-package ace-window
   :defer t
@@ -1118,6 +1135,7 @@
 ;;   )
 
 (use-package company
+  :delight Com
   :defer t
   :bind
   (("C-M-i" . company-complete)
@@ -1229,7 +1247,7 @@
 
 (use-package yasnippet
   :defer t
-  :delight
+  :delight Yas
   :bind
   ("C-c s i" . yas-insert-snippet)
   ("C-c s n" . yas-new-snippet)
@@ -1246,8 +1264,10 @@
 
 (use-package auctex
   :defer t
+  :delight AUCTEX
   :hook
   (LaTeX-mode-hook . (turn-on-reftex
+                      reftex-mode
                       LaTeX-math-mode
                       outline-minor-mode
                       visual-line-mode))
@@ -1274,7 +1294,7 @@
 	           (concat "~" cite))))))
 (use-package cdlatex
   :defer t
-  :delight
+  :delight cdLaTeX
   :hook
   (LaTeX-mode-hook . turn-on-cdlatex)
   (org-mode-hook . turn-on-org-cdlatex))
@@ -1468,6 +1488,7 @@
     '("\\.md" . poly-markdown-mode)))
 
 (use-package org
+  :delight Org
   :hook
   (org-mode . (org-indent-mode visual-line-mode variable-pitch-mode))
   :config
@@ -1485,11 +1506,9 @@
   ;;                           ("WAIT " . "")
   ;;                           ("DONE " . "")
   ;;                           ("FAIL " . "")))
-  )
-
-(use-package org-superstar
-  :config
-  (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
+  (use-package org-superstar
+    :config
+    (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))))
 
 ;; Org-Babel tangle
 (require 'ob-tangle)
@@ -1526,9 +1545,18 @@
   ("<f10>" . flyspell-buffer)
   :hook
   ((prog-mode . flyspell-prog-mode)
-   (TeX-mode . flyspell-mode)
+   (LaTeX-mode . flyspell-mode)
    (org-mode . flyspell-mode)
    (text-mode . flyspell-mode)))
+
+(use-package flyspell-correct
+  :after flyspell
+  :bind
+  (:map flyspell-mode-map
+        ("C-;" . flyspell-correct-wrapper))
+  :config
+  (use-package flyspell-correct-ivy
+    :after flyspell-correct))
 
 (use-package typo
   :disabled t
@@ -1622,7 +1650,7 @@
 (prefer-coding-system 'utf-8)
 (set-face-attribute 'default nil
 		    :family "IBM Plex Mono"
-		    :height 140)
+		    :height 150)
 (set-fontset-font
  nil 'japanese-jisx0208
  (font-spec :family "Noto Sans CJK JP"))
@@ -1678,7 +1706,6 @@
   (global-pretty-mode t))
 
 (use-package apropospriate-theme
-  ;; :disabled t
   :config
   (load-theme 'apropospriate-dark t)
   (defvar apropospriate-themes-current-style nil)
@@ -1706,6 +1733,39 @@
           (t (error (format "Invalid apropospriate current style: %s"
                             apropospriate-themes-current-style))))))
 
+;; (use-package modus-themes
+;;   :disabled t
+;;   :straight nil
+;;   :init
+;;   (use-package modus-operandi-theme)
+;;   (use-package modus-vivendi-theme)
+;;   :config
+;;   (load-theme modus-vivendi t)
+;;   (defvar modus-themes-current-style nil)
+;;   (defun modus-themes-load-style (style)
+;;     "Load modus theme variant STYLE.
+;;     Argument STYLE can be either 'light or 'dark."
+
+;;     (interactive)
+;;     (cond ((equal style 'light)
+;;            (load-theme 'modus-operandi t))
+;;           ((equal style 'dark)
+;;            (load-theme 'modus-vivendi t))
+
+;;           (t (error (format "Unknown modus theme style: %S" style)))))
+;;   (defun modus-themes-switch-style()
+;;     "Toggle between the light and dark style of modus theme."
+;;     (interactive)
+;;     (cond ((or (null modus-themes-current-style)
+;;                (equal modus-themes-current-style 'dark))
+;;            (modus-themes-load-style 'light)
+;;            (setq modus-themes-current-style 'light))
+;;           ((equal modus-themes-current-style 'light)
+;;            (modus-themes-load-style 'dark)
+;;            (setq modus-themes-current-style 'dark))
+;;           (t (error (format "Invalid modus current style: %s"
+;;                             modus-themes-current-style))))))
+
 (display-time-mode 1)
 (setq display-time-day-and-date t)
 (setq display-time-24hr-format t)
@@ -1713,18 +1773,10 @@
 (column-number-mode 1)
 
 (use-package doom-modeline
+  :disabled t
   :delight
   :init
   (doom-modeline-mode 1))
-
-(use-package awesome-tray
-  :disabled t
-  :straight (awesome-tray :host github
-                          :repo "manateelazycat/awesome-tray"
-                          :branch "master")
-  :delight
-  :init
-  (awesome-tray-mode 1))
 
 (use-package mini-modeline
   :disabled t
@@ -1735,12 +1787,29 @@
 (use-package smart-mode-line
   :delight
   :config
-  ;; (setq sml/theme 'respectful)
+  (setq sml/theme 'respectful)
+  (setq sml/no-confirm-load-theme t)
   (setq sml/read-only-char "%%")
   (setq sml/modified-char "*")
   (setq sml/extra-filler -10)
-  (setq sml/no-confirm-load-theme t)
+  (setq sml/shorten-directory t)
+  (setq sml/shorten-modes t)
+  ;; (add-to-list
+  ;;  'sml/replacer-regexp-list
+  ;;  '("^.+/junk/[0-9]+/" ":J:") t)
+  (add-to-list 'sml/replacer-regexp-list
+               '("^~/Google_drive/" ":GD:") t)
+  (add-to-list 'sml/replacer-regexp-list
+               '("^~/MEGA/" ":MD:") t)
+  (setq sml/name-width 25)
   (sml/setup))
+
+(use-package nyan-mode
+  :custom
+  (nyan-cat-face-number 4)
+  (nyan-animate-nyancat t)
+  :hook
+  (after-init . nyan-mode))
 
 (use-package hide-mode-line
   :hook
@@ -1801,7 +1870,6 @@
         sublimity-map-set-delay 5))
 
 ;; Windowmove
-
 (use-package windmove
   :straight nil
   :config
@@ -1823,17 +1891,22 @@
     :delight
     :defer t
     :config
-    (elscreen-separate-buffer-list-mode 1))
-  (use-package zoom-window
+    (elscreen-separate-buffer-list-mode 1)))
+(use-package zoom-window
     :defer t
     :delight
     :bind
     ("C-x z" . zoom-window-zoom)
     :config
     (setq zoom-window-use-elscreen t)
-    (zoom-window-setup)))
+    (zoom-window-setup))
 
 (use-package transpose-frame)
+
+(when (eq system-type 'darwin)
+  (use-package ns-auto-titlebar
+    :config
+    (ns-auto-titlebar-mode)))
 
 (use-package rainbow-mode
   :delight
@@ -1874,7 +1947,7 @@
   :hook
   (prog-mode-hook . highlight-indent-guides-mode)
   :config
-  (setq highlight-indent-guides-method 'bitmap))
+  (setq highlight-indent-guides-method 'character))
 
 (use-package line-reminder
   :defer t
@@ -1883,6 +1956,14 @@
   :config
   (setq line-reminder-show-option 'indicators)
   (setq line-indicators-fringe-placed 'left-fringe))
+
+(use-package dimmer
+  :disabled t
+  :defer t
+  :delight
+  :config
+  (dimmer-configure-which-key)
+  (dimmer-mode t))
 
 (use-package posframe :delight)
 
@@ -1941,12 +2022,6 @@
   (setq symon-sparkline-width 50)
   (setq symon-sparkline-thickness 2)
   (symon-mode 1))
-
-(use-package schrute
-  :delight
-  :defer t
-  :config
-  (schrute-mode 1))
 
 (use-package git-gutter
   :disabled t

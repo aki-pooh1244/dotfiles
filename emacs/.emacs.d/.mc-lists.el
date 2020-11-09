@@ -8,4 +8,6 @@
 
 (setq mc/cmds-to-run-once
       '(
+        beginning-of-buffer
+        undefined
         ))
