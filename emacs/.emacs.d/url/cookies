@@ -1,18 +1,0 @@
-;; Emacs-W3 HTTP cookies file
-;; Automatically generated file!!! DO NOT EDIT!!!
-
-(setq url-cookie-storage
- '((".google.com"
-  [url-cookie "NID" "204=clI7gbYWrgssR52El-ysb4Q_F9VtIyDZArzSsqxPDcGip6zTSCj62AhTFIthxwkG-TTcBSJXx-3wSkIvtAuCWN5LHzyNaCdD4W9Xy7O9yEaZEXujg72a8920kcQpcqkho8yCw7vfOQSJtWqKR30aKrPEB1y0piEejldfmiidz7M" "Fri, 30-Apr-2021 15:41:15 GMT" "/" ".google.com" nil]
-  [url-cookie "CGIC" "Ik10ZXh0L2h0bWwsIHRleHQvcGxhaW4sIHRleHQvc2dtbCwgdGV4dC9jc3MsIGFwcGxpY2F0aW9uL3hodG1sK3htbCwgKi8qO3E9MC4wMQ" "Tue, 27-Apr-2021 15:41:24 GMT" "/complete/search" ".google.com" nil]
-  [url-cookie "CGIC" "Ik10ZXh0L2h0bWwsIHRleHQvcGxhaW4sIHRleHQvc2dtbCwgdGV4dC9jc3MsIGFwcGxpY2F0aW9uL3hodG1sK3htbCwgKi8qO3E9MC4wMQ" "Tue, 27-Apr-2021 15:41:24 GMT" "/search" ".google.com" nil]))
-)
-(setq url-cookie-secure-storage
- '((".google.com"
-  [url-cookie "1P_JAR" "2020-10-29-15" "Sat, 28-Nov-2020 15:41:45 GMT" "/" ".google.com" t]))
-)
-
-;; Local Variables:
-;; version-control: never
-;; no-byte-compile: t
-;; End:

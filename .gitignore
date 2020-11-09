@@ -15,7 +15,9 @@ runner-conf.el
 places
 /emacs/.emacs.d/persist/
 /emacs/.emacs.d/.cache/
+/emacs/.emacs.d/request
 .persistent-scratch
+projectile-bookmarks.eld
 
 *\~
 #ignore fish file
