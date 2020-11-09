@@ -13,6 +13,7 @@ recentf
 smex-items
 runner-conf.el
 places
+.mc-lists.el
 /emacs/.emacs.d/persist/
 /emacs/.emacs.d/.cache/
 /emacs/.emacs.d/request
