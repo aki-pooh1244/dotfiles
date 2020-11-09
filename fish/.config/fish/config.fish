@@ -15,7 +15,7 @@ alias ekill="emacsclient -e '(kill-emacs)'"
 alias erestart="ekill && estart"
 alias eg='emacsclient -c'
 
-alias vi='/usr/bin/vim'
+# alias vi='/usr/bin/vim'
 
 # cd > ls
 function cd
@@ -35,6 +35,9 @@ set -U __done_notify_sound 1
 #golang env
 export GOPATH=$HOME/go
 #export PATH=$PATH:$GOPATH/bin
+
+#Editor
+export EDITOR=emacsclient
 
 ##python anaconda now not using
 #export PATH="/home/aiwata/anaconda3/bin:$PATH"
