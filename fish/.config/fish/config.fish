@@ -33,8 +33,9 @@ set -U __done_exclude 'git (?!push|pull)'  # default: all git commands, except p
 set -U __done_notify_sound 1
 
 #golang env
-export GOPATH=$HOME/go
-#export PATH=$PATH:$GOPATH/bin
+set -x GOPATH $HOME/go
+set -x PATH $PATH $GOPATH/bin
+
 
 #Editor
 export EDITOR=emacsclient
