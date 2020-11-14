@@ -215,6 +215,7 @@ Setup use-package
 *** smart-newline
 #+BEGIN_SRC emacs-lisp
   (use-package smart-newline
+    :disabled t
     :defer t
     :delight
     :hook
@@ -318,6 +319,10 @@ Setup use-package
   (use-package delight
     :defer t)
 #+end_src
+*** posframe
+#+BEGIN_SRC emacs-lisp
+(use-package posframe :delight)
+#+END_SRC
 ** Key Binds
 *** Basics
 #+BEGIN_SRC emacs-lisp
@@ -939,18 +944,6 @@ Setup use-package
         :config
         (use-package wgrep-ag :defer t :delight))
     #+END_SRC
-*** ag
-    #+BEGIN_SRC emacs-lisp
-      (use-package ag
-        :defer t
-        :delight
-        :bind
-        ("M-s a" . ag-project)
-        :config
-        (ag-highlight-search t)
-        (ag-reuse-buffer t)
-        (ag-reuse-window t))
-    #+END_SRC
 *** projectile
     #+BEGIN_SRC emacs-lisp
       (use-package projectile
@@ -1317,27 +1310,26 @@ Setup use-package
     :delight
     :bind
     ("C-c C-j" . avy-resume)
-    ("C-:" . avy-goto-char)
-    ("C-'" . avy-goto-char-2)
-    ("M-g f" . avy-goto-line)
+    ("C-'" . avy-goto-char-timer)
+    ("M-g g" . avy-goto-line)
     ("M-g w" . avy-goto-word-1)
-    ("M-g e" . avy-goto-word-0)
     :config
     (avy-setup-default))
   (use-package avy-migemo
-    :after avy
+    :after avy migemo
     :delight
     :bind
-    ("M-g m m" . avy-migemo-mode)
+    ("M-g m" . avy-migemo-mode)
     ("C-M-;" . avy-migemo-goto-char-timer)
     :config
     (avy-migemo-mode 1)
-    (setq avy-timeout-seconds nil))
+    (setq avy-timeout-seconds 0.5))
   (use-package avy-zap
     :after avy
     :delight Zap
     :bind
-    ("M-z" . avy-zap-up-to-char-dwim))
+    ("M-z" . avy-zap-up-to-char-dwim)
+    ("M-Z" . avy-zap-up-char-dwim))
 #+END_SRC
 *** ace-window
 #+BEGIN_SRC emacs-lisp
@@ -1825,6 +1817,7 @@ Setup use-package
     ;;                           ("DONE " . "")
     ;;                           ("FAIL " . "")))
     (use-package org-superstar
+      :after org
       :config
       (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))))
 #+END_SRC
@@ -1971,13 +1964,13 @@ C-x n w: recursive-wide
   (use-package shell-pop
     :defer t
     :bind
-    ("C-c C-s" . shell-pop)
+    ("C-M-s" . shell-pop)
     :config
     (custom-set-variables
      '(shell-pop-shell-type '("eshell" "*eshell*"
                                  (lambda ()
                                    (eshell))))
-     '(shell-pop-term-shell "/usr/local/bin/zsh")
+     '(shell-pop-term-shell "/usr/local/bin/fish")
      '(shell-pop-universal-key "C-t")
      '(shell-pop-default-directory "/Users/iwata")
      '(shell-pop-autocd-to-working-dir t)
@@ -2126,12 +2119,6 @@ C-x n w: recursive-wide
   (setq display-time-24hr-format t)
   (display-battery-mode t)
   (column-number-mode 1)
-
-  (use-package doom-modeline
-    :disabled t
-    :delight
-    :init
-    (doom-modeline-mode 1))
   
   (use-package mini-modeline
     :disabled t
@@ -2155,11 +2142,14 @@ C-x n w: recursive-wide
     (add-to-list 'sml/replacer-regexp-list
                  '("^~/Google_drive/" ":GD:") t)
     (add-to-list 'sml/replacer-regexp-list
-                 '("^~/MEGA/" ":MD:") t)
-    (setq sml/name-width 25)
+                 '("^~/Dropbox/" ":DB:") t)
+    (add-to-list 'sml/replacer-regexp-list
+                 '("^~/Git_project/" ":Git:") t)
+    (setq sml/name-width 20)
     (sml/setup))
 
   (use-package nyan-mode
+    :delight
     :custom
     (nyan-cat-face-number 4)
     (nyan-animate-nyancat t)
@@ -2344,11 +2334,6 @@ C-x n w: recursive-wide
     (dimmer-configure-which-key)
     (dimmer-mode t))
 #+end_src
-*** posframe
-#+BEGIN_SRC emacs-lisp
-(use-package posframe :delight)
-#+END_SRC
-
 *** emacs-mini-frame
 #+BEGIN_SRC emacs-lisp
   (use-package mini-frame

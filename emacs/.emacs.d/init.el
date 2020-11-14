@@ -34,8 +34,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(anzu-mode-lighter "")
- '(anzu-search-threshold 1000)
  '(beacon-mode t)
  '(company-echo-delay 0 t)
  '(company-idle-delay 0 t)

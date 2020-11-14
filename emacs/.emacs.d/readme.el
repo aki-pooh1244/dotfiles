@@ -722,16 +722,6 @@
   :config
   (use-package wgrep-ag :defer t :delight))
 
-(use-package ag
-  :defer t
-  :delight
-  :bind
-  ("M-s a" . ag-project)
-  :config
-  (ag-highlight-search t)
-  (ag-reuse-buffer t)
-  (ag-reuse-window t))
-
 (use-package projectile
   :disabled t
   :defer t
@@ -1066,27 +1056,26 @@
   :delight
   :bind
   ("C-c C-j" . avy-resume)
-  ("C-:" . avy-goto-char)
-  ("C-'" . avy-goto-char-2)
-  ("M-g f" . avy-goto-line)
+  ("C-'" . avy-goto-char-timer)
+  ("M-g g" . avy-goto-line)
   ("M-g w" . avy-goto-word-1)
-  ("M-g e" . avy-goto-word-0)
   :config
   (avy-setup-default))
 (use-package avy-migemo
-  :after avy
+  :after avy migemo
   :delight
   :bind
-  ("M-g m m" . avy-migemo-mode)
+  ("M-g m" . avy-migemo-mode)
   ("C-M-;" . avy-migemo-goto-char-timer)
   :config
   (avy-migemo-mode 1)
-  (setq avy-timeout-seconds nil))
+  (setq avy-timeout-seconds 0.5))
 (use-package avy-zap
   :after avy
   :delight Zap
   :bind
-  ("M-z" . avy-zap-up-to-char-dwim))
+  ("M-z" . avy-zap-up-to-char-dwim)
+  ("M-Z" . avy-zap-up-char-dwim))
 
 (use-package ace-window
   :defer t
@@ -1507,6 +1496,7 @@
   ;;                           ("DONE " . "")
   ;;                           ("FAIL " . "")))
   (use-package org-superstar
+    :after org
     :config
     (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))))
 
@@ -1630,13 +1620,13 @@
 (use-package shell-pop
   :defer t
   :bind
-  ("C-c C-s" . shell-pop)
+  ("C-M-s" . shell-pop)
   :config
   (custom-set-variables
    '(shell-pop-shell-type '("eshell" "*eshell*"
                                (lambda ()
                                  (eshell))))
-   '(shell-pop-term-shell "/usr/local/bin/zsh")
+   '(shell-pop-term-shell "/usr/local/bin/fish")
    '(shell-pop-universal-key "C-t")
    '(shell-pop-default-directory "/Users/iwata")
    '(shell-pop-autocd-to-working-dir t)
@@ -1805,6 +1795,7 @@
   (sml/setup))
 
 (use-package nyan-mode
+  :delight
   :custom
   (nyan-cat-face-number 4)
   (nyan-animate-nyancat t)

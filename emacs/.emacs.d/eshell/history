@@ -11,4 +11,11 @@ ls
 ssh -XY aiwata@133.3.18.17
 exit
 latexmk -pvc hotspot_paper_pop_ver2.4_comment_revise_ver1.0.tex
+ls
+la
+man ls
+ls -G
+ls
+./Google_drive/Research/Research_paper/Hotspot_paper_RSI_PoP/
+ls
 latexmk -pvc hotspot_paper_pop_comment_revise_ver1.0.tex
