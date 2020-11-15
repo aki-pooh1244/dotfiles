@@ -879,6 +879,7 @@ Setup use-package
       :config
       (ivy-prescient-mode +1))
     (use-package ivy-posframe
+      :disabled t
       :delight
       :after ivy
       :hook
@@ -1449,6 +1450,10 @@ Setup use-package
           :delight
           :hook
           (company-mode-hook . company-posframe-mode))
+        (use-package completions-frame
+          :delight
+          :hook
+          (company-mode . completions-frame-mode))
         ;; (use-package company-tabnine :delight)
         (use-package company-quickhelp
           :when (display-graphic-p)
@@ -2337,17 +2342,18 @@ C-x n w: recursive-wide
 *** emacs-mini-frame
 #+BEGIN_SRC emacs-lisp
   (use-package mini-frame
-    :disabled t
+    ;; :disabled t
     :delight
     :hook
     (after-init . mini-frame-mode)
     :config
     (custom-set-variables
      '(mini-frame-show-parameters
-       '((top . 0)
-         (width . 1.0)
+       '((top . 10)
+         (width . 0.7)
          (left . 0.5)
-         (height . 20)))))
+         ;; (height . 15)
+         ))))
 #+END_SRC
 
 *** popwin
