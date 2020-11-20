@@ -168,6 +168,7 @@
   ("M-)" . paren-completer-add-single-delimiter))
 
 (use-package smart-newline
+  :disabled t
   :defer t
   :delight
   :hook
@@ -219,6 +220,8 @@
 
 (use-package delight
   :defer t)
+
+(use-package posframe :delight)
 
 (define-key global-map [?¥] [?\\])
 (define-key key-translation-map (kbd "C-h") (kbd "<DEL>"))
@@ -645,7 +648,7 @@
    ("M-x" . counsel-M-x)
    ("M-y" . counsel-yank-pop)
    ("C-x C-f" . counsel-find-file)
-   ("C-x b" . counsel-ibuffer)
+   ("C-x b" . counsel-switch-buffer)
    :map ivy-minibuffer-map
    ("C-k" . ivy-kill-line)
    ("C-j" . ivy-immediate-done)
@@ -658,6 +661,7 @@
   (enable-recursive-minibuffers t)
   (ivy-use-selectable-prompt t)
   (ivy-use-virtual-buffers t)
+  (ivy-count-format "(%d/%d) ")
   :config
   (use-package ivy-prescient
     :delight
@@ -666,6 +670,7 @@
     :config
     (ivy-prescient-mode +1))
   (use-package ivy-posframe
+    :disabled t
     :delight
     :after ivy
     :hook
@@ -686,13 +691,64 @@
      '((t . 15)))
     :config
     (ivy-posframe-mode +1))
+  (use-package all-the-icons-ivy-rich
+    :after all-th-icons
+    :init (all-the-icons-ivy-rich-mode 1))
   (use-package ivy-rich
     :delight
-    :after ivy
+    :after ivy all-the-icons-ivy-rich
     :config
-    (ivy-rich-mode 1))
-  (use-package all-the-icons-ivy
-    :hook (after-init . all-the-icons-ivy-setup)))
+    (ivy-rich-mode 1)
+
+    ;;; copy fromhttps://vxlabs.com/2020/11/15/fix-ivy-rich-switch-buffer-directories-display-in-emacs/
+    ;; abbreviate turns home into ~ (for example)
+    ;; buffers still only get the buffer basename
+    (setq ivy-virtual-abbreviation 'abbreviation
+          ivy-rich-path-style 'abbrev)
+    ;; use buffer-file-name and list-buffers-directory instead of default-directory
+    ;; so that special buffers, e.g. *scratch* don't get a directory (we return nil in those cases)
+    (defun ivy-rich--switch-buffer-directory (candidate)
+      "Return directory of file visited by buffer named CANDIDATE, or nil if no file."
+      (let* ((buffer (get-buffer candidate))
+             (fn (buffer-file-name buffer)))
+        ;; if valid filename, i.e. buffer visiting file:
+        (if fn
+            ;; return containing directory
+            (directory-file-name fn)
+          ;; else if mode explicitly offering list-buffers-directory, return that; else nil.
+          ;; buffers that don't explicitly visit files, but would like to show a filename,
+          ;; e.g. magit or dired, set the list-buffers-directory variable
+          (buffer-local-value 'list-buffers-directory buffer))))
+
+    ;; override ivy-rich project root finding to use FFIP or to skip completely
+    (defun ivy-rich-switch-buffer-root (candidate)
+      ;; 1. changed let* to when-let*; if our directory func above returns nil,
+      ;;    we don't want to try and find project root
+      (when-let* ((dir (ivy-rich--switch-buffer-directory candidate)))
+        (unless (or (and (file-remote-p dir)
+                      (not ivy-rich-parse-remote-buffer))
+                   ;; Workaround for `browse-url-emacs' buffers , it changes
+                   ;; `default-directory' to "http://" (#25)
+                   (string-match "https?://" dir))
+          (cond
+           ;; 2. replace the project-root-finding
+           ;; a. add FFIP for projectile-less project-root finding (on my setup much faster) ...
+           ((require 'find-file-in-project nil t)
+            (let ((default-directory dir))
+              (ffip-project-root)))
+           ;; b. OR disable project-root-finding altogether
+           (t "")
+           ((bound-and-true-p projectile-mode)
+            (let ((project (or (ivy-rich--local-values
+                               candidate 'projectile-project-root)
+                              (projectile-project-root dir))))
+              (unless (string= project "-")
+                project)))
+           ((require 'project nil t)
+            (when-let ((project (project-current nil dir)))
+              (car (project-roots project))))
+           ))))
+  ))
 
 (use-package loccur
   :delight loccur
@@ -1178,6 +1234,10 @@
     :delight
     :hook
     (company-mode-hook . company-posframe-mode))
+  (use-package completions-frame
+    :delight
+    :hook
+    (company-mode . completions-frame-mode))
   ;; (use-package company-tabnine :delight)
   (use-package company-quickhelp
     :when (display-graphic-p)
@@ -1762,12 +1822,6 @@
 (display-battery-mode t)
 (column-number-mode 1)
 
-(use-package doom-modeline
-  :disabled t
-  :delight
-  :init
-  (doom-modeline-mode 1))
-
 (use-package mini-modeline
   :disabled t
   :delight
@@ -1790,8 +1844,10 @@
   (add-to-list 'sml/replacer-regexp-list
                '("^~/Google_drive/" ":GD:") t)
   (add-to-list 'sml/replacer-regexp-list
-               '("^~/MEGA/" ":MD:") t)
-  (setq sml/name-width 25)
+               '("^~/Dropbox/" ":DB:") t)
+  (add-to-list 'sml/replacer-regexp-list
+               '("^~/Git_project/" ":Git:") t)
+  (setq sml/name-width 20)
   (sml/setup))
 
 (use-package nyan-mode
@@ -1948,28 +2004,19 @@
   (setq line-reminder-show-option 'indicators)
   (setq line-indicators-fringe-placed 'left-fringe))
 
-(use-package dimmer
-  :disabled t
-  :defer t
-  :delight
-  :config
-  (dimmer-configure-which-key)
-  (dimmer-mode t))
-
-(use-package posframe :delight)
-
 (use-package mini-frame
-  :disabled t
+  ;; :disabled t
   :delight
   :hook
   (after-init . mini-frame-mode)
   :config
   (custom-set-variables
    '(mini-frame-show-parameters
-     '((top . 0)
-       (width . 1.0)
+     '((top . 10)
+       (width . 0.7)
        (left . 0.5)
-       (height . 20)))))
+       ;; (height . 15)
+       ))))
 
 (use-package popwin :delight)
 
