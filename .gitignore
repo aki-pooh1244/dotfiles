@@ -1,6 +1,7 @@
 #ignore /emacs/.emacs.d/straight
 /emacs/.emacs.d/straight/
 /emacs/.emacs.d/auto-save-list/
+/emacs/.emacs.d/eshell
 /emacs/.emacs.d/var/
 /emacs/.emacs.d/url/
 /emacs/.emacs.d/thumbs/
