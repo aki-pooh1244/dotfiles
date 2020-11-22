@@ -3,7 +3,7 @@
 ;; (setq skk-sticky-key ";")
 (setq skk-egg-like-newline t)
 (setq skk-jisyo-code 'utf-8)
-(setq skk-jisyo "~/Dropbox/skk-jisyo/skk-my-jisyo.S")
+(setq skk-jisyo "~/Dropbox/skk-jisyo/skk-my-jisyo")
 (setq skk-large-jisyo "~/Dropbox/skk-jisyo/skk-get-jisyo/SKK-JISYO.L")
 ;; (setq skk-server-host "localhost")
 ;; (setq skk-server-portnum 1178)
