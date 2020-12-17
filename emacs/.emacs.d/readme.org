@@ -1650,7 +1650,7 @@ Setup use-package
                                         ;
     )
 #+END_SRC
-** Language
+* Language
 ** LaTeX
 #+BEGIN_SRC emacs-lisp
   (use-package auctex
