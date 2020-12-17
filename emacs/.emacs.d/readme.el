@@ -72,6 +72,7 @@
 (update-load-path)
 
 (use-package exec-path-from-shell
+  :init
   :config
   (exec-path-from-shell-initialize))
 
@@ -92,15 +93,29 @@
       scroll-step 1
   scroll-preserve-screen-position 1)
 
-(setq frame-title-format
-      (format "%%f - Emacs@%s" (system-name)))
+;; (setq frame-title-format
+;;   (format "%%f - Emacs@%s" (system-name)))
 
 ;; (setq frame-title-format
 ;;     '((:eval (if (buffer-file-name)
 ;;                  (abbreviation-file-name (buffer-file-name))
 ;;                "%b"))))
 
-(setq uniquify-buffer-name-style 'post-forward-angle-brackets)
+(setq frame-title-format
+      '("emacs%@"
+        (:eval (system-name)) ": "
+        (:eval (if (buffer-file-name)
+                   (abbreviate-file-name (buffer-file-name))
+                 "%b")) " [%*]"))
+
+(use-package uniquify
+  :straight nil
+  :delight
+  :config
+  (setq uniquify-buffer-name-style 'forward)
+  (setq uniquify-separator "/")
+  (setq uniquify-after-kill-buffer-p t)
+  (setq uniquify-ignore-buffers-re "^\\*"))
 
 (setq show-paren-style 'parethesis)
 (show-paren-mode +1)
@@ -138,34 +153,6 @@
   ("C-c e" . crux-eval-and-replace)
   :config
   (crux-with-region-or-buffer indent-region))
-
-(use-package comment-dwim-2
-  :defer t
-  :delight
-  :bind
-  ("M-;" . comment-dwim-2))
-
-(use-package smartparens
-  :defer t
-  :delight
-  :hook
-  (after-init . show-smartparens-global-mode)
-  :config
-  (require 'smartparens-config)
-  ;; (sp-pair "=" "=" :actions '(wrap))
-  ;; (sp-pair "+" "+" :actions '(wrap))
-  ;; (sp-pair "<" ">" :actions '(wrap))
-  ;; (sp-pair "$" "$" :actions '(wrap))
-  (setq sp-base-key-bindings 'paredit)
-  (setq sp-autoskip-closing-pair 'always)
-  (setq sp-hybrid-kill-entire-symbol nil)
-  (sp-use-paredit-bindings)
-  (show-smartparens-global-mode +1))
-
-(use-package paren-completer
-  :delight
-  :bind
-  ("M-)" . paren-completer-add-single-delimiter))
 
 (use-package smart-newline
   :disabled t
@@ -235,7 +222,9 @@
 (define-key global-map (kbd "C-x -") 'split-window-vertically)
 (when (eq system-type 'darwin)
   (setq ns-command-modifier (quote meta))
-  (setq ns-option-modifier (quote super)))
+  (setq ns-option-modifier (quote super))
+  ;; capslock -> hyper
+  )
 
 (use-package which-key
   :delight
@@ -283,7 +272,7 @@
   :delight
   :config
   (prescient-persist-mode +1)
-  (setq prescient-history-length 1000))
+  (setq prescient-history-length 10000))
 
 (use-package ddskk
   :defer t
@@ -325,7 +314,6 @@
   (after-init . frecentf-mode))
 
 (use-package super-save
-  :defer t
   :delight
   ;; :hook
   ;; (after-init-hook . super-save-mode)
@@ -337,31 +325,32 @@
   (super-save-mode +1))
 (use-package save-place
   :straight nil
-  :defer t
   :delight
   :config
   (save-place-mode 1))
-(use-package savehist-mode
-  :straight nil
-  :defer t
-  :delight
+;; (use-package savehist-mode
+;;   :straight nil
+;;   :delight
+;;   :config
+;;   (push 'kill-ring savehist-additional-variables)
+;;   (push 'command-history savehist-ignored-variables)
+;;   (savehist-mode 1))
+(use-package psession
   :config
-  (savehist-mode 1)
-  (push 'kill-ring savehist-additional-variables)
-  (push 'command-history savehist-ignored-variables))
+  (psession-mode 1)
+  (psession-savehist-mode 1)
+  (psession-autosave-mode 1))
 
 (use-package undo-fu
   :delight
-  :hook
-  (after-init . undo-fu)
   :bind
   ("C-/" . undo-fu-only-undo)
   ("M-/" . undo-fu-only-redo))
 (use-package undo-fu-session
-  :after undo-fu
   :delight
   :config
-  (undo-fu-session-mode t))
+  (setq undo-fu-session-compression t)
+  (global-undo-fu-session-mode))
 
 (use-package dired
   :straight nil
@@ -648,6 +637,7 @@
    ("M-x" . counsel-M-x)
    ("M-y" . counsel-yank-pop)
    ("C-x C-f" . counsel-find-file)
+   ("C-x C-r" . counsel-recentf)
    ("C-x b" . counsel-switch-buffer)
    :map ivy-minibuffer-map
    ("C-k" . ivy-kill-line)
@@ -657,18 +647,26 @@
   :hook
   (ivy-mode . counsel-mode)
   :custom
-  (counsel-yank-pop-height 15)
+  (counsel-yank-pop-height 20)
   (enable-recursive-minibuffers t)
+  (ivy-height 20)
   (ivy-use-selectable-prompt t)
+  (ivy-format-functions-alist '((t . ivy-format-function-arrow)))
   (ivy-use-virtual-buffers t)
   (ivy-count-format "(%d/%d) ")
+  (ivy-re-builders-alist '((t. ivy--regex-fuzzy)
+                           (swiper . ivy--regex-plus)))
+  (counsel-yank-pop-separator "\n------------\n")
   :config
   (use-package ivy-prescient
     :delight
     :demand t
-    :after ivy
+    :after ivy perscient
     :config
-    (ivy-prescient-mode +1))
+    (ivy-prescient-mode +1)
+    (setf (alist-get 'counsel-M-x ivy-re-builders-alist)
+          #'iby-prescient-re-builder)
+    (setf (alist-get t ivy-re-builder-alist) #'ivy--regex-ignore-order))
   (use-package ivy-posframe
     :disabled t
     :delight
@@ -692,7 +690,7 @@
     :config
     (ivy-posframe-mode +1))
   (use-package all-the-icons-ivy-rich
-    :after all-th-icons
+    :after all-th-icons ivy
     :init (all-the-icons-ivy-rich-mode 1))
   (use-package ivy-rich
     :delight
@@ -768,15 +766,24 @@
   (setq migemo-options '("-q" "--emacs"))
   (when (eq system-type 'drwin)
     (setq migemo-dictionary "/usr/local/share/migemo/utf-8/migemo-dict"))
+  ;; (when (eq system-type 'gnu/linux)
+  ;;   (setq migemo-dictionary "/usr/..."))
   (setq migemo-user-dictionary nil)
   (setq migemo-regex-dictionary nil)
-  (setq migemo-coding-system 'utf-8-unix))
+  (setq migemo-coding-system 'utf-8-unix)
+  (migemo-init))
 
 (use-package wgrep
+  :disabled t
   :defer t
   :delight
-  :config
-  (use-package wgrep-ag :defer t :delight))
+  )
+
+(use-package deadgrep
+  :defer t
+  :delight deadgrep
+  :bind
+  ("<f5>" . deadgrep))
 
 (use-package projectile
   :disabled t
@@ -791,7 +798,6 @@
 (use-package visual-regexp
   :defer t
   :delight
-  :after multiple-cursor
   :bind
   ("C-c r" . vr/replace)
   ("M-%" . vr/query-replace)
@@ -799,14 +805,22 @@
   ("C-M-R" . vr/isearch-backward)
   ("C-c m" . vr/mc-mark)
   :config
-  (use-package pcre2el
-    :defer t
-    :delight)
+  (use-package pcre2el)
   (use-package visual-regexp-steroids
     :after visual-regexp
     :delight
     :config
     (setq vr/engine 'pcre2el)))       ; If use Python, pcre2el -> python
+
+(use-package anzu
+  :delight anzu
+  :bind
+  ("C-M-%" . anzu-query-replace)
+  :config
+  (global-anzu-mode +1)
+  (setq anzu-use-migemo t)
+  (setq anzu-search-threshold 100)
+  (setq anzu-replace-to-string-separator " => "))
 
 ;; (use-package ctrlf
 ;;   :init
@@ -1044,17 +1058,8 @@
 ;;   (setq ace-isearch-use-function-from-isearch t)
 ;;   (setq ace-isearch-fallback-function 'swoop-from-isearch))
 
-;; (use-package anzu
-;;   :disabled t
-;;   :defer t
-;;   :delight
-;;   :config
-;;   (global-anzu-mode +1)
-;;   (custom-set-variables
-;;    '(anzu-mode-lighter "")
-;;    '(anzu-search-threshold 1000)))
-
 (use-package multiple-cursors
+  :disabled t
   :hook
   (after-init . multiple-cursors)
   :delight
@@ -1100,6 +1105,9 @@
                 :after 'jump-to-previous-cursor)
     (advice-add 'multiple-cursors-mode
                 :after 'reset-cursors)))
+
+(use-package iedit
+  )
 
 (use-package expand-region
   :defer t
@@ -1153,13 +1161,45 @@
   :config
   (beginend-global-mode))
 
-(use-package visible-mark
-  :defer t
-  :delight
+(use-package paredit
+  :delight ParEdit)
+
+(use-package smartparens
+  :delight SP
+  ;; :hook
+  ;; (after-init . show-smartparens-global-mode)
   :config
-  (setq set-mark-command-repeat-pop t)
-  (setq visible-mark-max 10)
-  (global-visible-mark-mode 1))
+  (require 'smartparens-config)
+  ;; (sp-pair "=" "=" :actions '(wrap))
+  ;; (sp-pair "+" "+" :actions '(wrap))
+  ;; (sp-pair "<" ">" :actions '(wrap))
+  ;; (sp-pair "$" "$" :actions '(wrap))
+  (setq sp-base-key-bindings 'paredit)
+  (setq sp-autoskip-closing-pair 'always)
+  (setq sp-hybrid-kill-entire-symbol nil)
+  (sp-use-paredit-bindings)
+  (show-smartparens-global-mode +1))
+
+(use-package lispy
+  )
+
+(use-package paren-completer
+  :delight
+  :bind
+  ("M-)" . paren-completer-add-single-delimiter))
+
+(use-package mic-paren
+  :config
+  (paren-activate))
+
+(use-package goto-chg
+  :bind
+  ("<f8>" . goto-last-change)
+  ("<M-f8>" . goto-last-change-reverse))
+
+(use-package back-button
+  :config
+  (back-button-mode 1))
 
 (use-package move-text
   :defer t
@@ -1277,7 +1317,8 @@
           try-expand-list
           try-expand-line
           try-complete-lisp-symbol-partially
-          try-complete-lisp-symbol)))
+          try-complete-lisp-symbol
+          yas-hippie-try-expand)))
 
 ;; (use-package bbyac
 ;;   :bind
@@ -1294,6 +1335,11 @@
 ;;   (advice-add 'bbyac--display-matches :around 'bbyac--display-matches--use-ido)
 ;;   (bbyac-global-mode 1))
 
+(setq-default abbrev-mode t)
+(setq save-abbrevs t)
+(setq abbrev-file-name "~/.emacs.d/my-abbreviations.el")
+(quietly-read-abbrev-file)
+
 (use-package yasnippet
   :defer t
   :delight Yas
@@ -1309,7 +1355,13 @@
           "~/.emacs.d/mysnippets"))
   (yas-global-mode 1))
 (use-package yasnippet-snippets
+  :delight
   :after yasnippet)
+(use-package auto-yasnippet
+  :after yasnippet
+  :delight
+                                      ;
+  )
 
 (use-package auctex
   :defer t
@@ -1342,7 +1394,7 @@
 	             cite
 	           (concat "~" cite))))))
 (use-package cdlatex
-  :defer t
+  :after auctex
   :delight cdLaTeX
   :hook
   (LaTeX-mode-hook . turn-on-cdlatex)
@@ -1350,12 +1402,12 @@
 
 (use-package company-auctex
         :delight
-        :defer t
+        :after company auctex
         :config
         (company-auctex-init))
 (use-package company-math
   :delight
-  :defer t
+  :after company auctex
   :preface
   (defun my/latex-mode-setup ()
     (setq-local company-backends
@@ -1365,7 +1417,7 @@
                         company-backends)))
   :hook
   ((org-mode-hook . my/latex-mode-setup)
-   (TeX-mode-hook . my/latex-mode-setup)))
+   (LaTeX-mode-hook . my/latex-mode-setup)))
 ;; (use-package company-math
 ;;   :delight
 ;;   :defer t
@@ -1384,6 +1436,10 @@
   :straight nil
   :hook
   ((emacs-lisp-mode-hook lisp-interaction-mode-hook ielm-mode-hook) . (eldoc-mode)))
+
+(use-package elisp-slime-nav
+  :hook
+  ((emacs-lisp-mode-hook ielm-mode-hook) . elisp-slime-nav-mode))
 
 ;; (use-package slime
 ;;   :defer t
@@ -1488,11 +1544,12 @@
   :delight)
 
 (use-package dumb-jump
-  :disabled t)
+  )
 
-(use-package eldoc-box)
+(use-package eldoc-box
+  :after eldoc)
 (use-package eldoc-overlay
-  :defer t
+  :after eldoc
   :init (eldoc-overlay-mode 1))
 
 (use-package flycheck
@@ -1555,10 +1612,7 @@
   ;;                           ("WAIT " . "")
   ;;                           ("DONE " . "")
   ;;                           ("FAIL " . "")))
-  (use-package org-superstar
-    :after org
-    :config
-    (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))))
+  )
 
 ;; Org-Babel tangle
 (require 'ob-tangle)
@@ -1573,6 +1627,13 @@
                                (ditaa . t)
                                (js . t)
                                (C . t)))
+
+(use-package org-superstar
+    :config
+    (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
+
+(use-package org-web-tools
+  :defer t)
 
 ;  (use-package recursive-narrow :defer t :delight)
 
@@ -1627,9 +1688,11 @@
         eshell-prefer-lisp-functions nil)
   :config
   (setq eshell-ask-to-save-history (quote always))
+  ;; (setq eshell-history-file-name "~/file_name")
+  (setq eshell-history-size 100000)
   (setq eshell-cmpl-cycle-completions nil)
   (setq eshell-cmpl-ignore-case t)
-  (setq eshell-prompt-regexp "^[^#$]*[$#] ")
+  (setq eshell-glob-include-dot-dot nil)
   (setq eshell-command-aliases-list
     (append
      (list
@@ -1649,9 +1712,10 @@
       (list "pk" "eshell-up-peek $1")
       )))
   (use-package eshell-z :delight)
+  (use-package eshell-fixed-prompt
+    :delight)
   (use-package eshell-prompt-extras
     :delight
-    :defer t
     :config
     (setq eshell-highlight-prompt t
           eshell-prompt-function 'epe-theme-lambda))
@@ -1756,6 +1820,7 @@
   (global-pretty-mode t))
 
 (use-package apropospriate-theme
+  :disabled t
   :config
   (load-theme 'apropospriate-dark t)
   (defvar apropospriate-themes-current-style nil)
@@ -1782,6 +1847,73 @@
            (setq apropospriate-themes-current-style 'dark))
           (t (error (format "Invalid apropospriate current style: %s"
                             apropospriate-themes-current-style))))))
+
+(use-package sunburn
+  :disabled t
+  :straight (sunburn :host github
+                     :repo "mvarela/Sunburn-Theme"
+                     :branch "master")
+  :config
+  (load-theme 'sunburn t))
+
+(use-package poet-theme
+  :disabled t
+  :config
+  (load-theme 'poet-dark))
+
+(use-package mood-one-theme
+  :disabled t
+  :config
+  (load-theme 'mood-one t))
+
+(use-package minimal-theme
+  :disabled t
+  :config
+  (load-theme 'minimal-light t))
+
+(use-package berrys-theme
+  :disabled t
+  :config
+  (load-theme 'berrys t))
+
+(use-package bubbleberry-theme
+  :disabled t
+  :config
+  (load-theme 'bubbleberry t))
+
+(use-package tao-theme
+  :disabled t
+  :config
+  (load-theme 'tao-yang t))
+
+(use-package tangotango-theme
+  :disabled t
+  :config
+  (load-theme 'tangotango t))
+
+(use-package tango-plus-theme
+  :disabled t
+  :config
+  (load-theme 'tango-plus t))
+
+(use-package cloud-theme
+  :disabled t
+  :config
+  (load-theme 'cloud t))
+
+(use-package commentary-theme
+  :disabled t
+  :config
+  (load-theme 'commentary t))
+
+(use-package obsidian-theme
+  :disabled t
+  :config
+  (load-theme 'obsidian t))
+
+(use-package eclipse-theme
+  :config
+  (load-theme 'eclipse t))
 
 ;; (use-package modus-themes
 ;;   :disabled t
@@ -1822,12 +1954,6 @@
 (display-battery-mode t)
 (column-number-mode 1)
 
-(use-package mini-modeline
-  :disabled t
-  :delight
-  :config
-  (mini-modeline-mode t))
-
 (use-package smart-mode-line
   :delight
   :config
@@ -1862,8 +1988,19 @@
   :hook
   ((treemacs-mode imenu-list-minor-mode) . hide-mode-line-mode))
 
+(use-package minions
+  :after smart-mode-line
+  :config
+  (minions-mode 1))
+
+(use-package moody
+  :config
+  (setq x-underline-at-descent-line t)
+  (moody-replace-mode-line-buffer-identification)
+  (moody-replace-vc-mode))
+
 (use-package dashboard
-  :delight dashboard-mode
+  :delight dashboard
   :custom
   (dashboard-startup-banner '"~/.emacs.d/image/Larry_Cow.png")
   ;; Value can be
@@ -1872,9 +2009,9 @@
   ;; 1, 2 or 3 which displays one of the text banners
   ;; "path/to/your/image.png" which displays whatever image you would prefer
   (dashboard-center-content t)
-  (dashboard-items '((recents .5)))
+  (dashboard-items '((recents .5)
+                     (bookmarks .5)))
       ;               (projects .5)
-       ;              (bookmarks .5)))
   (dashboard-set-heading-icons t)
   (dashboard-set-file-icons t)
   (dashboard-set-navigator t)
@@ -1894,7 +2031,20 @@
 ;; Transparency
 
 (add-to-list 'default-frame-alist
-	     '(alpha . (0.90 0.90)))
+	         '(alpha . (0.90 0.90)))
+
+(use-package maxframe
+  :hook
+  (window-setup-hook . (maximize-frame t))
+  :config
+  (setq mf-max-width 1600)
+  )
+
+(use-package edwina
+  :config
+  (setq display-buffer-base-action '(display-buffer-below-selected))
+  (edwina-setup-dwm-keys)
+  (edwina-mode 1))
 
 (use-package multicolumn
   :defer t
@@ -1949,6 +2099,19 @@
     (zoom-window-setup))
 
 (use-package transpose-frame)
+
+(use-package yequake
+  :disabled t
+  :custom
+  (yequake-frames
+   '(("org-capture" 
+      (buffer-fns . (yequake-org-capture))
+      (width . 0.75)
+      (height . 0.5)
+      (alpha . 0.95)
+      (frame-parameters . ((undecorated . t)
+                           (skip-taskbar . t)
+                           (sticky . t)))))))
 
 (when (eq system-type 'darwin)
   (use-package ns-auto-titlebar
@@ -2012,7 +2175,7 @@
   :config
   (custom-set-variables
    '(mini-frame-show-parameters
-     '((top . 10)
+     '((top . 0)
        (width . 0.7)
        (left . 0.5)
        ;; (height . 15)
@@ -2117,6 +2280,28 @@
   :init
   (setq olivetti-body-width 0.618))
 
+(use-package comment-dwim-2
+  :defer t
+  :delight
+  :bind
+  ("M-;" . comment-dwim-2))
+
+(use-package comment-or-uncomment-sexp
+  :defer t
+  :delight
+  :bind
+  ("C-M-;" . comment-or-uncomment-sexp))
+
+(use-package nocomments-mode
+  :defer t
+  :delight)
+
+(use-package origami
+  :defer t
+  :bind
+  (:map origami-mode-map
+        ("<tab>" . origami-recursively-toggle-node)))
+
 (use-package google-this
   :defer t
   :bind
@@ -2139,6 +2324,10 @@
   :config
   (atomic-chrome-start-server)
   (setq atomic-chrome-buffer-open-style 'split))
+
+(use-package clipmon
+  :bind
+  ("<M-f2>" . clipmon-autoinsert-toggle))
 
 (use-package igor-mode
   :straight (igor-mode :host github

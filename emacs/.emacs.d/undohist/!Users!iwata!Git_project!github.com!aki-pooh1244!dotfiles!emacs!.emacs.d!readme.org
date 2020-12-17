@@ -1,0 +1,3 @@
+
+((digest . "7a8d8722d9da481a5360da33ccb32c5d") (undo-list nil (14573 . 14578) (t . 0) nil ("
+" . 14543) ((marker . 14609) . -1) ("    " . -14543) ((marker . 14578) . -4) ((marker . 14578) . -4) ((marker . 14543) . -4) ((marker . 14578) . -4) 14547 nil (";; :after undo-fu" . 14547) ((marker . 14543) . -17) (t . 0) nil undo-tree-canary))

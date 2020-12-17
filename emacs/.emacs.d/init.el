@@ -41,8 +41,9 @@
  '(company-quickhelp-delay 0.8 t)
  '(company-show-numbers t t)
  '(custom-safe-themes
-   '("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default))
+   '("2229862b727e0caa3b0a53152ef82d37819324bf5d2c657f859b2b0a475b34f7" "cc0dbb53a10215b696d391a90de635ba1699072745bf653b53774706999208e3" "3e335d794ed3030fefd0dbd7ff2d3555e29481fe4bbb0106ea11c660d6001767" "7d23729342514203c5a1dc4c8f1f67d96ac65f660dd73cb8c6bfffc8eba79804" "f490984d405f1a97418a92f478218b8e4bcc188cf353e5dd5d5acd2f8efd0790" "28a104f642d09d3e5c62ce3464ea2c143b9130167282ea97ddcc3607b381823f" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default))
  '(inferior-lisp-program "ros -Q run" t)
+ '(mini-frame-show-parameters '((top . 10) (width . 0.7) (left . 0.5)))
  '(package-selected-packages
    '(ido-complete-space-or-hyphen crm-custom ido-sort-mtime skk-study helm-swoop company-tabnine company-posframe company-box visual-regexp-steroids zoom-window elscreen-separate-buffer-list projectile company-quickhelp company-math popwin rainbow-delimiters rainbow-mode which-key-posframe use-package quelpa pretty-mode mwim diminish all-the-icons))
  '(time-stamp-active t t)
