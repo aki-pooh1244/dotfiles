@@ -137,6 +137,9 @@
 (setq require-final-newline t)
 (global-auto-revert-mode t)
 
+;; calender style = English
+(setq system-time-locale "C")
+
 (use-package crux
   :defer t
   :delight
@@ -629,124 +632,17 @@
                                                  'mode-line fg))
                                    orig-fg))))
 
-(use-package counsel
-  :delight Ivy Counsel
-  :init (ivy-mode 1)
+(use-package selectrum
+  :init
+  (selectrum-mode +1)
   :bind
-  (("C-s" . swiper)
-   ("M-x" . counsel-M-x)
-   ("M-y" . counsel-yank-pop)
-   ("C-x C-f" . counsel-find-file)
-   ("C-x C-r" . counsel-recentf)
-   ("C-x b" . counsel-switch-buffer)
-   :map ivy-minibuffer-map
-   ("C-k" . ivy-kill-line)
-   ("C-j" . ivy-immediate-done)
-   ("RET" . ivy-alt-done)
-   ("C-h" . ivy-backward-char))
-  :hook
-  (ivy-mode . counsel-mode)
-  :custom
-  (counsel-yank-pop-height 20)
-  (enable-recursive-minibuffers t)
-  (ivy-height 20)
-  (ivy-use-selectable-prompt t)
-  (ivy-format-functions-alist '((t . ivy-format-function-arrow)))
-  (ivy-use-virtual-buffers t)
-  (ivy-count-format "(%d/%d) ")
-  (ivy-re-builders-alist '((t. ivy--regex-fuzzy)
-                           (swiper . ivy--regex-plus)))
-  (counsel-yank-pop-separator "\n------------\n")
+  ("C-c z" . selectrum-repeat))
+(use-package selectrum-prescient
+  :delight
+  :demand t
+  :after selectrum
   :config
-  (use-package ivy-prescient
-    :delight
-    :demand t
-    :after ivy perscient
-    :config
-    (ivy-prescient-mode +1)
-    (setf (alist-get 'counsel-M-x ivy-re-builders-alist)
-          #'iby-prescient-re-builder)
-    (setf (alist-get t ivy-re-builder-alist) #'ivy--regex-ignore-order))
-  (use-package ivy-posframe
-    :disabled t
-    :delight
-    :after ivy
-    :hook
-    (ivy-mode . ivy-posframe-mode)
-    :custom
-    (ivy-posframe-display-functions-alist
-     '((swiper . nil)
-       (swiper-avy . nil)
-       (swiper-isearch . nil)
-       (counsel-M-x . ivy-posframe-display-at-point)
-       (counsel-recentf . ivy-posframe-display-at-frma-center)
-       (complete-symbol . ivy-posframe-display-at-point)
-       (t . ivy-posframe-display)))
-    (ivy-posframe-parameters
-     '((left-fringe . 5)
-       (right-fringe . 5)))
-    (ivy-posframe-height-alist
-     '((t . 15)))
-    :config
-    (ivy-posframe-mode +1))
-  (use-package all-the-icons-ivy-rich
-    :after all-th-icons ivy
-    :init (all-the-icons-ivy-rich-mode 1))
-  (use-package ivy-rich
-    :delight
-    :after ivy all-the-icons-ivy-rich
-    :config
-    (ivy-rich-mode 1)
-
-    ;;; copy fromhttps://vxlabs.com/2020/11/15/fix-ivy-rich-switch-buffer-directories-display-in-emacs/
-    ;; abbreviate turns home into ~ (for example)
-    ;; buffers still only get the buffer basename
-    (setq ivy-virtual-abbreviation 'abbreviation
-          ivy-rich-path-style 'abbrev)
-    ;; use buffer-file-name and list-buffers-directory instead of default-directory
-    ;; so that special buffers, e.g. *scratch* don't get a directory (we return nil in those cases)
-    (defun ivy-rich--switch-buffer-directory (candidate)
-      "Return directory of file visited by buffer named CANDIDATE, or nil if no file."
-      (let* ((buffer (get-buffer candidate))
-             (fn (buffer-file-name buffer)))
-        ;; if valid filename, i.e. buffer visiting file:
-        (if fn
-            ;; return containing directory
-            (directory-file-name fn)
-          ;; else if mode explicitly offering list-buffers-directory, return that; else nil.
-          ;; buffers that don't explicitly visit files, but would like to show a filename,
-          ;; e.g. magit or dired, set the list-buffers-directory variable
-          (buffer-local-value 'list-buffers-directory buffer))))
-
-    ;; override ivy-rich project root finding to use FFIP or to skip completely
-    (defun ivy-rich-switch-buffer-root (candidate)
-      ;; 1. changed let* to when-let*; if our directory func above returns nil,
-      ;;    we don't want to try and find project root
-      (when-let* ((dir (ivy-rich--switch-buffer-directory candidate)))
-        (unless (or (and (file-remote-p dir)
-                      (not ivy-rich-parse-remote-buffer))
-                   ;; Workaround for `browse-url-emacs' buffers , it changes
-                   ;; `default-directory' to "http://" (#25)
-                   (string-match "https?://" dir))
-          (cond
-           ;; 2. replace the project-root-finding
-           ;; a. add FFIP for projectile-less project-root finding (on my setup much faster) ...
-           ((require 'find-file-in-project nil t)
-            (let ((default-directory dir))
-              (ffip-project-root)))
-           ;; b. OR disable project-root-finding altogether
-           (t "")
-           ((bound-and-true-p projectile-mode)
-            (let ((project (or (ivy-rich--local-values
-                               candidate 'projectile-project-root)
-                              (projectile-project-root dir))))
-              (unless (string= project "-")
-                project)))
-           ((require 'project nil t)
-            (when-let ((project (project-current nil dir)))
-              (car (project-roots project))))
-           ))))
-  ))
+  (selectrum-prescient-mode +1))
 
 (use-package loccur
   :delight loccur
@@ -757,6 +653,11 @@
   :bind
   ("M-w" . easy-kill)
   ("C-<SPC>" . easy-mark))
+
+(use-package browse-kill-ring
+  :delight
+  :bind
+  ("M-y" . browse-kill-ring))
 
 (use-package migemo
   ;; :defer t
@@ -1004,24 +905,6 @@
 ;;   :config
 ;;   (helm-cider-mode 1))
 
-;; (use-package selectrum
-;;   :init
-;;   (selectrum-mode +1)
-;;   :bind
-;;   ("C-c z" . selectrum-repeat))
-;; (use-package selectrum-prescient
-;;   :delight
-;;   :demand t
-;;   :after selectrum
-;;   :config
-;;   (selectrum-prescient-mode +1))
-
-;; (use-package browse-kill-ring
-;;   :disabled t
-;;   :delight
-;;   :bind
-;;   ("M-y" . browse-kill-ring))
-
 ;; (use-package flx-isearch
 ;;   :disabled t
 ;;   :delight
@@ -1057,6 +940,126 @@
 ;;   (setq ace-isearch-function-from-isearch 'swoop-from-isearch)
 ;;   (setq ace-isearch-use-function-from-isearch t)
 ;;   (setq ace-isearch-fallback-function 'swoop-from-isearch))
+
+(use-package counsel
+  :disabled t
+  :delight Ivy Counsel
+  :init (ivy-mode 1)
+  :bind
+  (("C-s" . swiper)
+   ("M-x" . counsel-M-x)
+   ("M-y" . counsel-yank-pop)
+   ("C-x C-f" . counsel-find-file)
+   ("C-x C-r" . counsel-recentf)
+   ("C-x b" . counsel-switch-buffer)
+   :map ivy-minibuffer-map
+   ("C-k" . ivy-kill-line)
+   ("C-j" . ivy-immediate-done)
+   ("RET" . ivy-alt-done)
+   ("C-h" . ivy-backward-char))
+  :hook
+  (ivy-mode . counsel-mode)
+  :custom
+  (counsel-yank-pop-height 20)
+  (enable-recursive-minibuffers t)
+  (ivy-height 20)
+  (ivy-use-selectable-prompt t)
+  (ivy-format-functions-alist '((t . ivy-format-function-arrow)))
+  (ivy-use-virtual-buffers t)
+  (ivy-count-format "(%d/%d) ")
+  (ivy-re-builders-alist '((t. ivy--regex-fuzzy)
+                           (swiper . ivy--regex-plus)))
+  (counsel-yank-pop-separator "\n------------\n")
+  :config
+  (use-package ivy-prescient
+    :delight
+    :demand t
+    :after ivy perscient
+    :config
+    (ivy-prescient-mode +1)
+    (setf (alist-get 'counsel-M-x ivy-re-builders-alist)
+          #'iby-prescient-re-builder)
+    (setf (alist-get t ivy-re-builder-alist) #'ivy--regex-ignore-order))
+  (use-package ivy-posframe
+    :disabled t
+    :delight
+    :after ivy
+    :hook
+    (ivy-mode . ivy-posframe-mode)
+    :custom
+    (ivy-posframe-display-functions-alist
+     '((swiper . nil)
+       (swiper-avy . nil)
+       (swiper-isearch . nil)
+       (counsel-M-x . ivy-posframe-display-at-point)
+       (counsel-recentf . ivy-posframe-display-at-frma-center)
+       (complete-symbol . ivy-posframe-display-at-point)
+       (t . ivy-posframe-display)))
+    (ivy-posframe-parameters
+     '((left-fringe . 5)
+       (right-fringe . 5)))
+    (ivy-posframe-height-alist
+     '((t . 15)))
+    :config
+    (ivy-posframe-mode +1))
+  (use-package all-the-icons-ivy-rich
+    :after all-th-icons ivy
+    :init (all-the-icons-ivy-rich-mode 1))
+  (use-package ivy-rich
+    :delight
+    :after ivy all-the-icons-ivy-rich
+    :config
+    (ivy-rich-mode 1)
+
+    ;;; copy fromhttps://vxlabs.com/2020/11/15/fix-ivy-rich-switch-buffer-directories-display-in-emacs/
+    ;; abbreviate turns home into ~ (for example)
+    ;; buffers still only get the buffer basename
+    (setq ivy-virtual-abbreviation 'abbreviation
+          ivy-rich-path-style 'abbrev)
+    ;; use buffer-file-name and list-buffers-directory instead of default-directory
+    ;; so that special buffers, e.g. *scratch* don't get a directory (we return nil in those cases)
+    (defun ivy-rich--switch-buffer-directory (candidate)
+      "Return directory of file visited by buffer named CANDIDATE, or nil if no file."
+      (let* ((buffer (get-buffer candidate))
+             (fn (buffer-file-name buffer)))
+        ;; if valid filename, i.e. buffer visiting file:
+        (if fn
+            ;; return containing directory
+            (directory-file-name fn)
+          ;; else if mode explicitly offering list-buffers-directory, return that; else nil.
+          ;; buffers that don't explicitly visit files, but would like to show a filename,
+          ;; e.g. magit or dired, set the list-buffers-directory variable
+          (buffer-local-value 'list-buffers-directory buffer))))
+
+    ;; override ivy-rich project root finding to use FFIP or to skip completely
+    (defun ivy-rich-switch-buffer-root (candidate)
+      ;; 1. changed let* to when-let*; if our directory func above returns nil,
+      ;;    we don't want to try and find project root
+      (when-let* ((dir (ivy-rich--switch-buffer-directory candidate)))
+        (unless (or (and (file-remote-p dir)
+                      (not ivy-rich-parse-remote-buffer))
+                   ;; Workaround for `browse-url-emacs' buffers , it changes
+                   ;; `default-directory' to "http://" (#25)
+                   (string-match "https?://" dir))
+          (cond
+           ;; 2. replace the project-root-finding
+           ;; a. add FFIP for projectile-less project-root finding (on my setup much faster) ...
+           ((require 'find-file-in-project nil t)
+            (let ((default-directory dir))
+              (ffip-project-root)))
+           ;; b. OR disable project-root-finding altogether
+           (t "")
+           ((bound-and-true-p projectile-mode)
+            (let ((project (or (ivy-rich--local-values
+                               candidate 'projectile-project-root)
+                              (projectile-project-root dir))))
+              (unless (string= project "-")
+                project)))
+           ((require 'project nil t)
+            (when-let ((project (project-current nil dir)))
+              (car (project-roots project))))
+           ))))
+  ))
 
 (use-package multiple-cursors
   :disabled t
@@ -1107,7 +1110,21 @@
                 :after 'reset-cursors)))
 
 (use-package iedit
-  )
+  :config
+  (defun iedit-dwim (arg)
+    "Starts iedit but uses \\[narrow-to-defun] to limit its scope."
+    (interactive "P")
+    (if arg
+        (iedit-mode)
+      (save-excursion
+        (widen)
+        ;; this function determines the scope of 'iedit-start'.
+        (if iedit-mode
+            (iedit-done)
+          ;; 'current-word' can of course be replaced by other
+          ;; functions.
+          (narrow-to-defun)
+          (iedit-start (current-word) (point-min) (point-max)))))))
 
 (use-package expand-region
   :defer t
@@ -1184,6 +1201,7 @@
   )
 
 (use-package paren-completer
+  :disabled t
   :delight
   :bind
   ("M-)" . paren-completer-add-single-delimiter))
@@ -1596,7 +1614,11 @@
 (use-package org
   :delight Org
   :hook
-  (org-mode . (org-indent-mode visual-line-mode variable-pitch-mode))
+  (org-mode-hook . (org-indent-mode
+                    visual-line-mode
+                    variable-pitch-mode))
+  :bind
+  ("C-c a" . org-agenda)
   :config
   (setq org-tags-column 0)
   (setq org-display-inline-images t)
@@ -1634,6 +1656,10 @@
 
 (use-package org-web-tools
   :defer t)
+
+(use-package org-cliplink
+  :bind
+  ("C-x p i" . org-cliplink))
 
 ;  (use-package recursive-narrow :defer t :delight)
 
@@ -2295,6 +2321,25 @@
 (use-package nocomments-mode
   :defer t
   :delight)
+
+(use-package outline
+  :straight nil
+  :hook
+  (prog-mode-hook . (outline-minor-mode
+                     hs-minor-mode)))
+
+(use-package outline-minor-faces
+  :after outline
+  :config
+  (add-hook 'outline-minor-mode-hook
+            'outline-minor-faces-add-font-lock-keywords))
+
+(use-package bicycle
+  :after outline
+  :bind
+  (:map outline-minor-mode-map
+        ([C-tab] . bicycle-cycle)
+        ([S-tab] . bicycle-cycle-global)))
 
 (use-package origami
   :defer t
