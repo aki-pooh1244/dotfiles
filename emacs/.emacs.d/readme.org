@@ -321,8 +321,9 @@ Setup use-package
 (define-key global-map (kbd "C-x |") 'split-window-horizontally)
 (define-key global-map (kbd "C-x -") 'split-window-vertically)
 (when (eq system-type 'darwin)
-  (setq ns-command-modifier (quote meta))
-  (setq ns-option-modifier (quote super))
+  (setq ns-command-modifier 'meta)
+  (setq ns-option-modifier 'super)
+  ;; (setq ns-function-modifier 'hyper)
   ;; capslock -> hyper
   )
 #+END_SRC
