@@ -20,7 +20,7 @@ places
 /emacs/.emacs.d/request
 .persistent-scratch
 projectile-bookmarks.eld
-*.elc
+/emacs/.emacs.d/elisp-objects/*.elc
 
 *\~
 #ignore fish file
