@@ -836,7 +836,6 @@ Setup use-package
 * Search/Replace
 ** selectrum
 #+BEGIN_SRC emacs-lisp
-
   (use-package selectrum
     :init
     (selectrum-mode +1)
@@ -850,6 +849,54 @@ Setup use-package
     (selectrum-prescient-mode +1))
   
 #+END_SRC
+** consult
+   #+begin_src emacs-lisp
+     (use-package consult
+       :straight (consult :host github
+                          :repo "minad/consult"
+                          :branch "main")
+       :delight Consult
+       :init
+       (fset 'multi-occur #'consult-multi-occur)
+       :bind
+       (("C-s" . consult-line)
+        ("C-c h" . consult-history)
+        ("C-x b" . consult-buffer)
+        ("C-x r x" . consult-register)
+        ("C-x r b" . consult-bookmark)
+        ("M-s o" . consult-outline)
+        ("M-s m" . consult-mark)
+        ("M-s i" . consult-imenu)
+        ("M-s e" . consult-error)
+        ("M-s m" . consult-multi-occur)
+        ("M-y" . consult-yank-pop)
+        ("<help> a" . consult-apropos))
+       :config
+       (consult-preview-mode))
+
+     (use-package consult-selectrum
+       :straight (consult-selectrum :host github
+                                    :repo "minad/consult"
+                                    :branch "main")
+       :demand t)
+
+     (use-package consult-flycheck
+       :straight (consult-flycheck :host github
+                                   :repo "minad/consult"
+                                   :branch "main")
+       :bind
+       (:map flycheck-command-map
+             ("!" . consult-flycheck)))
+   #+end_src
+** marginalia
+   #+begin_src emacs-lisp
+     (use-package marginalia
+       :straight (marginalia :host github
+                             :repo "minad/marginalia"
+                             :branch "main")
+       :init
+       (marginalia-mode))
+   #+end_src
 ** occur
 #+begin_src emacs-lisp
   (use-package loccur
@@ -868,6 +915,7 @@ Setup use-package
 *** Browse kill ring
     #+begin_src emacs-lisp
       (use-package browse-kill-ring
+        :disabled t
         :delight
         :bind
         ("M-y" . browse-kill-ring))
@@ -1212,6 +1260,7 @@ Setup use-package
      (counsel-yank-pop-separator "\n------------\n")
      :config
      (use-package ivy-prescient
+       :disabled t
        :delight
        :demand t
        :after ivy perscient
@@ -1243,9 +1292,11 @@ Setup use-package
        :config
        (ivy-posframe-mode +1))
      (use-package all-the-icons-ivy-rich
+       :disabled t
        :after all-th-icons ivy
        :init (all-the-icons-ivy-rich-mode 1))
      (use-package ivy-rich
+       :disabled t
        :delight
        :after ivy all-the-icons-ivy-rich
        :config
@@ -1995,6 +2046,11 @@ Setup use-package
       :config
       (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
 #+end_src
+** org-sticky-header
+   #+begin_src emacs-lisp
+     (use-package org-sticky-header
+       :demand t)
+   #+end_src
 ** org-web-tools
    #+begin_src emacs-lisp
      (use-package org-web-tools

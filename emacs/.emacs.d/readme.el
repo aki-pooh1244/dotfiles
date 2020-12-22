@@ -224,8 +224,9 @@
 (define-key global-map (kbd "C-x |") 'split-window-horizontally)
 (define-key global-map (kbd "C-x -") 'split-window-vertically)
 (when (eq system-type 'darwin)
-  (setq ns-command-modifier (quote meta))
-  (setq ns-option-modifier (quote super))
+  (setq ns-command-modifier 'meta)
+  (setq ns-option-modifier 'super)
+  ;; (setq ns-function-modifier 'hyper)
   ;; capslock -> hyper
   )
 
@@ -644,6 +645,50 @@
   :config
   (selectrum-prescient-mode +1))
 
+(use-package consult
+  :straight (consult :host github
+                     :repo "minad/consult"
+                     :branch "main")
+  :delight Consult
+  :init
+  (fset 'multi-occur #'consult-multi-occur)
+  :bind
+  (("C-s" . consult-line)
+   ("C-c h" . consult-history)
+   ("C-x b" . consult-buffer)
+   ("C-x r x" . consult-register)
+   ("C-x r b" . consult-bookmark)
+   ("M-s o" . consult-outline)
+   ("M-s m" . consult-mark)
+   ("M-s i" . consult-imenu)
+   ("M-s e" . consult-error)
+   ("M-s m" . consult-multi-occur)
+   ("M-y" . consult-yank-pop)
+   ("<help> a" . consult-apropos))
+  :config
+  (consult-preview-mode))
+
+(use-package consult-selectrum
+  :straight (consult-selectrum :host github
+                               :repo "minad/consult"
+                               :branch "main")
+  :demand t)
+
+(use-package consult-flycheck
+  :straight (consult-flycheck :host github
+                              :repo "minad/consult"
+                              :branch "main")
+  :bind
+  (:map flycheck-command-map
+        ("!" . consult-flycheck)))
+
+(use-package marginalia
+  :straight (marginalia :host github
+                        :repo "minad/marginalia"
+                        :branch "main")
+  :init
+  (marginalia-mode))
+
 (use-package loccur
   :delight loccur
   )
@@ -655,6 +700,7 @@
   ("C-<SPC>" . easy-mark))
 
 (use-package browse-kill-ring
+  :disabled t
   :delight
   :bind
   ("M-y" . browse-kill-ring))
@@ -972,6 +1018,7 @@
   (counsel-yank-pop-separator "\n------------\n")
   :config
   (use-package ivy-prescient
+    :disabled t
     :delight
     :demand t
     :after ivy perscient
@@ -1003,9 +1050,11 @@
     :config
     (ivy-posframe-mode +1))
   (use-package all-the-icons-ivy-rich
+    :disabled t
     :after all-th-icons ivy
     :init (all-the-icons-ivy-rich-mode 1))
   (use-package ivy-rich
+    :disabled t
     :delight
     :after ivy all-the-icons-ivy-rich
     :config
@@ -1653,6 +1702,9 @@
 (use-package org-superstar
     :config
     (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
+
+(use-package org-sticky-header
+  :demand t)
 
 (use-package org-web-tools
   :defer t)
