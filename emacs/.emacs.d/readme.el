@@ -23,6 +23,7 @@
 ;; Install use-package
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
+(setq use-package-enable-imenu-supprot t)
 
 ;; (unless (package-installed-p 'use-package)
 ;;         (package-refresh-contents)
@@ -42,6 +43,9 @@
 (defun display-startup-echo-area-message ()
   (message " "))
 (setq initial-scratch-message nil)
+
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file 'noerror)
 
 (use-package server
   :straight nil
@@ -81,7 +85,10 @@
 (use-package dash)
 
 (setq-default cursor-type 'box)
-(menu-bar-mode 1)
+(when (eq system-type 'darwin)
+  (menu-bar-mode 1))
+(when (eq system-type 'linux)
+  (menu-bar-mode -1))
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (global-hl-line-mode +1)
@@ -246,19 +253,22 @@
         key-chord-one-key-delay  0.15
         key-chord-safety-interval-backward 0.1
         key-chord-safety-interval-forward 0.25)
-  (key-chord-define-global "zz" 'undo-fu-only-undo)
-  (key-chord-define-global "rr" 'undo-fu-only-redo)
-  (key-chord-define-global "ee" 'hippie-expand)
-  (key-chord-define-global ",," 'indent-for-comment)
-  (key-chord-define-global "jj" 'avy-goto-word-1)
-  (key-chord-define-global "jl" 'avy-goto-line)
-  (key-chord-define-global "jk" 'avy-goto-char)
-  (key-chord-define-global "xx" 'execute-extended-command)
-  (key-chord-define-global "yy" 'browse-kill-ring)
-  (key-chord-define-global "mc" 'mc/mark-all-dwim)
-  (key-chord-define-global "ff" 'dired-sidebar-toggle-sidebar)
-  (key-chord-mode +1)
-  (use-package use-package-chords))
+  (key-chord-mode +1))
+
+(use-package use-package-chords
+  :config
+  (key-chord-mode +1))
+
+(use-package keyfreq
+  :config
+  (require 'keyfreq)
+  (setq keyfreq-excluded-commands
+        '(self-insert-command
+          abort-recursive-edit
+          previous-line
+          next-line))
+  (keyfreq-mode 1)
+  (keyfreq-autosave-mode 1))
 
 ;; (use-package hydra)
 ;; (use-package hydra-posframe
@@ -271,6 +281,11 @@
 ;; (use-package major-mode-hydra
 ;;   :bind
 ;;   ("M-SPC" . major-mode-hydra))
+
+(use-package xah-fly-keys
+  :config
+  (xah-fly-keys-set-layout "qwerty")
+  (xah-fly-keys 1))
 
 (use-package prescient
   :delight
@@ -311,11 +326,11 @@
 ;;   :bind
 ;;   ("C-c c o" . recentf-open-files))
 
-(use-package frecentf
-  :delight Recentf
-  :defer t
-  :hook
-  (after-init . frecentf-mode))
+;; (use-package frecentf
+;;   :delight Recentf
+;;   :defer t
+;;   :hook
+;;   (after-init . frecentf-mode))
 
 (use-package super-save
   :delight
@@ -349,7 +364,10 @@
   :delight
   :bind
   ("C-/" . undo-fu-only-undo)
-  ("M-/" . undo-fu-only-redo))
+  ("M-/" . undo-fu-only-redo)
+  :chords
+  (("zz" . undo-fu-only-undo)
+   ("rr" . undo-fu-only-redo)))
 (use-package undo-fu-session
   :delight
   :config
@@ -633,6 +651,13 @@
                                                  'mode-line fg))
                                    orig-fg))))
 
+(use-package marginalia
+  :straight (marginalia :host github
+                        :repo "minad/marginalia"
+                        :branch "main")
+  :init
+  (marginalia-mode))
+
 (use-package selectrum
   :init
   (selectrum-mode +1)
@@ -652,6 +677,7 @@
   :delight Consult
   :init
   (fset 'multi-occur #'consult-multi-occur)
+  :after marginalia
   :bind
   (("C-s" . consult-line)
    ("C-c h" . consult-history)
@@ -681,13 +707,6 @@
   :bind
   (:map flycheck-command-map
         ("!" . consult-flycheck)))
-
-(use-package marginalia
-  :straight (marginalia :host github
-                        :repo "minad/marginalia"
-                        :branch "main")
-  :init
-  (marginalia-mode))
 
 (use-package loccur
   :delight loccur
@@ -1189,6 +1208,11 @@
   ("C-'" . avy-goto-char-timer)
   ("M-g g" . avy-goto-line)
   ("M-g w" . avy-goto-word-1)
+  :chords
+  (("jj" . avy-goto-word-1)
+   ("jl" . avy-goto-line)
+   ("jk" . avy-goto-char)
+   ("`'jr" . avy-resume))
   :config
   (avy-setup-default))
 (use-package avy-migemo
@@ -1197,6 +1221,8 @@
   :bind
   ("M-g m" . avy-migemo-mode)
   ("C-M-;" . avy-migemo-goto-char-timer)
+  :chords
+  (("jm" . avy-migemo-goto-char-timer))
   :config
   (avy-migemo-mode 1)
   (setq avy-timeout-seconds 0.5))
@@ -1215,6 +1241,12 @@
   :config
   (setq aw-keys '(?j ?k ?l ?i ?o ?h ?y ?u ?p))
   (setq aw-leading-char-face '((t (:height 4.0 :foreground "#f1fa8c")))))
+
+(use-package ace-link
+  :defer t
+  :delight
+  :config
+  (ace-link-setup-default))
 
 (use-package mwim
   :bind
@@ -1373,6 +1405,8 @@
   :straight nil
   :bind
   ("C--" . hippie-expand)
+  :chords
+  (("ee" . hippie-expand))
   :config
   (setq hippie-expand-try-functions-list
         '(try-expand-dabbrev
@@ -1386,6 +1420,11 @@
           try-complete-lisp-symbol-partially
           try-complete-lisp-symbol
           yas-hippie-try-expand)))
+
+(setq-default abbrev-mode t)
+(setq save-abbrevs t)
+(setq abbrev-file-name "~/.emacs.d/my-abbreviations.el")
+(quietly-read-abbrev-file)
 
 ;; (use-package bbyac
 ;;   :bind
@@ -1402,10 +1441,11 @@
 ;;   (advice-add 'bbyac--display-matches :around 'bbyac--display-matches--use-ido)
 ;;   (bbyac-global-mode 1))
 
-(setq-default abbrev-mode t)
-(setq save-abbrevs t)
-(setq abbrev-file-name "~/.emacs.d/my-abbreviations.el")
-(quietly-read-abbrev-file)
+;; (use-package fancy-dabbrev
+;;   :bind
+;;   ("<tab>" . foncy-dabbrev-expand-or-indent)
+;;   :config
+;;   (global-fancy-dabbrev-mode))
 
 (use-package yasnippet
   :defer t
@@ -1541,25 +1581,29 @@
   (setq tab-always-indent 'complete)
   (setq font-lock-maximum-decoration 3))
 
-(use-package elpy
+;; (use-package elpy
+;;   :disabled t
+;;   :defer t
+;;   :init
+;;   (advice-add 'python-mode :before 'elpy-enable))
+
+(use-package pipenv
+  :hook
+  (python-mode . pipenv-mode)
+  )
+(use-package anaconda-mode
+  :hook
+  (python-mode-hook . (anaconda-mode anaconda-eldoc-mode)))
+
+(use-package company-anaconda
   :defer t
-  :init
-  (advice-add 'python-mode :before 'elpy-enable))
-
-;; (use-package anaconda-mode
-;;   :defer t
-;;   :hook
-;;   (python-mode-hook . (anaconda-mode anaconda-eldoc-mode)))
-
-;; (use-package company-anaconda
-;;   :defer t
-;;   :preface
-;;   (defun my/python-mode-setup ()
-;;      (setq-local company-backends
-;;                  (append '((company-anaconda))
-;;                          company-backends)))
-;;   :hook
-;;   (python-mode-hook . my/python-mode-setup))
+  :preface
+  (defun my/python-mode-setup ()
+     (setq-local company-backends
+                 (append '((company-anaconda))
+                         company-backends)))
+  :hook
+  (python-mode-hook . my/python-mode-setup))
 
 ;; (use-package py-yapf
 ;;   :defer t
@@ -1588,12 +1632,14 @@
   :defer t)
 
 (use-package julia-mode
+  :disabled t
   :defer t
   :delight
   :init
   (setq inferior-julia-program-name "/usr/local/bin/julia"))
 
 (use-package julia-repl
+  :disabled t
   :defer t
   :hook
   (julia-mode-hook . julia-repl-mode))
@@ -1605,6 +1651,22 @@
    ("\\.markdown\\'" . markdown-mode))
   :init
   (setq markdown-command "multimarkdown"))
+
+(use-package ledger-mode)
+
+(use-package flycheck-ledger
+  :after flycheck
+  :delight)
+
+(use-package company-ledger
+  :defer t
+  :preface
+  (defun my/ledger-mode-setup ()
+    (setq-local company-backends
+                (append '((company-ledger))
+                        company-backends)))
+  :hook
+  (ledger-mode-hook . my/ledger-mode-setup))
 
 (use-package quickrun
   :defer t
@@ -1645,6 +1707,9 @@
   :hook
   (after-init-hook . flimenu-global-mode))
 
+(use-package imenus
+  :defer t)
+
 (use-package polymode
   :delight Poly)
 (use-package poly-org
@@ -1662,13 +1727,22 @@
 
 (use-package org
   :delight Org
+  :init
+  (use-package org-plus-contrib :straight nil)
   :hook
   (org-mode-hook . (org-indent-mode
                     visual-line-mode
                     variable-pitch-mode))
   :bind
   ("C-c a" . org-agenda)
+  ("C-c c" . org-capture)
   :config
+  (setq org-directory "~/Dropbox/org/")
+  (setq org-default-notes-file "~/Dropbox/org/note.org")
+  (setq org-agenda-files "~/Dropbox/org/agenda.org")
+  (setq org-return-follows-link t)
+  (setq org-indent-indentation-per-level 2)
+  (setq org-startup-folded 'content)
   (setq org-tags-column 0)
   (setq org-display-inline-images t)
   (setq org-redisplay-inline-images t)
@@ -1693,18 +1767,21 @@
                                ;; (ein . t)
                                (ipython . t)
                                (shell . t)
+                               (awk . t)
                                (emacs-lisp . t)
                                (ledger . t)
                                (ditaa . t)
                                (js . t)
-                               (C . t)))
+                               (C . t)
+                               (latex . t)))
 
 (use-package org-superstar
     :config
     (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
 
 (use-package org-sticky-header
-  :demand t)
+  :hook
+  (org-mode . org-sticky-header-mode))
 
 (use-package org-web-tools
   :defer t)
@@ -1712,6 +1789,18 @@
 (use-package org-cliplink
   :bind
   ("C-x p i" . org-cliplink))
+
+(use-package yankpad
+  :defer t
+  :delight YankPad
+  :init
+  (setq yankpad-file "~/Dropbox/org/yankpad.org")
+  :bind
+  ("<f9>" . yankpad-map)
+  ("M-<f9>" . yankpad-expand)
+  :config
+  (add-to-list 'company-backends #'company-yankpad)
+  (add-to-list hippie-expand-try-functions-list #'yankpad-expand))
 
 ;  (use-package recursive-narrow :defer t :delight)
 
@@ -2074,7 +2163,8 @@
 (use-package moody
   :config
   (setq x-underline-at-descent-line t)
-  (moody-replace-mode-line-buffer-identification)
+  ;; (moody-replace-mode-line-buffer-identification)
+  (moody-replace-sml/mode-line-buffer-identification)
   (moody-replace-vc-mode))
 
 (use-package dashboard
@@ -2132,17 +2222,26 @@
   :config
   (setq multicolumn-min-width 72))
 
-(use-package sublimity
-  :defer t
-  ;; :hook
-  ;; (prog-mode-hook . sublimity-mode)
+(use-package unfill
+  )
+
+;; (use-package sublimity
+;;   :disabled t
+;;   :defer t
+;;   ;; :hook
+;;   ;; (prog-mode-hook . sublimity-mode)
+;;   :config
+;;   (setq sublimity-scroll-weight 5
+;;         sublimity-scroll-drift-length 10)
+;;   (setq sublimity-map-size 20
+;;         sublimity-map-fraction 0.3
+;;         sublimity-map-text-scale -7
+;;         sublimity-map-set-delay 5))
+
+(use-package smooth-scrolling
+  :delight smooth
   :config
-  (setq sublimity-scroll-weight 5
-        sublimity-scroll-drift-length 10)
-  (setq sublimity-map-size 20
-        sublimity-map-fraction 0.3
-        sublimity-map-text-scale -7
-        sublimity-map-set-delay 5))
+  (require 'smooth-scrolling))
 
 ;; Windowmove
 (use-package windmove
@@ -2254,7 +2353,7 @@
   (custom-set-variables
    '(mini-frame-show-parameters
      '((top . 0)
-       (width . 0.7)
+       ;; (width . 0.7)
        (left . 0.5)
        ;; (height . 15)
        ))))
@@ -2431,3 +2530,22 @@
                        :repo "yamad/igor-mode"
                        :branch "master")
   :defer t)
+
+(use-package char-menu
+  :defer t
+  :config
+  (setq char-menu
+        '("—" "‘’" "“”" "…" "«»" "–" "【】" "◀▶" "☚ ☛"
+          ("Typography" "•" "©" "†" "‡" "°" "·" "§" "№" "★")
+          ("Math"       "≈" "≡" "≠" "∞" "×" "±" "∓" "÷" "√")
+          ("Arrows"     "←" "→" "↑" "↓" "⇐" "⇒" "⇑" "⇓")
+          ("Greek"      "α" "β" "Y" "δ" "ε" "ζ" "η" "θ" "ι" "κ" "λ" "μ"
+                        "ν" "ξ" "ο" "π" "ρ" "σ" "τ" "υ" "φ" "χ" "ψ" "ω") 
+          )))
+
+(use-package hamburger-menu
+  :disabled t
+  :config
+  (setq mode-line-front-space 'hamburger-menu-mode-line))
+
+(use-package alert)

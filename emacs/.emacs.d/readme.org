@@ -2,7 +2,7 @@
 #+AUTHOR: Akihiro Iwata
 #+DATE:<2020-10-19 Mon>
 #+STARTUP: overview
-Last-Updated:<2020-December-11 13:16:02>
+Last-Updated:<2021-January-08 11:34:52>
 My Emacs configuration
 * Lexical Binding
 #+BEGIN_SRC emacs-lisp
@@ -37,6 +37,7 @@ Setup package.el
   ;; Install use-package
   (straight-use-package 'use-package)
   (setq straight-use-package-by-default t)
+  (setq use-package-enable-imenu-supprot t)
 #+END_SRC
 ** Use-package
 Setup use-package
@@ -64,6 +65,11 @@ Setup use-package
   (setq initial-scratch-message nil)
 #+END_SRC
 
+** Separate custom config
+   #+begin_src emacs-lisp
+     (setq custom-file "~/.emacs.d/custom.el")
+     (load custom-file 'noerror)
+   #+end_src
 ** emacsclient
 #+BEGIN_SRC emacs-lisp 
   (use-package server
@@ -116,7 +122,10 @@ Setup use-package
 *** defaults
 #+BEGIN_SRC emacs-lisp
   (setq-default cursor-type 'box)
-  (menu-bar-mode 1)
+  (when (eq system-type 'darwin)
+    (menu-bar-mode +1))
+  (when (eq system-type 'linux)
+    (menu-bar-mode -1))
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
   (global-hl-line-mode +1)
@@ -347,21 +356,26 @@ Setup use-package
           key-chord-one-key-delay  0.15
           key-chord-safety-interval-backward 0.1
           key-chord-safety-interval-forward 0.25)
-    (key-chord-define-global "zz" 'undo-fu-only-undo)
-    (key-chord-define-global "rr" 'undo-fu-only-redo)
-    (key-chord-define-global "ee" 'hippie-expand)
-    (key-chord-define-global ",," 'indent-for-comment)
-    (key-chord-define-global "jj" 'avy-goto-word-1)
-    (key-chord-define-global "jl" 'avy-goto-line)
-    (key-chord-define-global "jk" 'avy-goto-char)
-    (key-chord-define-global "xx" 'execute-extended-command)
-    (key-chord-define-global "yy" 'browse-kill-ring)
-    (key-chord-define-global "mc" 'mc/mark-all-dwim)
-    (key-chord-define-global "ff" 'dired-sidebar-toggle-sidebar)
-    (key-chord-mode +1)
-    (use-package use-package-chords))
+    (key-chord-mode +1))
+  
+  (use-package use-package-chords
+    :config
+    (key-chord-mode +1))
 
 #+END_SRC
+** keyfreq
+   #+begin_src emacs-lisp
+     (use-package keyfreq
+       :config
+       (require 'keyfreq)
+       (setq keyfreq-excluded-commands
+             '(self-insert-command
+               abort-recursive-edit
+               previous-line
+               next-line))
+       (keyfreq-mode 1)
+       (keyfreq-autosave-mode 1))
+   #+end_src
 ** hydra
 *** hydra
     #+BEGIN_SRC emacs-lisp
@@ -380,6 +394,13 @@ Setup use-package
       ;;   :bind
       ;;   ("M-SPC" . major-mode-hydra))
     #+END_SRC
+** xah-key bind
+   #+begin_src emacs-lisp
+     (use-package xah-fly-keys
+       :config
+       (xah-fly-keys-set-layout "qwerty")
+       (xah-fly-keys 1))
+   #+end_src
 * Library
 ** prescient
 #+BEGIN_SRC emacs-lisp
@@ -428,11 +449,11 @@ Setup use-package
   ;;   :bind
   ;;   ("C-c c o" . recentf-open-files))
 
-  (use-package frecentf
-    :delight Recentf
-    :defer t
-    :hook
-    (after-init . frecentf-mode))
+  ;; (use-package frecentf
+  ;;   :delight Recentf
+  ;;   :defer t
+  ;;   :hook
+  ;;   (after-init . frecentf-mode))
 #+END_SRC
 ** save
 #+BEGIN_SRC emacs-lisp
@@ -470,7 +491,10 @@ Setup use-package
     :delight
     :bind
     ("C-/" . undo-fu-only-undo)
-    ("M-/" . undo-fu-only-redo))
+    ("M-/" . undo-fu-only-redo)
+    :chords
+    (("zz" . undo-fu-only-undo)
+     ("rr" . undo-fu-only-redo)))
   (use-package undo-fu-session
     :delight
     :config
@@ -834,6 +858,15 @@ Setup use-package
                                         orig-fg))))
    #+END_SRC
 * Search/Replace
+** marginalia
+   #+begin_src emacs-lisp
+     (use-package marginalia
+       :straight (marginalia :host github
+                             :repo "minad/marginalia"
+                             :branch "main")
+       :init
+       (marginalia-mode))
+   #+end_src
 ** selectrum
 #+BEGIN_SRC emacs-lisp
   (use-package selectrum
@@ -858,6 +891,7 @@ Setup use-package
        :delight Consult
        :init
        (fset 'multi-occur #'consult-multi-occur)
+       :after marginalia
        :bind
        (("C-s" . consult-line)
         ("C-c h" . consult-history)
@@ -887,15 +921,6 @@ Setup use-package
        :bind
        (:map flycheck-command-map
              ("!" . consult-flycheck)))
-   #+end_src
-** marginalia
-   #+begin_src emacs-lisp
-     (use-package marginalia
-       :straight (marginalia :host github
-                             :repo "minad/marginalia"
-                             :branch "main")
-       :init
-       (marginalia-mode))
    #+end_src
 ** occur
 #+begin_src emacs-lisp
@@ -1442,6 +1467,11 @@ Setup use-package
     ("C-'" . avy-goto-char-timer)
     ("M-g g" . avy-goto-line)
     ("M-g w" . avy-goto-word-1)
+    :chords
+    (("jj" . avy-goto-word-1)
+     ("jl" . avy-goto-line)
+     ("jk" . avy-goto-char)
+     ("`'jr" . avy-resume))
     :config
     (avy-setup-default))
   (use-package avy-migemo
@@ -1450,6 +1480,8 @@ Setup use-package
     :bind
     ("M-g m" . avy-migemo-mode)
     ("C-M-;" . avy-migemo-goto-char-timer)
+    :chords
+    (("jm" . avy-migemo-goto-char-timer))
     :config
     (avy-migemo-mode 1)
     (setq avy-timeout-seconds 0.5))
@@ -1471,6 +1503,14 @@ Setup use-package
     (setq aw-keys '(?j ?k ?l ?i ?o ?h ?y ?u ?p))
     (setq aw-leading-char-face '((t (:height 4.0 :foreground "#f1fa8c")))))
 #+END_SRC
+** ace-link
+   #+begin_src emacs-lisp
+     (use-package ace-link
+       :defer t
+       :delight
+       :config
+       (ace-link-setup-default))
+   #+end_src
 ** Smart move
    #+BEGIN_SRC emacs-lisp
      (use-package mwim
@@ -1659,6 +1699,8 @@ Setup use-package
         :straight nil
         :bind
         ("C--" . hippie-expand)
+        :chords
+        (("ee" . hippie-expand))
         :config
         (setq hippie-expand-try-functions-list
               '(try-expand-dabbrev
@@ -1673,6 +1715,13 @@ Setup use-package
                 try-complete-lisp-symbol
                 yas-hippie-try-expand)))
     #+END_SRC
+*** my abbreviation
+    #+begin_src emacs-lisp
+      (setq-default abbrev-mode t)
+      (setq save-abbrevs t)
+      (setq abbrev-file-name "~/.emacs.d/my-abbreviations.el")
+      (quietly-read-abbrev-file)
+    #+end_src
 *** bbyac (dabbrev)
     #+BEGIN_SRC emacs-lisp
       ;; (use-package bbyac
@@ -1690,12 +1739,13 @@ Setup use-package
       ;;   (advice-add 'bbyac--display-matches :around 'bbyac--display-matches--use-ido)
       ;;   (bbyac-global-mode 1))
     #+END_SRC
-*** my abbreviation
+*** fancy-dabbrev
     #+begin_src emacs-lisp
-      (setq-default abbrev-mode t)
-      (setq save-abbrevs t)
-      (setq abbrev-file-name "~/.emacs.d/my-abbreviations.el")
-      (quietly-read-abbrev-file)
+      ;; (use-package fancy-dabbrev
+      ;;   :bind
+      ;;   ("<tab>" . foncy-dabbrev-expand-or-indent)
+      ;;   :config
+      ;;   (global-fancy-dabbrev-mode))
     #+end_src
 ** yasnippet
 #+BEGIN_SRC emacs-lisp
@@ -1850,25 +1900,29 @@ Setup use-package
 ** Python
 #+BEGIN_SRC emacs-lisp
 
-  (use-package elpy
+  ;; (use-package elpy
+  ;;   :disabled t
+  ;;   :defer t
+  ;;   :init
+  ;;   (advice-add 'python-mode :before 'elpy-enable))
+
+  (use-package pipenv
+    :hook
+    (python-mode . pipenv-mode)
+    )
+  (use-package anaconda-mode
+    :hook
+    (python-mode-hook . (anaconda-mode anaconda-eldoc-mode)))
+
+  (use-package company-anaconda
     :defer t
-    :init
-    (advice-add 'python-mode :before 'elpy-enable))
-
-  ;; (use-package anaconda-mode
-  ;;   :defer t
-  ;;   :hook
-  ;;   (python-mode-hook . (anaconda-mode anaconda-eldoc-mode)))
-
-  ;; (use-package company-anaconda
-  ;;   :defer t
-  ;;   :preface
-  ;;   (defun my/python-mode-setup ()
-  ;;      (setq-local company-backends
-  ;;                  (append '((company-anaconda))
-  ;;                          company-backends)))
-  ;;   :hook
-  ;;   (python-mode-hook . my/python-mode-setup))
+    :preface
+    (defun my/python-mode-setup ()
+       (setq-local company-backends
+                   (append '((company-anaconda))
+                           company-backends)))
+    :hook
+    (python-mode-hook . my/python-mode-setup))
 
   ;; (use-package py-yapf
   ;;   :defer t
@@ -1900,12 +1954,14 @@ Setup use-package
 ** Julia
 #+BEGIN_SRC emacs-lisp
   (use-package julia-mode
+    :disabled t
     :defer t
     :delight
     :init
     (setq inferior-julia-program-name "/usr/local/bin/julia"))
 
   (use-package julia-repl
+    :disabled t
     :defer t
     :hook
     (julia-mode-hook . julia-repl-mode))
@@ -1921,6 +1977,29 @@ Setup use-package
     :init
     (setq markdown-command "multimarkdown"))
 #+END_SRC
+** ledger
+*** ledger mode
+    #+begin_src emacs-lisp
+      (use-package ledger-mode)
+    #+end_src
+*** flycheck-ledger
+    #+begin_src emacs-lisp
+      (use-package flycheck-ledger
+        :after flycheck
+        :delight)
+    #+end_src
+*** company-ledger
+    #+begin_src emacs-lisp
+      (use-package company-ledger
+        :defer t
+        :preface
+        (defun my/ledger-mode-setup ()
+          (setq-local company-backends
+                      (append '((company-ledger))
+                              company-backends)))
+        :hook
+        (ledger-mode-hook . my/ledger-mode-setup))
+    #+end_src
 * Programming tools
 ** quickrun
 #+BEGIN_SRC emacs-lisp
@@ -1974,6 +2053,10 @@ Setup use-package
   (use-package flimenu
     :hook
     (after-init-hook . flimenu-global-mode))
+
+  (use-package imenus
+    :defer t)
+  
 #+END_SRC
 
 ** Poly mode
@@ -2001,13 +2084,22 @@ Setup use-package
     #+BEGIN_SRC emacs-lisp
       (use-package org
         :delight Org
+        :init
+        (use-package org-plus-contrib :straight nil)
         :hook
         (org-mode-hook . (org-indent-mode
                           visual-line-mode
                           variable-pitch-mode))
         :bind
         ("C-c a" . org-agenda)
+        ("C-c c" . org-capture)
         :config
+        (setq org-directory "~/Dropbox/org/")
+        (setq org-default-notes-file "~/Dropbox/org/note.org")
+        (setq org-agenda-files "~/Dropbox/org/agenda.org")
+        (setq org-return-follows-link t)
+        (setq org-indent-indentation-per-level 2)
+        (setq org-startup-folded 'content)
         (setq org-tags-column 0)
         (setq org-display-inline-images t)
         (setq org-redisplay-inline-images t)
@@ -2034,11 +2126,13 @@ Setup use-package
                                  ;; (ein . t)
                                  (ipython . t)
                                  (shell . t)
+                                 (awk . t)
                                  (emacs-lisp . t)
                                  (ledger . t)
                                  (ditaa . t)
                                  (js . t)
-                                 (C . t)))
+                                 (C . t)
+                                 (latex . t)))
 #+END_SRC
 ** org-superstar
 #+begin_src emacs-lisp
@@ -2049,7 +2143,8 @@ Setup use-package
 ** org-sticky-header
    #+begin_src emacs-lisp
      (use-package org-sticky-header
-       :demand t)
+       :hook
+       (org-mode . org-sticky-header-mode))
    #+end_src
 ** org-web-tools
    #+begin_src emacs-lisp
@@ -2061,6 +2156,22 @@ Setup use-package
      (use-package org-cliplink
        :bind
        ("C-x p i" . org-cliplink))
+   #+end_src
+** yankpad
+   snippets using org-mode
+   #+begin_src emacs-lisp
+     (use-package yankpad
+       :defer t
+       :delight YankPad
+       :init
+       (setq yankpad-file "~/Dropbox/org/yankpad.org")
+       :bind
+       ("<f9>" . yankpad-map)
+       ("M-<f9>" . yankpad-expand)
+       :config
+       (add-to-list 'company-backends #'company-yankpad)
+       (add-to-list hippie-expand-try-functions-list #'yankpad-expand))
+     
    #+end_src
 ** recursive-narrow
 C-x n n: recursive-narrow
@@ -2458,7 +2569,8 @@ C-x n w: recursive-wide
   (use-package moody
     :config
     (setq x-underline-at-descent-line t)
-    (moody-replace-mode-line-buffer-identification)
+    ;; (moody-replace-mode-line-buffer-identification)
+    (moody-replace-sml/mode-line-buffer-identification)
     (moody-replace-vc-mode))
   
 #+END_SRC
@@ -2525,21 +2637,34 @@ C-x n w: recursive-wide
     :config
     (setq multicolumn-min-width 72))
 #+END_SRC
-** smooth-scroll/minimap
+** unfill
+   #+begin_src emacs-lisp
+     (use-package unfill
+       )
+   #+end_src
+** sublimity
 #+BEGIN_SRC emacs-lisp
-  (use-package sublimity
-    :defer t
-    ;; :hook
-    ;; (prog-mode-hook . sublimity-mode)
-    :config
-    (setq sublimity-scroll-weight 5
-          sublimity-scroll-drift-length 10)
-    (setq sublimity-map-size 20
-          sublimity-map-fraction 0.3
-          sublimity-map-text-scale -7
-          sublimity-map-set-delay 5))
+  ;; (use-package sublimity
+  ;;   :disabled t
+  ;;   :defer t
+  ;;   ;; :hook
+  ;;   ;; (prog-mode-hook . sublimity-mode)
+  ;;   :config
+  ;;   (setq sublimity-scroll-weight 5
+  ;;         sublimity-scroll-drift-length 10)
+  ;;   (setq sublimity-map-size 20
+  ;;         sublimity-map-fraction 0.3
+  ;;         sublimity-map-text-scale -7
+  ;;         sublimity-map-set-delay 5))
   
 #+END_SRC
+** smooth-scrolling
+   #+begin_src emacs-lisp
+     (use-package smooth-scrolling
+       :delight smooth
+       :config
+       (require 'smooth-scrolling))
+   #+end_src
 ** Windmove
 #+BEGIN_SRC emacs-lisp
   ;; Windowmove
@@ -2666,7 +2791,7 @@ C-x n w: recursive-wide
     (custom-set-variables
      '(mini-frame-show-parameters
        '((top . 0)
-         (width . 0.7)
+         ;; (width . 0.7)
          (left . 0.5)
          ;; (height . 15)
          ))))
@@ -2885,4 +3010,28 @@ C-x n w: recursive-wide
                             :branch "master")
        :defer t)
    #+end_src
-
+** char-menu
+   #+begin_src emacs-lisp
+     (use-package char-menu
+       :defer t
+       :config
+       (setq char-menu
+             '("—" "‘’" "“”" "…" "«»" "–" "【】" "◀▶" "☚ ☛"
+               ("Typography" "•" "©" "†" "‡" "°" "·" "§" "№" "★")
+               ("Math"       "≈" "≡" "≠" "∞" "×" "±" "∓" "÷" "√")
+               ("Arrows"     "←" "→" "↑" "↓" "⇐" "⇒" "⇑" "⇓")
+               ("Greek"      "α" "β" "Y" "δ" "ε" "ζ" "η" "θ" "ι" "κ" "λ" "μ"
+                             "ν" "ξ" "ο" "π" "ρ" "σ" "τ" "υ" "φ" "χ" "ψ" "ω") 
+               )))
+   #+end_src
+** hamburger-menu
+   #+begin_src emacs-lisp
+     (use-package hamburger-menu
+       :disabled t
+       :config
+       (setq mode-line-front-space 'hamburger-menu-mode-line))
+   #+end_src
+** alert
+   #+begin_src emacs-lisp
+     (use-package alert)
+   #+end_src
