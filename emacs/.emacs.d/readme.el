@@ -86,7 +86,7 @@
 
 (setq-default cursor-type 'box)
 (when (eq system-type 'darwin)
-  (menu-bar-mode 1))
+  (menu-bar-mode +1))
 (when (eq system-type 'linux)
   (menu-bar-mode -1))
 (tool-bar-mode -1)
