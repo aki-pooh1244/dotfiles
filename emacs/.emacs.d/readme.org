@@ -1345,6 +1345,13 @@ Setup use-package
 ** iedit
    #+begin_src emacs-lisp
      (use-package iedit
+       :bind
+       (:map iedit-mode
+             ("C-m" . iedit-toggle-selection)
+             ("M-p" . iedit-expand-up-a-line)
+             ("M-n" . iedit-expand-down-a-line)
+             ("M-h" . iedit-restrict-function)
+             ("M-i" . iedit-restrict-current-line))
        :config
        (defun iedit-dwim (arg)
          "Starts iedit but uses \\[narrow-to-defun] to limit its scope."
