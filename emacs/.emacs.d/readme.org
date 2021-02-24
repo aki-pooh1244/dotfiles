@@ -338,19 +338,6 @@ Setup use-package
     (key-chord-mode +1))
 
 #+END_SRC
-** keyfreq
-   #+begin_src emacs-lisp
-     (use-package keyfreq
-       :config
-       (require 'keyfreq)
-       (setq keyfreq-excluded-commands
-             '(self-insert-command
-               abort-recursive-edit
-               previous-line
-               next-line))
-       (keyfreq-mode 1)
-       (keyfreq-autosave-mode 1))
-   #+end_src
 ** hydra
 *** hydra
     #+BEGIN_SRC emacs-lisp
