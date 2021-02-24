@@ -359,6 +359,7 @@ Setup use-package
 ** xah-key bind
    #+begin_src emacs-lisp
      (use-package xah-fly-keys
+       :disabled t
        :config
        (xah-fly-keys-set-layout "qwerty")
        (xah-fly-keys 1))
