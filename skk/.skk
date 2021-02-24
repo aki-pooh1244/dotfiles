@@ -20,6 +20,7 @@
 (setq skk-jisx0201-mode-string "[_ｱ]")
 (setq skk-abbrev-mode-string "[aA]")
 (setq skk-status-indicator 'left)
+(require 'skk-study)
 (setq skk-dcomp-activate t)
 (setq skk-dcomp-multiple-activate nil)
 (setq skk-dcompmultiple-rows 10)
