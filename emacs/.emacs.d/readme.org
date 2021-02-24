@@ -1430,10 +1430,10 @@ Setup use-package
     ("M-g g" . avy-goto-line)
     ("M-g w" . avy-goto-word-1)
     :chords
-    (("jj" . avy-goto-word-1)
+    (("jh" . avy-goto-word-1)
      ("jl" . avy-goto-line)
      ("jk" . avy-goto-char)
-     ("`'jr" . avy-resume))
+     ("jr" . avy-resume))
     :config
     (avy-setup-default))
   (use-package avy-migemo
@@ -1552,20 +1552,6 @@ Setup use-package
         :config
         (move-text-default-bindings))
     #+END_SRC
-*** spatial navigation
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package spatial-navigate
-  ;;   :defer t
-  ;;   :delight
-  ;;   :bind
-  ;;   ("<M-up>" . spatial-navigate-backward-vertical-bar)
-  ;;   ("<M-down>" . spatial-navigate-forward-vertical-bar)
-  ;;   ("<M-left>" . spatial-navigate-backward-horizontal-bar)
-  ;;   ("<M-right>" . spatial-navigate-forward-horizontal-bar)
-  ;;   :hook
-  ;;   (after-init-hook . spatial-navigate-mode)
-  ;;   )
-#+END_SRC
 * Completion
 ** Company
    #+BEGIN_SRC emacs-lisp
