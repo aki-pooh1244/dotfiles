@@ -294,11 +294,11 @@
   (setq prescient-history-length 10000))
 
 (use-package ddskk
-  :defer t
   :bind
   ("C-x j" . skk-mode)
   :init
-  (setq skk-init-file "~/.skk")
+  (setq skk-user-directory "~/Git_project/github.com/aki-pooh1244/dotfiles/skk")
+  (setq skk-init-file "~/Git_project/github.com/aki-pooh1244/dotfiles/skk/.skk")
   (setq default-input-method "japanese-skk")
   :config
   (setq skk-byte-complile-init-file t))

@@ -2,7 +2,7 @@
 #+AUTHOR: Akihiro Iwata
 #+DATE:<2020-10-19 Mon>
 #+STARTUP: overview
-Last-Updated:<2021-January-08 11:34:52>
+Last-Updated:<2021-February-24 11:32:01>
 My Emacs configuration
 * Lexical Binding
 #+BEGIN_SRC emacs-lisp
@@ -65,11 +65,6 @@ Setup use-package
   (setq initial-scratch-message nil)
 #+END_SRC
 
-** Separate custom config
-   #+begin_src emacs-lisp
-     (setq custom-file "~/.emacs.d/custom.el")
-     (load custom-file 'noerror)
-   #+end_src
 ** emacsclient
 #+BEGIN_SRC emacs-lisp 
   (use-package server
@@ -204,26 +199,6 @@ Setup use-package
     ("C-c e" . crux-eval-and-replace)
     :config
     (crux-with-region-or-buffer indent-region))
-#+END_SRC
-** smart-newline
-#+BEGIN_SRC emacs-lisp
-  (use-package smart-newline
-    :disabled t
-    :defer t
-    :delight
-    :hook
-    (after-init . smart-newline-mode)
-    :bind
-    ("C-m" . smart-newline)
-    :config
-    (smart-newline-mode 1)
-    (defadvice smart-newline (around C-u activate)
-      "C-uを押したら元のC-mの挙動をするようにした.org-modeなどで活用."
-      (if (not current-prefix-arg)
-          ad-do-it
-        (let (current-prefix-arg)
-          (let (smart-newline-mode)
-            (call-interactively (key-binding (kbd "C-m"))))))))
 #+END_SRC
 ** buffer
     I use ibuffer.el.
@@ -414,11 +389,11 @@ Setup use-package
 * SKK
 #+BEGIN_SRC emacs-lisp
   (use-package ddskk
-    :defer t
     :bind
     ("C-x j" . skk-mode)
     :init
-    (setq skk-init-file "~/.skk")
+    (setq skk-user-directory "~/Git_project/github.com/aki-pooh1244/dotfiles/skk")
+    (setq skk-init-file "~/Git_project/github.com/aki-pooh1244/dotfiles/skk/.skk")
     (setq default-input-method "japanese-skk")
     :config
     (setq skk-byte-complile-init-file t))
