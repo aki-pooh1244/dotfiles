@@ -279,6 +279,7 @@
   (let ((message-log-max nil))
     `(with-temp-message (or (current-message) "") ,@body)))
 (use-package recentf
+  :disabled t
   :defer t
   :config
   (setq recentf-save-file "~/.emacs.d/.recentf")
@@ -1546,19 +1547,6 @@
 
 (use-package ob-ipython
   :defer t)
-
-(use-package julia-mode
-  :disabled t
-  :defer t
-  :delight
-  :init
-  (setq inferior-julia-program-name "/usr/local/bin/julia"))
-
-(use-package julia-repl
-  :disabled t
-  :defer t
-  :hook
-  (julia-mode-hook . julia-repl-mode))
 
 (use-package markdown-mode
   :mode

@@ -396,6 +396,7 @@ Setup use-package
     (let ((message-log-max nil))
       `(with-temp-message (or (current-message) "") ,@body)))
   (use-package recentf
+    :disabled t
     :defer t
     :config
     (setq recentf-save-file "~/.emacs.d/.recentf")
