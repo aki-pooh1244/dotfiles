@@ -1857,21 +1857,6 @@ Setup use-package
     :defer t)
 
 #+END_SRC
-** Julia
-#+BEGIN_SRC emacs-lisp
-  (use-package julia-mode
-    :disabled t
-    :defer t
-    :delight
-    :init
-    (setq inferior-julia-program-name "/usr/local/bin/julia"))
-
-  (use-package julia-repl
-    :disabled t
-    :defer t
-    :hook
-    (julia-mode-hook . julia-repl-mode))
-#+END_SRC
 ** C language
 ** markdown
 #+BEGIN_SRC emacs-lisp

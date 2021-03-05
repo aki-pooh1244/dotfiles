@@ -44,9 +44,6 @@
   (message " "))
 (setq initial-scratch-message nil)
 
-(setq custom-file "~/.emacs.d/custom.el")
-(load custom-file 'noerror)
-
 (use-package server
   :straight nil
   :config
@@ -164,24 +161,6 @@
   :config
   (crux-with-region-or-buffer indent-region))
 
-(use-package smart-newline
-  :disabled t
-  :defer t
-  :delight
-  :hook
-  (after-init . smart-newline-mode)
-  :bind
-  ("C-m" . smart-newline)
-  :config
-  (smart-newline-mode 1)
-  (defadvice smart-newline (around C-u activate)
-    "C-uを押したら元のC-mの挙動をするようにした.org-modeなどで活用."
-    (if (not current-prefix-arg)
-        ad-do-it
-      (let (current-prefix-arg)
-        (let (smart-newline-mode)
-          (call-interactively (key-binding (kbd "C-m"))))))))
-
 (use-package ibuffer
   :straight nil
   :bind
@@ -259,17 +238,6 @@
   :config
   (key-chord-mode +1))
 
-(use-package keyfreq
-  :config
-  (require 'keyfreq)
-  (setq keyfreq-excluded-commands
-        '(self-insert-command
-          abort-recursive-edit
-          previous-line
-          next-line))
-  (keyfreq-mode 1)
-  (keyfreq-autosave-mode 1))
-
 ;; (use-package hydra)
 ;; (use-package hydra-posframe
 ;;   :straight (hydra-posframe :host github
@@ -283,6 +251,7 @@
 ;;   ("M-SPC" . major-mode-hydra))
 
 (use-package xah-fly-keys
+  :disabled t
   :config
   (xah-fly-keys-set-layout "qwerty")
   (xah-fly-keys 1))
@@ -1129,55 +1098,14 @@
            ))))
   ))
 
-(use-package multiple-cursors
-  :disabled t
-  :hook
-  (after-init . multiple-cursors)
-  :delight
-  :bind
-  (("C-x r t" . mc/edit-lines)
-   ("C-M-SPC" . mc/mark-all-dwim)
-  ("C->" . mc/mark-next-like-this)
-  ("C-<" . mc/mark-previous-like-this)
-  ("C-c C-<" . mc/mark-all-like-this)
-  ("M-S-<mouse-1>" . mc/add-cursor-on-click)
-  :map mc/keymap
-  ("M-<down>" . mc/cycle-forward)
-  ("M-<up>" . mc/cycle-backward)
-  ("M-S-<down>" . mc/skip-to-next-like-this)
-  ("M-S-<up>" . mc/skip-to-previous-like-this))
-  :init
-  (progn
-    (require 'mc-cycle-cursors)
-
-    (defvar mc-last-direction 0
-      "Records the last direction of multiple cursor.")
-
-    (defun jump-to-next-cursor (another)
-      (call-interactively
-       (if (= mc-last-direction -1)
-           'mc/cycle-backward
-         'mc/cycle-forward))
-      (setq mc-last-direction 1))
-
-    (defun jump-to-previous-cursor (another)
-      (call-interactively
-       (if (= mc-last-direction 1)
-           'mc/cycle-forward
-         'mc/cycle-backward))
-      (setq mc-last-direction -1))
-
-    (defun reset-cursors (another)
-      (setq mc-last-direction 0))
-
-    (advice-add 'mc/mark-next-like-this
-                :after 'jump-to-next-cursor)
-    (advice-add 'mc/mark-previous-like-this
-                :after 'jump-to-previous-cursor)
-    (advice-add 'multiple-cursors-mode
-                :after 'reset-cursors)))
-
 (use-package iedit
+  :bind
+  (:map iedit-mode
+        ("C-m" . iedit-toggle-selection)
+        ("M-p" . iedit-expand-up-a-line)
+        ("M-n" . iedit-expand-down-a-line)
+        ("M-h" . iedit-restrict-function)
+        ("M-i" . iedit-restrict-current-line))
   :config
   (defun iedit-dwim (arg)
     "Starts iedit but uses \\[narrow-to-defun] to limit its scope."
@@ -1209,10 +1137,10 @@
   ("M-g g" . avy-goto-line)
   ("M-g w" . avy-goto-word-1)
   :chords
-  (("jj" . avy-goto-word-1)
+  (("jh" . avy-goto-word-1)
    ("jl" . avy-goto-line)
    ("jk" . avy-goto-char)
-   ("`'jr" . avy-resume))
+   ("jr" . avy-resume))
   :config
   (avy-setup-default))
 (use-package avy-migemo
@@ -1305,18 +1233,6 @@
   :delight
   :config
   (move-text-default-bindings))
-
-;; (use-package spatial-navigate
-;;   :defer t
-;;   :delight
-;;   :bind
-;;   ("<M-up>" . spatial-navigate-backward-vertical-bar)
-;;   ("<M-down>" . spatial-navigate-forward-vertical-bar)
-;;   ("<M-left>" . spatial-navigate-backward-horizontal-bar)
-;;   ("<M-right>" . spatial-navigate-forward-horizontal-bar)
-;;   :hook
-;;   (after-init-hook . spatial-navigate-mode)
-;;   )
 
 (use-package company
   :delight Com
