@@ -661,6 +661,8 @@
    ("M-s m" . consult-multi-occur)
    ("M-y" . consult-yank-pop)
    ("<help> a" . consult-apropos))
+  :chords
+  (("bb" . consult-buffer))
   :config
   (consult-preview-mode))
 
@@ -1187,6 +1189,14 @@
   :delight
   :config
   (beginend-global-mode))
+
+(use-package smart-hungry-delete
+  :delight
+  :bind
+  ("<backspace>" . smart-hungry-delete-backward-char)
+  ("C-d" . smart-hungry-delete-forward-char)
+  :config
+  (smart-hungry-delete-add-default-hooks))
 
 (use-package paredit
   :delight ParEdit)
@@ -2074,7 +2084,7 @@
 (use-package dashboard
   :delight dashboard
   :custom
-  (dashboard-startup-banner '"~/.emacs.d/image/Larry_Cow.png")
+  (dashboard-startup-banner '"~/.emacs.d/image/gnu_icon_4x.png")
   ;; Value can be
   ;; 'official which displays the official emacs logo
   ;; 'logo which displays an alternative emacs logo

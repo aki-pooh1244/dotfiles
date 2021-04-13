@@ -869,6 +869,8 @@ Setup use-package
         ("M-s m" . consult-multi-occur)
         ("M-y" . consult-yank-pop)
         ("<help> a" . consult-apropos))
+       :chords
+       (("bb" . consult-buffer))
        :config
        (consult-preview-mode))
 
@@ -1447,6 +1449,16 @@ Setup use-package
        :config
        (beginend-global-mode))
    #+END_SRC
+** smart hungry delete
+   #+begin_src emacs-lisp
+     (use-package smart-hungry-delete
+       :delight
+       :bind
+       ("<backspace>" . smart-hungry-delete-backward-char)
+       ("C-d" . smart-hungry-delete-forward-char)
+       :config
+       (smart-hungry-delete-add-default-hooks))
+   #+end_src
 ** Paren
 *** Par Edit
     #+begin_src emacs-lisp
@@ -2471,7 +2483,7 @@ C-x n w: recursive-wide
   (use-package dashboard
     :delight dashboard
     :custom
-    (dashboard-startup-banner '"~/.emacs.d/image/Larry_Cow.png")
+    (dashboard-startup-banner '"~/.emacs.d/image/gnu_icon_4x.png")
     ;; Value can be
     ;; 'official which displays the official emacs logo
     ;; 'logo which displays an alternative emacs logo
