@@ -144,6 +144,10 @@
 ;; calender style = English
 (setq system-time-locale "C")
 
+;; Set default directory
+(setq default-directory "~/")
+(setq command-line-default-directory "~/")
+
 (use-package crux
   :defer t
   :delight

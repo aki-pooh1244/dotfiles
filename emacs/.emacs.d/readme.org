@@ -178,6 +178,10 @@ Setup use-package
 
   ;; calender style = English
   (setq system-time-locale "C")
+
+  ;; Set default directory
+  (setq default-directory "~/")
+  (setq command-line-default-directory "~/")
   
 #+END_SRC
 
