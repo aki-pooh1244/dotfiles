@@ -7,8 +7,11 @@
 /emacs/.emacs.d/thumbs/
 /emacs/.emacs.d/transient
 /emacs/.emacs.d/undo-fu-session/
+/emacs/.emacs.d/eln-cache
 .mc-list.el
 .DS_Store
+*.elc
+*.eln
 .recentf
 recentf
 smex-items
@@ -32,4 +35,5 @@ fishfile
 filepos_history
 search_history
 #*#
-skk/#.skk#
+skk/
+#.skk#
