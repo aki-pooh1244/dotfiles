@@ -1,3 +1,12 @@
 [submodule "borg"]
 	path = emacs/.emacs.d/lib/borg
 	url = git@github.com:emacscollective/borg.git
+[submodule "closql"]
+	path = emacs/.emacs.d/lib/closql
+	url = git@github.com:emacscollective/closql.git
+[submodule "emacsql"]
+	path = emacs/.emacs.d/lib/emacsql
+	url = git@github.com:skeeto/emacsql.git
+[submodule "epkg"]
+	path = emacs/.emacs.d/lib/epkg
+	url = git@github.com:emacscollective/epkg.git
