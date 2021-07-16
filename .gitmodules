@@ -1,12 +1,129 @@
+[submodule "ace-window"]
+	path = emacs/.emacs.d/lib/ace-window
+	url = git@github.com:abo-abo/ace-window.git
+[submodule "auto-compile"]
+	path = emacs/.emacs.d/lib/auto-compile
+	url = git@github.com:emacscollective/auto-compile.git
+[submodule "avy"]
+	path = emacs/.emacs.d/lib/avy
+	url = git@github.com:abo-abo/avy.git
+[submodule "avy-migemo"]
+	path = emacs/.emacs.d/lib/avy-migemo
+	url = git@github.com:momomo5717/avy-migemo.git
+[submodule "avy-zap"]
+	path = emacs/.emacs.d/lib/avy-zap
+	url = git@github.com:cute-jumper/avy-zap.git
+[submodule "back-button"]
+	path = emacs/.emacs.d/lib/back-button
+	url = git@github.com:rolandwalker/back-button.git
+[submodule "berrys-theme"]
+	path = emacs/.emacs.d/lib/berrys-theme
+	url = git@github.com:vbuzin/berrys-theme.git
 [submodule "borg"]
 	path = emacs/.emacs.d/lib/borg
 	url = git@github.com:emacscollective/borg.git
 [submodule "closql"]
 	path = emacs/.emacs.d/lib/closql
 	url = git@github.com:emacscollective/closql.git
+[submodule "comment-dwim-2"]
+	path = emacs/.emacs.d/lib/comment-dwim-2
+	url = git@github.com:remyferre/comment-dwim-2.git
+[submodule "company"]
+	path = emacs/.emacs.d/lib/company
+	url = git@github.com:company-mode/company-mode.git
+[submodule "consult"]
+	path = emacs/.emacs.d/lib/consult
+	url = git@github.com:minad/consult.git
+[submodule "dash"]
+	path = emacs/.emacs.d/lib/dash
+	url = git@github.com:magnars/dash.el.git
+[submodule "ddskk"]
+	path = emacs/.emacs.d/lib/ddskk
+	url = git@github.com:skk-dev/ddskk.git
+[submodule "deadgrep"]
+	path = emacs/.emacs.d/lib/deadgrep
+	url = git@github.com:Wilfred/deadgrep.git
+[submodule "diff-hl"]
+	path = emacs/.emacs.d/lib/diff-hl
+	url = git@github.com:dgutov/diff-hl.git
+[submodule "dired-hacks"]
+	path = emacs/.emacs.d/lib/dired-hacks
+	url = git@github.com:Fuco1/dired-hacks.git
+[submodule "easy-kill"]
+	path = emacs/.emacs.d/lib/easy-kill
+	url = git@github.com:leoliu/easy-kill.git
+[submodule "eclipse-theme"]
+	path = emacs/.emacs.d/lib/eclipse-theme
+	url = git@github.com:abo-abo/eclipse-theme.git
 [submodule "emacsql"]
 	path = emacs/.emacs.d/lib/emacsql
 	url = git@github.com:skeeto/emacsql.git
 [submodule "epkg"]
 	path = emacs/.emacs.d/lib/epkg
 	url = git@github.com:emacscollective/epkg.git
+[submodule "f"]
+	path = emacs/.emacs.d/lib/f
+	url = git@github.com:rejeep/f.el.git
+[submodule "flycheck"]
+	path = emacs/.emacs.d/lib/flycheck
+	url = git@github.com:flycheck/flycheck.git
+[submodule "goto-chg"]
+	path = emacs/.emacs.d/lib/goto-chg
+	url = git@github.com:emacs-evil/goto-chg.git
+[submodule "https://github.com/zk-phi/setup"]
+	path = emacs/.emacs.d/lib/https:/github.com/zk-phi/setup
+	url = https://github.com/zk-phi/setup
+[submodule "iedit"]
+	path = emacs/.emacs.d/lib/iedit
+	url = git@github.com:victorhge/iedit.git
+[submodule "key-chord"]
+	path = emacs/.emacs.d/lib/key-chord
+	url = git@github.com:emacsorphanage/key-chord.git
+[submodule "libgit"]
+	path = emacs/.emacs.d/lib/libgit
+	url = git@github.com:magit/libegit2.git
+[submodule "magit"]
+	path = emacs/.emacs.d/lib/magit
+	url = git@github.com:magit/magit.git
+[submodule "migemo"]
+	path = emacs/.emacs.d/lib/migemo
+	url = git@github.com:emacs-jp/migemo.git
+[submodule "orderless"]
+	path = emacs/.emacs.d/lib/orderless
+	url = git@github.com:oantolin/orderless.git
+[submodule "packed"]
+	path = emacs/.emacs.d/lib/packed
+	url = git@github.com:emacscollective/packed.git
+[submodule "page-break-lines"]
+	path = emacs/.emacs.d/lib/page-break-lines
+	url = git@github.com:purcell/page-break-lines.git
+[submodule "s"]
+	path = emacs/.emacs.d/lib/s
+	url = git@github.com:magnars/s.el.git
+[submodule "spinner"]
+	path = emacs/.emacs.d/lib/spinner
+	url = git@github.com:Malabarba/spinner.el.git
+[submodule "tangotango-theme"]
+	path = emacs/.emacs.d/lib/tangotango-theme
+	url = git@github.com:juba/color-theme-tangotango.git
+[submodule "transient"]
+	path = emacs/.emacs.d/lib/transient
+	url = git@github.com:magit/transient.git
+[submodule "vertico"]
+	path = emacs/.emacs.d/lib/vertico
+	url = git@github.com:minad/vertico.git
+[submodule "visual-regexp"]
+	path = emacs/.emacs.d/lib/visual-regexp
+	url = git@github.com:benma/visual-regexp.el.git
+[submodule "visual-regexp-steroids"]
+	path = emacs/.emacs.d/lib/visual-regexp-steroids
+	url = git@github.com:benma/visual-regexp-steroids.el.git
+[submodule "which-key"]
+	path = emacs/.emacs.d/lib/which-key
+	url = git@github.com:justbur/emacs-which-key.git
+[submodule "with-editor"]
+	path = emacs/.emacs.d/lib/with-editor
+	url = git@github.com:magit/with-editor.git
+[submodule "zenburn-theme"]
+	path = emacs/.emacs.d/lib/zenburn-theme
+	url = git@github.com:bbatsov/zenburn-emacs.git
