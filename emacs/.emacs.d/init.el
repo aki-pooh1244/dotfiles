@@ -36,6 +36,16 @@
 ;; 			  'append))
 
 
+;; Directory
+
+(eval-and-compile
+  (defconst my-data-directory "~/.emacs.d/data/"
+    "Directory to save datas."))
+(eval-when-compile
+  (unless (file-exists-p my-data-directory)
+    (make-directory my-data-directory)))
+
+
 ;; Editing
 
 (setq show-paren-style 'parethesis)
