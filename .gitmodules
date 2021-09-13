@@ -85,6 +85,9 @@
 [submodule "magit"]
 	path = emacs/.emacs.d/lib/magit
 	url = git@github.com:magit/magit.git
+[submodule "marginalia"]
+	path = emacs/.emacs.d/lib/marginalia
+	url = git@github.com:minad/marginalia.git
 [submodule "migemo"]
 	path = emacs/.emacs.d/lib/migemo
 	url = git@github.com:emacs-jp/migemo.git

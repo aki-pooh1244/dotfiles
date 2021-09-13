@@ -45,6 +45,14 @@
   (unless (file-exists-p my-data-directory)
     (make-directory my-data-directory)))
 
+(defconst my-auto-save-list-directory
+  (! (concat my-data-directory "auto-save-lists/"))
+  "Directory to save auto-save-lists.")
+
+(defconst my-backup-directory
+  (! (concat my-data-directory "backups/"))
+  "Directory to save backup files.")
+
 
 ;; Editing
 
@@ -74,9 +82,18 @@
   '(iedit-mode) "iedit")
 
 (!-
- (setup "page-ext")
- (setup "page-break-lines"
-   (global-page-break-lines-mode)))
+ (setup-include "page-ext")
+ (setup-include "page-break-lines"
+        (global-page-break-lines-mode)))
+
+
+;; SKK
+
+(!-
+ (setup-lazy
+   '(skk-mode) "skk-autoloads"
+   (setup-keybinds nil
+     "C-x j" 'skk-mode)))
 
 
 ;; Search/Replace/Cursor
@@ -88,6 +105,27 @@
   (setq completion-styles '(orderless)
         completion-category-defaults nil
         completion-category-overrides '((file (styles partial-completion))))))
+
+(setup-after "vertico"
+  (setup "marginalia"
+    (setup-keybinds minibuffer-local-map
+      "M-A" 'marginalia-cycle)
+    ;; (setq marginalia-align-offset 25)
+    (marginalia-mode +1)))
+
+(setup-lazy
+  '(consult-line consult-buffer consult-multi-occur) "consult"
+  (setup-keybinds nil
+    ;; C-x binds
+    "C-x b" 'consult-buffer
+    "C-x 4 b" 'consult-buffer-other-window
+    "C-x 5 b" 'consult-buffer-other-frame
+    ;; C- binds
+    "C-s" 'consult-line
+    
+    ;; M- binds
+    "M-y" 'consult-yank-pop))
+
 
 (setup-lazy
   '(avy-resume avy-goto-char-timer) "avy"
