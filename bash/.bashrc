@@ -8,6 +8,12 @@
 
 ## fzf setup
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+#export FZF_DEFAULT_COMMAND='rg --files --hidden --glob "!.git"'
+export FZF_DEFAULT_OPTS='--height 40% --reverse --border'
+
+## bash-completion
+
+source /usr/share/bash-completion/bash_completion
 
 ## bash option
 shopt -s autocd
@@ -16,11 +22,11 @@ shopt -s extglob
 shopt -s histappend
 
 ## ls color
-if [ "Darwin" = 'Darwin' ]; then
-    alias ls='ls -GFC'
-else
-    alias ls='ls -FC --color=auto'
-fi
+#if [ "Darwin" = 'Darwin' ]; then
+#    alias ls='ls -GFC'
+#else
+#    alias ls='ls --color=auto -FC'
+#fi
 
 ## cd -> ls
 autols(){
@@ -39,15 +45,16 @@ HISTSIZE=1000
 HISTFILESIZE=10000
 
 ## alias
-alias la='ls -a'
-alias ll='ls -al'
-alias lsm='ls -hlAFG'
-alias tree='tree -C'
+alias ls='exa -F'
+alias la='exa -aF'
+alias ll='exa -alF'
+alias lsm='exa -hlAFG'
+alias tree='exa -T'
 alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
-alias less='less -iRX'
-alias cd='cd -P && ls'
+#alias less='less -iRX'
+alias cd='cd -P && exa -F'
 alias up='cd ..'
 
 alias estart='emacs --daemon'
@@ -58,21 +65,30 @@ alias eg='emacsclient -c'
 
 alias vi='nano'
 alias vim='nano'
+## tail
+tailc (){
+	tail $@ | ccze -A
+}
+alias tail='tailc'
+
+## less
+export LESS='-R'
+export LESSOPEN='| /usr/bin/src-hilite-lesspippe.sh %s'
 
 ## banjoman/brilliant-bash (https://github.com/banjoman/brilliant-bash.git)
 ### update: update all of your packages!
-if [ ! -z "$(which brew)" ]; then
-  alias update="brew update && brew upgrade"
-elif [ ! -z "$(which pacman)" ]; then
-  alias update="sudo pacman -Syyu"
-elif [ ! -z "$(which apt)" ]; then
-  alias update="sudo apt update && sudo apt upgrade && sudo apt full-upgrade"
-elif [ ! -z "$(which apt-get)" ]; then
-  alias update ="sudo apt-get update && sudo apt-get upgrade && sudo apt-get dist-upgrade"
-elif [ ! -z "$(which dnf)" ]; then
-  alias update="sudo dnf upgrade"
-elif [ ! -z "$(which yum)" ]; then
-  alias update="su -c 'yum update'"
-elif [ ! -z "$(which zypper)" ]; then
-  alias update="sudo zypper update"
-fi
+#if [ ! -z "$(which brew)" ]; then
+#  alias update="brew update && brew upgrade"
+#elif [ ! -z "$(which pacman)" ]; then
+#  alias update="sudo pacman -Syyu"
+#elif [ ! -z "$(which apt)" ]; then
+#  alias update="sudo apt update && sudo apt upgrade && sudo apt full-upgrade"
+#elif [ ! -z "$(which apt-get)" ]; then
+#  alias update ="sudo apt-get update && sudo apt-get upgrade && sudo apt-get dist-upgrade"
+#elif [ ! -z "$(which dnf)" ]; then
+#  alias update="sudo dnf upgrade"
+#elif [ ! -z "$(which yum)" ]; then
+#  alias update="su -c 'yum update'"
+#elif [ ! -z "$(which zypper)" ]; then
+#  alias update="sudo zypper update"
+#fi
