@@ -10,15 +10,12 @@
 [submodule "avy-migemo"]
 	path = emacs/.emacs.d/lib/avy-migemo
 	url = git@github.com:momomo5717/avy-migemo.git
-[submodule "avy-zap"]
-	path = emacs/.emacs.d/lib/avy-zap
-	url = git@github.com:cute-jumper/avy-zap.git
 [submodule "back-button"]
 	path = emacs/.emacs.d/lib/back-button
 	url = git@github.com:rolandwalker/back-button.git
-[submodule "berrys-theme"]
-	path = emacs/.emacs.d/lib/berrys-theme
-	url = git@github.com:vbuzin/berrys-theme.git
+[submodule "beginend"]
+	path = emacs/.emacs.d/lib/beginend
+	url = git@github.com:DamienCassou/beginend.git
 [submodule "borg"]
 	path = emacs/.emacs.d/lib/borg
 	url = git@github.com:emacscollective/borg.git
@@ -52,9 +49,6 @@
 [submodule "easy-kill"]
 	path = emacs/.emacs.d/lib/easy-kill
 	url = git@github.com:leoliu/easy-kill.git
-[submodule "eclipse-theme"]
-	path = emacs/.emacs.d/lib/eclipse-theme
-	url = git@github.com:abo-abo/eclipse-theme.git
 [submodule "emacsql"]
 	path = emacs/.emacs.d/lib/emacsql
 	url = git@github.com:skeeto/emacsql.git
@@ -91,6 +85,9 @@
 [submodule "migemo"]
 	path = emacs/.emacs.d/lib/migemo
 	url = git@github.com:emacs-jp/migemo.git
+[submodule "mwim"]
+	path = emacs/.emacs.d/lib/mwim
+	url = git@github.com:alezost/mwim.el.git
 [submodule "orderless"]
 	path = emacs/.emacs.d/lib/orderless
 	url = git@github.com:oantolin/orderless.git
@@ -130,3 +127,6 @@
 [submodule "zenburn-theme"]
 	path = emacs/.emacs.d/lib/zenburn-theme
 	url = git@github.com:bbatsov/zenburn-emacs.git
+[submodule "zop-to-char"]
+	path = emacs/.emacs.d/lib/zop-to-char
+	url = git@github.com:thierryvolpiatto/zop-to-char.git
