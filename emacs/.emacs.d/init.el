@@ -89,11 +89,11 @@
 
 ;; SKK
 
-(!-
- (setup-lazy
-   '(skk-mode) "skk-autoloads"
-   (setup-keybinds nil
-     "C-x j" 'skk-mode)))
+;; (!-
+;;  (setup-lazy
+;;    '(skk-mode) "skk-autoloads"
+;;    (setup-keybinds nil
+;;      "C-x j" 'skk-mode)))
 
 
 ;; Search/Replace/Cursor
