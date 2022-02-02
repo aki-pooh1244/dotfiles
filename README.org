@@ -1,9 +1,16 @@
 This repositry is my own setup files (dotfiles).
 
-* fisher install 
+* Emacs set-up
+1. git clone ...
+2. make bootstrap-borg
+3. git submodule update --init
+4. start emacs
+
+* Now I DON'T USE fish
+** fisher install 
 curl https://git.io/fisher --create-dirs -sLo ~/.config/fish/functions/fisher.fish
 
-* fish pulgin
+** fish pulgin
 
 0rax/fish-bd
 decors/fish-ghq
