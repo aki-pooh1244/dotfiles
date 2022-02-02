@@ -79,12 +79,19 @@
 	         "M-;" 'comment-dwim-2))
 
 (setup-lazy
-  '(iedit-mode) "iedit")
+  '(iedit-mode) "iedit"
+  :prepare (setup-keybinds nil
+	         "C-;" 'iedit-mode))
 
 (!-
  (setup-include "page-ext")
  (setup-include "page-break-lines"
-        (global-page-break-lines-mode)))
+   (global-page-break-lines-mode)))
+
+(setup-lazy
+  '(zop-to-char zop-up-to-char) "zop-to-char"
+  :prepare (setup-keybinds nil
+             "M-z" 'zop-up-to-char))
 
 
 ;; SKK
@@ -108,56 +115,64 @@
 
 (setup-after "vertico"
   (setup "marginalia"
-    (setup-keybinds minibuffer-local-map
-      "M-A" 'marginalia-cycle)
+    :prepare (setup-keybinds minibuffer-local-map
+               "M-A" 'marginalia-cycle)
     ;; (setq marginalia-align-offset 25)
     (marginalia-mode +1)))
 
 (setup-lazy
   '(consult-line consult-buffer consult-multi-occur) "consult"
-  (setup-keybinds nil
-    ;; C-x binds
-    "C-x b" 'consult-buffer
-    "C-x 4 b" 'consult-buffer-other-window
-    "C-x 5 b" 'consult-buffer-other-frame
-    ;; C- binds
-    "C-s" 'consult-line
-    
-    ;; M- binds
-    "M-y" 'consult-yank-pop))
+  :prepare (setup-keybinds nil
+             ;; C-x binds
+             "C-x b" 'consult-buffer
+             "C-x 4 b" 'consult-buffer-other-window
+             "C-x 5 b" 'consult-buffer-other-frame
+             ;; C- binds
+             "C-s" 'consult-line
+             
+             ;; M- binds
+             "M-y" 'consult-yank-pop))
 
 
 (setup-lazy
   '(avy-resume avy-goto-char-timer) "avy"
   (avy-setup-default)
-  (setup-keybinds nil
-    "C-'" 'avy-goto-char-timer))
+  :preapre (setup-keybinds nil
+             "C-'" 'avy-goto-char-timer))
 
 (setup-lazy
   '(ace-window) "ace-window"
   (setq aw-keys '(?j ?k ?l ?i ?o ?h ?y ?u ?p)
         aw-leading-char-face '((t (:height 4.0 :foreground "#f1fa8c"))))
-  (setup-keybinds nil
-    "s-w" 'ace-window))
+  :preapre (setup-keybinds nil
+             "s-w" 'ace-window))
 
 (setup "easy-kill"
-  (setup-keybinds nil
-    "M-w" 'easy-kill
-    "C-<SPC>" 'easy-mark))
+  :preapre (setup-keybinds nil
+             "M-w" 'easy-kill
+             "C-<SPC>" 'easy-mark))
 
 (setup-lazy
   '(goto-last-change goto-last-change-reverse) "goto-chg"
-  (setup-keybinds nil
-    "<f8>" 'goto-last-change
-    "<M-f8>" 'goto-last-change-reverse))
+  :prepare (setup-keybinds nil
+             "<f8>" 'goto-last-change
+             "<M-f8>" 'goto-last-change-reverse))
 
 (setup "back-button"
        (back-button-mode 1))
 
 (setup-lazy
   '(deadgrep) "deadgrep"
-  (setup-keybinds nil
-    "<f5>" 'deadgrep))
+  :prepare (setup-keybinds nil
+             "<f5>" 'deadgrep))
+
+(setup-include "mwim"
+  :prepare (setup-keybinds nil
+             "C-a" 'mwim-beginning
+             "C-e" 'mwim-end))
+
+(setup-include "beginend"
+  (beginend-global-mode))
 
 
 ;; filer
@@ -171,8 +186,8 @@
 
 (!-
  (setup "hippie-exp"
-  (setup-keybinds nil
-    "C--" 'hippie-expand)
+  :prepare (setup-keybinds nil
+             "C--" 'hippie-expand)
   (setq hippie-expand-try-function-list
         '(try-expand-dabbrev
           try-expand-dabbrev-all-buffers
@@ -281,5 +296,9 @@
   (!cond
    ((member "IBM Plex Mono" (font-family-list))
     (set-face-attribute 'default nil :family "IBM Plex Mono" :height 140))))
+(!when (eq system-type 'gnu/linux)
+  (!cond
+   ((member "IBM Plex Mono" (font-family-list))
+    (set-face-attribute 'default nil :family "IBM Plex Mono" :height 120))))
 
 ;;; End here.
