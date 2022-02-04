@@ -280,6 +280,17 @@
 (setup "diff-hl"
   (global-diff-hl-mode))
 
+;; (setup "moody"
+;;   (setq x-underline-at-descent-line t)
+;;   (moody-replace-mode-line-buffer-identification)
+;;   (moody-replace-vc-mode)
+;;   (moody-replace-eldoc-minibuffer-message-function))
+
+(setup-include "minions"
+  (minions-mode t))
+
+(column-number-mode t)
+
 
 ;; startup
 (setq inhibit-startup-screen t

@@ -85,6 +85,12 @@
 [submodule "migemo"]
 	path = emacs/.emacs.d/lib/migemo
 	url = git@github.com:emacs-jp/migemo.git
+[submodule "minions"]
+	path = emacs/.emacs.d/lib/minions
+	url = git@github.com:tarsius/minions.git
+[submodule "moody"]
+	path = emacs/.emacs.d/lib/moody
+	url = git@github.com:tarsius/moody.git
 [submodule "mwim"]
 	path = emacs/.emacs.d/lib/mwim
 	url = git@github.com:alezost/mwim.el.git
