@@ -31,7 +31,7 @@ shopt -s histappend
 ## cd -> ls
 autols(){
     if [ "$OLDPWD" != "$PWD" ]; then
-        ls
+        exa -F
         OLDPWD="$PWD"
     fi
 }
