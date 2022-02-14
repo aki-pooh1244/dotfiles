@@ -25,8 +25,8 @@ $pdf_mode= 3; # generates pdf via dvipdfmx
 $pvc_view_file_via_temporary = 0;
 
 if ($^O eq "linux"){
-    #Use Okular in Linux OS
-    $pdf_previewer = "okular";
+    #Use Evince in Linux OS
+    $pdf_previewer = "evince";
 }
 else {
     # Use Skim as a previewer in MacOS
