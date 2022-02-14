@@ -61,16 +61,17 @@
 (electric-pair-mode +1)
 
 (setq-default indent-tabs-mode      nil
-	      tab-width             4
-	      truncate-lines        nil
-	      line-move-visual      t
-	      fill-column           100
-	      require-final-newline t)
+	          tab-width             4
+	          truncate-lines        nil
+	          line-move-visual      t
+	          fill-column           80
+              cursor-type           'box
+	          require-final-newline t)
 
 (global-auto-revert-mode t)
 
 (!-
- (setup "delsel"
+ (setup-include "delsel"
    (delete-selection-mode 1)))
 
 (setup-lazy
@@ -88,10 +89,20 @@
  (setup-include "page-break-lines"
    (global-page-break-lines-mode)))
 
+(setup "pp-c-l"
+  (pretty-control-l-mode 1))
+
 (setup-lazy
   '(zop-to-char zop-up-to-char) "zop-to-char"
   :prepare (setup-keybinds nil
              "M-z" 'zop-up-to-char))
+
+(setup-include "viewer"
+  (viewer-stay-in-setup)
+  ;; (setq viewer-modeline-color-unwritable "tomato"
+  ;;       viewer-modeline-color-view "orange")
+  ;; (viewer-change-modeline-color-setup)
+  (viewer-aggressive-setup t))
 
 
 ;; SKK
@@ -140,12 +151,11 @@
   :preapre (setup-keybinds nil
              "C-'" 'avy-goto-char-timer))
 
-(setup-lazy
-  '(ace-window) "ace-window"
-  (setq aw-keys '(?j ?k ?l ?i ?o ?h ?y ?u ?p)
-        aw-leading-char-face '((t (:height 4.0 :foreground "#f1fa8c"))))
+(setup-include "ace-window"
   :preapre (setup-keybinds nil
-             "s-w" 'ace-window))
+             "s-w" 'ace-window)
+  (setq aw-keys '(?j ?k ?l ?i ?o ?h ?y ?u ?p)
+        aw-leading-char-face '((t (:height 4.0 :foreground "#f1fa8c")))))
 
 (setup "easy-kill"
   :preapre (setup-keybinds nil
@@ -219,13 +229,20 @@
 
 (prefer-coding-system 'utf-8-unix)
 
-(setup-hook 'minibuffer-setup-hook
-  (setq truncate-lines t))
+;; (setup-hook 'minibuffer-setup-hook
+;;   (setq truncate-lines t))
 
+(setup-include "sublimity-scroll"
+  (sublimity-mode 1))
+
+
 ;; Save/Backup/Undo
 
 (setup "saveplace"
   (save-place-mode))
+
+(setq make-backup-files t)
+(add-to-list 'backup-directory-alist (cons "." my-backup-directory))
 
 
 ;; Keybinds
@@ -250,8 +267,6 @@
 
 
 ;; GUI
-
-(setq-default cursor-type 'box)
 
 (!when (eq window-system 'ns)
   (push '(ns-transparent-titlebar . t) default-frame-alist))
@@ -289,6 +304,13 @@
 (setup-include "minions"
   (minions-mode t))
 
+(setup-include "smart-mode-line"
+  (setq sml/theme 'respectful)
+  (setq sml/no-confirm-load-theme t)
+  (setq sml/modified-char "*")
+  (setq sml/extra-filler -10)
+  (sml/setup))
+
 (column-number-mode t)
 
 
@@ -310,6 +332,8 @@
 (!when (eq system-type 'gnu/linux)
   (!cond
    ((member "IBM Plex Mono" (font-family-list))
-    (set-face-attribute 'default nil :family "IBM Plex Mono" :height 120))))
+    (set-face-attribute 'default nil :family "IBM Plex Mono" :height 120))
+   ((member "Noto Sans CJK JP" (font-family-list))
+    (set-face-attribute '(han kana) nil :family "Noto Sans CJK JP Regular" :height 120))))
 
 ;;; End here.

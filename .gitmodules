@@ -103,12 +103,24 @@
 [submodule "page-break-lines"]
 	path = emacs/.emacs.d/lib/page-break-lines
 	url = git@github.com:purcell/page-break-lines.git
+[submodule "pp-c-l"]
+	path = emacs/.emacs.d/lib/pp-c-l
+	url = git@github.com:emacsmirror/pp-c-l.git
+[submodule "rich-minority"]
+	path = emacs/.emacs.d/lib/rich-minority
+	url = git@github.com:Malabarba/rich-minority.git
 [submodule "s"]
 	path = emacs/.emacs.d/lib/s
 	url = git@github.com:magnars/s.el.git
+[submodule "smart-mode-line"]
+	path = emacs/.emacs.d/lib/smart-mode-line
+	url = git@github.com:Malabarba/smart-mode-line.git
 [submodule "spinner"]
 	path = emacs/.emacs.d/lib/spinner
 	url = git@github.com:Malabarba/spinner.el.git
+[submodule "sublimity"]
+	path = emacs/.emacs.d/lib/sublimity
+	url = git@github.com:zk-phi/sublimity.git
 [submodule "tangotango-theme"]
 	path = emacs/.emacs.d/lib/tangotango-theme
 	url = git@github.com:juba/color-theme-tangotango.git
@@ -118,6 +130,9 @@
 [submodule "vertico"]
 	path = emacs/.emacs.d/lib/vertico
 	url = git@github.com:minad/vertico.git
+[submodule "viewer"]
+	path = emacs/.emacs.d/lib/viewer
+	url = git@github.com:rubikitch/viewer.git
 [submodule "visual-regexp"]
 	path = emacs/.emacs.d/lib/visual-regexp
 	url = git@github.com:benma/visual-regexp.el.git
