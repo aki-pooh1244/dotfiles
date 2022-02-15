@@ -333,6 +333,8 @@
 
 (column-number-mode t)
 
+(global-linum-mode t)
+
 (setup-lazy '(indent-guide-mode) "indent-guide"
   (set-face-background 'indent-guide-face "lightpink"))
 
