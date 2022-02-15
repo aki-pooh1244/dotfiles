@@ -103,6 +103,9 @@
 [submodule "mwim"]
 	path = emacs/.emacs.d/lib/mwim
 	url = git@github.com:alezost/mwim.el.git
+[submodule "noccur"]
+	path = emacs/.emacs.d/lib/noccur
+	url = git@github.com:NicolasPetton/noccur.el.git
 [submodule "orderless"]
 	path = emacs/.emacs.d/lib/orderless
 	url = git@github.com:oantolin/orderless.git
