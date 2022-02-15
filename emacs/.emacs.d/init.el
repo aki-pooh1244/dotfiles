@@ -309,6 +309,14 @@
   (setq sml/no-confirm-load-theme t)
   (setq sml/modified-char "*")
   (setq sml/extra-filler -10)
+  (setq sml/shorten-directory t)
+  (add-to-list 'sml/replacer-regexp-list
+               '("^~/git_projects/aki-pooh1244/dotfiles/emacs/.emacs.d" ":ED:")
+               t)
+  (add-to-list 'sml/replacer-regexp-list
+               '("^~/git_projects/aki-pooh1244/" ":MyGit:") t)
+  (add-to-list 'sml/replacer-regexp-list
+               '("^~/git_projects/" ":Git:") t)
   (sml/setup))
 
 (column-number-mode t)
