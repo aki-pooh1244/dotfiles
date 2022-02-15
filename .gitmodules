@@ -13,6 +13,9 @@
 [submodule "back-button"]
 	path = emacs/.emacs.d/lib/back-button
 	url = git@github.com:rolandwalker/back-button.git
+[submodule "beacon"]
+	path = emacs/.emacs.d/lib/beacon
+	url = git@github.com:Malabarba/beacon.git
 [submodule "beginend"]
 	path = emacs/.emacs.d/lib/beginend
 	url = git@github.com:DamienCassou/beginend.git

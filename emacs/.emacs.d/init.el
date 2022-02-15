@@ -331,8 +331,11 @@
 (column-number-mode t)
 
 (setup-lazy '(indent-guide-mode) "indent-guide"
-  (set-face-background 'indent-guide-face "lightpink")
-)
+  (set-face-background 'indent-guide-face "lightpink"))
+
+(setup-include "beacon"
+  (beacon-mode 1)
+  (setq beacon-color "lightpink"))
 
 ;; Language
 ;;;LaTeX
