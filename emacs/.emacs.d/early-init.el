@@ -25,6 +25,9 @@
   (add-to-list 'package-archives
                (cons "org" "https://orgmode.org/elpa/")
                t))
+(setq default-frame-alist
+      '((width . 80)
+        (height . 30)))
 
 ;; End:
 ;;; early-init.el ends here
