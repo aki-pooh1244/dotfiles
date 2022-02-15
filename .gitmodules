@@ -70,12 +70,18 @@
 [submodule "iedit"]
 	path = emacs/.emacs.d/lib/iedit
 	url = git@github.com:victorhge/iedit.git
+[submodule "indent-guide"]
+	path = emacs/.emacs.d/lib/indent-guide
+	url = git@github.com:zk-phi/indent-guide.git
 [submodule "key-chord"]
 	path = emacs/.emacs.d/lib/key-chord
 	url = git@github.com:emacsorphanage/key-chord.git
 [submodule "libgit"]
 	path = emacs/.emacs.d/lib/libgit
 	url = git@github.com:magit/libegit2.git
+[submodule "magic-latex-buffer"]
+	path = emacs/.emacs.d/lib/magic-latex-buffer
+	url = git@github.com:zk-phi/magic-latex-buffer.git
 [submodule "magit"]
 	path = emacs/.emacs.d/lib/magit
 	url = git@github.com:magit/magit.git

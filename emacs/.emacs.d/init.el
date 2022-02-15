@@ -321,6 +321,27 @@
 
 (column-number-mode t)
 
+(setup-lazy '(indent-guide-mode) "indent-guide"
+  (set-face-background 'indent-guide-face "lightpink")
+)
+
+;; Language
+;;;LaTeX
+(setup-expecting "tex-mode"
+  (push '("\\.tex$" . latex-mode) auto-mode-alist))
+(setup-after "tex-mode"
+  (setup-hook 'LaTeX-mode-hook
+    (outline-minor-mode 1)
+    (setq-local outline-regexp "\\\\\\(sub\\)*section\\>"
+                outline-level (lambda () (- (outline-level) 7))))
+  (setup-lazy '(magic-latex-buffer) "magic-latex-buffer"
+    :prepare (setup-hook 'latex-mode-hook 'magic-latex-buffer)
+    (setq magic-latex-enable-block-highlight t
+          magic-latex-enable-pretty-symbols  t
+          magic-latex-enable-block-align     t
+          magic-latex-enable-inline-image    t
+          magic-latex-enable-minibuffer-echo t))
+ )
 
 ;; startup
 (setq inhibit-startup-screen t
