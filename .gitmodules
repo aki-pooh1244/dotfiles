@@ -109,6 +109,9 @@
 [submodule "noccur"]
 	path = emacs/.emacs.d/lib/noccur
 	url = git@github.com:NicolasPetton/noccur.el.git
+[submodule "nyan-mode"]
+	path = emacs/.emacs.d/lib/nyan-mode
+	url = git@github.com:TeMPOraL/nyan-mode.git
 [submodule "orderless"]
 	path = emacs/.emacs.d/lib/orderless
 	url = git@github.com:oantolin/orderless.git
