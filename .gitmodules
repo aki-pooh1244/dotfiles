@@ -79,6 +79,9 @@
 [submodule "libgit"]
 	path = emacs/.emacs.d/lib/libgit
 	url = git@github.com:magit/libegit2.git
+[submodule "loccur"]
+	path = emacs/.emacs.d/lib/loccur
+	url = git@github.com:fourier/loccur.git
 [submodule "magic-latex-buffer"]
 	path = emacs/.emacs.d/lib/magic-latex-buffer
 	url = git@github.com:zk-phi/magic-latex-buffer.git

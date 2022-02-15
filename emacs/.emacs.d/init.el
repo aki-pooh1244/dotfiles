@@ -176,6 +176,13 @@
   :prepare (setup-keybinds nil
              "<f5>" 'deadgrep))
 
+(setup-lazy '(loccur loccur-current loccur-isearch) "loccur"
+  :prepare (setup-keybinds nil
+             "C-o"     'loccur-current
+             "C-M-o"   'loccur
+             "C-O"     'loccur-previous-match
+             "M-s C-o" 'loccur-isearch))
+
 (setup-include "mwim"
   :prepare (setup-keybinds nil
              "C-a" 'mwim-beginning
