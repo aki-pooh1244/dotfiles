@@ -1,6 +1,9 @@
 [submodule "ace-window"]
 	path = emacs/.emacs.d/lib/ace-window
 	url = git@github.com:abo-abo/ace-window.git
+[submodule "anaconda-mode"]
+	path = emacs/.emacs.d/lib/anaconda-mode
+	url = git@github.com:pythonic-emacs/anaconda-mode.git
 [submodule "auto-compile"]
 	path = emacs/.emacs.d/lib/auto-compile
 	url = git@github.com:emacscollective/auto-compile.git
@@ -31,6 +34,9 @@
 [submodule "company"]
 	path = emacs/.emacs.d/lib/company
 	url = git@github.com:company-mode/company-mode.git
+[submodule "company-anaconda"]
+	path = emacs/.emacs.d/lib/company-anaconda
+	url = git@github.com:pythonic-emacs/company-anaconda.git
 [submodule "consult"]
 	path = emacs/.emacs.d/lib/consult
 	url = git@github.com:minad/consult.git
@@ -121,9 +127,15 @@
 [submodule "page-break-lines"]
 	path = emacs/.emacs.d/lib/page-break-lines
 	url = git@github.com:purcell/page-break-lines.git
+[submodule "pipenv"]
+	path = emacs/.emacs.d/lib/pipenv
+	url = git@github.com:pwalsh/pipenv.el.git
 [submodule "pp-c-l"]
 	path = emacs/.emacs.d/lib/pp-c-l
 	url = git@github.com:emacsmirror/pp-c-l.git
+[submodule "rainbow-delimiters"]
+	path = emacs/.emacs.d/lib/rainbow-delimiters
+	url = git@github.com:Fanael/rainbow-delimiters.git
 [submodule "rich-minority"]
 	path = emacs/.emacs.d/lib/rich-minority
 	url = git@github.com:Malabarba/rich-minority.git

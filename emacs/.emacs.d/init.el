@@ -89,8 +89,8 @@
  (setup-include "page-break-lines"
    (global-page-break-lines-mode)))
 
-(setup "pp-c-l"
-  (pretty-control-l-mode 1))
+;; (setup "pp-c-l"
+;;   (pretty-control-l-mode 1))
 
 (setup-lazy
   '(zop-to-char zop-up-to-char) "zop-to-char"
@@ -251,7 +251,7 @@
 ;; Save/Backup/Undo
 
 (setup "saveplace"
-  (save-place-mode))
+  (save-place-mode t))
 
 (setq make-backup-files t)
 (add-to-list 'backup-directory-alist (cons "." my-backup-directory))
@@ -341,6 +341,10 @@
 (setup-include "beacon"
   (beacon-mode 1)
   (setq beacon-color "lightpink"))
+
+(setup-include "rainbow-delimiters"
+  (global-rainbow-delimiters-mode t))
+
 
 ;; Language
 ;;;LaTeX
@@ -358,7 +362,14 @@
           magic-latex-enable-block-align     t
           magic-latex-enable-inline-image    t
           magic-latex-enable-minibuffer-echo t))
- )
+  )
+
+;;;Python
+(setup-lazy '(anaconda-mode) "anaconda-mode"
+  :prepare (push '("\\.py$" . anaconda-mode) auto-mode-alist)
+
+  (setup-hook 'anaconda-mode-hook 'anaconda-eldoc-mode))
+
 
 ;; startup
 (setq inhibit-startup-screen t
