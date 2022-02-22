@@ -49,6 +49,6 @@ URxvt*color15:            #EEEEEC
 ! tabbed
 URxvt.perl-ext-common:    tabbed
 URxvt.tabbed.tabbar-fg:   243
-URxvt.tabbad.tabbar-bg:   237
-URxvt.tabbad.tab-fg:      250
-URxvt.tabbad.tab-bg:      30
+URxvt.tabbed.tabbar-bg:   237
+URxvt.tabbed.tab-fg:      250
+URxvt.tabbed.tab-bg:      30
