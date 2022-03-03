@@ -247,6 +247,9 @@
 ;; (setup-include "nyan-mode"
 ;;   (setq nyan-bar-length 10)
 ;;   (nyan-mode 1))
+
+(setup-lazy '(rpn-calc) "rpn-calc")
+
 
 ;; Save/Backup/Undo
 
@@ -368,8 +371,10 @@
 ;;;Python
 (setup-lazy '(anaconda-mode) "anaconda-mode"
   :prepare (push '("\\.py$" . anaconda-mode) auto-mode-alist)
-
-  (setup-hook 'anaconda-mode-hook 'anaconda-eldoc-mode))
+  (setup-hook 'anaconda-mode-hook
+    (anaconda-eldoc-mode)
+    (pipenv-mode))
+  (setup-lazy '(pipenv-mode) "pipenv"))
 
 
 ;; startup

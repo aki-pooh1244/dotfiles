@@ -130,15 +130,24 @@
 [submodule "pipenv"]
 	path = emacs/.emacs.d/lib/pipenv
 	url = git@github.com:pwalsh/pipenv.el.git
+[submodule "popup"]
+	path = emacs/.emacs.d/lib/popup
+	url = git@github.com:auto-complete/popup-el.git
 [submodule "pp-c-l"]
 	path = emacs/.emacs.d/lib/pp-c-l
 	url = git@github.com:emacsmirror/pp-c-l.git
+[submodule "pythonic"]
+	path = emacs/.emacs.d/lib/pythonic
+	url = git@github.com:pythonic-emacs/pythonic.git
 [submodule "rainbow-delimiters"]
 	path = emacs/.emacs.d/lib/rainbow-delimiters
 	url = git@github.com:Fanael/rainbow-delimiters.git
 [submodule "rich-minority"]
 	path = emacs/.emacs.d/lib/rich-minority
 	url = git@github.com:Malabarba/rich-minority.git
+[submodule "rpn-calc"]
+	path = emacs/.emacs.d/lib/rpn-calc
+	url = git@github.com:zk-phi/rpn-calc.git
 [submodule "s"]
 	path = emacs/.emacs.d/lib/s
 	url = git@github.com:magnars/s.el.git
