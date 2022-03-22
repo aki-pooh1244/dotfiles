@@ -89,9 +89,6 @@
  (setup-include "page-break-lines"
    (global-page-break-lines-mode)))
 
-;; (setup "pp-c-l"
-;;   (pretty-control-l-mode 1))
-
 (setup-lazy
   '(zop-to-char zop-up-to-char) "zop-to-char"
   :prepare (setup-keybinds nil
@@ -103,6 +100,13 @@
   ;;       viewer-modeline-color-view "orange")
   ;; (viewer-change-modeline-color-setup)
   (viewer-aggressive-setup t))
+
+(setup-lazy
+  '(grugru) "grugru"
+  :preapre (setup-keybinds nil
+             "C-:" 'grugru)
+  (grugru-default-setup)
+  (grugru-highlight-mode))
 
 
 ;; SKK
@@ -262,8 +266,8 @@
 
 ;; Keybinds
 
-(define-key global-map (kbd "C-x -") 'split-window-horizontally)
-(define-key global-map (kbd "C-x |") 'split-window-vertically)
+(define-key global-map (kbd "C-x |") 'split-window-horizontally)
+(define-key global-map (kbd "C-x -") 'split-window-vertically)
 
 (!when (eq system-type 'darwin)
   (setq ns-command-modifier 'meta)
@@ -346,8 +350,8 @@
   (beacon-mode 1)
   (setq beacon-color "lightpink"))
 
-(setup-include "rainbow-delimiters"
-  (global-rainbow-delimiters-mode t))
+;; (setup-include "rainbow-delimiters"
+;;   (global-rainbow-delimiters-mode t))
 
 
 ;; Language

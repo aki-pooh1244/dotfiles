@@ -73,6 +73,9 @@
 [submodule "goto-chg"]
 	path = emacs/.emacs.d/lib/goto-chg
 	url = git@github.com:emacs-evil/goto-chg.git
+[submodule "grugru"]
+	path = emacs/.emacs.d/lib/grugru
+	url = git@github.com:ROCKTAKEY/grugru.git
 [submodule "https://github.com/zk-phi/setup"]
 	path = emacs/.emacs.d/lib/https:/github.com/zk-phi/setup
 	url = https://github.com/zk-phi/setup
