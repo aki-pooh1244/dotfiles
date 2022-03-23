@@ -130,6 +130,9 @@
 [submodule "page-break-lines"]
 	path = emacs/.emacs.d/lib/page-break-lines
 	url = git@github.com:purcell/page-break-lines.git
+[submodule "peep-dired"]
+	path = emacs/.emacs.d/lib/peep-dired
+	url = git@github.com:asok/peep-dired.git
 [submodule "pipenv"]
 	path = emacs/.emacs.d/lib/pipenv
 	url = git@github.com:pwalsh/pipenv.el.git
@@ -142,6 +145,9 @@
 [submodule "pythonic"]
 	path = emacs/.emacs.d/lib/pythonic
 	url = git@github.com:pythonic-emacs/pythonic.git
+[submodule "quick-preview"]
+	path = emacs/.emacs.d/lib/quick-preview
+	url = git@github.com:emacsattic/quick-preview.git
 [submodule "rainbow-delimiters"]
 	path = emacs/.emacs.d/lib/rainbow-delimiters
 	url = git@github.com:Fanael/rainbow-delimiters.git
@@ -151,6 +157,9 @@
 [submodule "rpn-calc"]
 	path = emacs/.emacs.d/lib/rpn-calc
 	url = git@github.com:zk-phi/rpn-calc.git
+[submodule "runner"]
+	path = emacs/.emacs.d/lib/runner
+	url = git@github.com:thamer/runner.git
 [submodule "s"]
 	path = emacs/.emacs.d/lib/s
 	url = git@github.com:magnars/s.el.git
@@ -166,6 +175,9 @@
 [submodule "tangotango-theme"]
 	path = emacs/.emacs.d/lib/tangotango-theme
 	url = git@github.com:juba/color-theme-tangotango.git
+[submodule "total-lines"]
+	path = emacs/.emacs.d/lib/total-lines
+	url = git@github.com:hinrik/total-lines.git
 [submodule "transient"]
 	path = emacs/.emacs.d/lib/transient
 	url = git@github.com:magit/transient.git
@@ -175,6 +187,9 @@
 [submodule "viewer"]
 	path = emacs/.emacs.d/lib/viewer
 	url = git@github.com:rubikitch/viewer.git
+[submodule "visible-mark"]
+	path = emacs/.emacs.d/lib/visible-mark
+	url = git@github.com:emacsmirror/visible-mark.git
 [submodule "visual-regexp"]
 	path = emacs/.emacs.d/lib/visual-regexp
 	url = git@github.com:benma/visual-regexp.el.git

@@ -26,8 +26,8 @@
                (cons "org" "https://orgmode.org/elpa/")
                t))
 (setq default-frame-alist
-      '((width . 80)
-        (height . 30)))
+      '((width . 185)
+        (height . 50)))
 
 ;; End:
 ;;; early-init.el ends here
