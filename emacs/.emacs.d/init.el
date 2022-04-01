@@ -374,6 +374,11 @@
 (setq make-backup-files t)
 (add-to-list 'backup-directory-alist (cons "." my-backup-directory))
 
+(define-key global-map (kbd "C-z") 'undo)
+
+(setup-include "undohist"
+  (undohist-initialize))
+
 
 ;; Keybinds
 

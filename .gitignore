@@ -36,3 +36,5 @@ filepos_history
 search_history
 #*#
 skk/#.skk#
+
+emacs/.emacs.d/undohist/

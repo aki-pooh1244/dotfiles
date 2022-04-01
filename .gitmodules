@@ -181,6 +181,9 @@
 [submodule "transient"]
 	path = emacs/.emacs.d/lib/transient
 	url = git@github.com:magit/transient.git
+[submodule "undohist"]
+	path = emacs/.emacs.d/lib/undohist
+	url = git@github.com:emacsorphanage/undohist.git
 [submodule "vertico"]
 	path = emacs/.emacs.d/lib/vertico
 	url = git@github.com:minad/vertico.git
