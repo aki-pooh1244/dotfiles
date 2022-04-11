@@ -62,7 +62,7 @@
 
 (setq-default indent-tabs-mode      nil
 	          tab-width             4
-	          truncate-lines        nil
+	          truncate-lines        t
 	          line-move-visual      t
 	          fill-column           80
               cursor-type           'box
@@ -339,6 +339,8 @@
 
 ;; Misc
 
+(ffap-bindings)
+
 (defalias 'yes-or-no-p 'y-or-n-p)
 (define-key query-replace-map (kbd "SPC") nil)
 
@@ -466,12 +468,23 @@
 
 (global-linum-mode t)
 
+(size-indication-mode t)
+
 (setup-lazy '(indent-guide-mode) "indent-guide"
   (set-face-background 'indent-guide-face "lightpink"))
 
 (setup-include "beacon"
   (beacon-mode 1)
   (setq beacon-color "lightpink"))
+
+(setup-hook 'prog-mode-hook
+  (setup-lazy '(display-fill-column-indicator-mode) "display-fill-column-indicator"
+    (setq-default display-fill-column-indicator 80)))
+
+(setup-lazy '(visual-fill-column-mode) "visual-fill-column"
+    :prepare (setup-keybinds nil
+               "C-c t" 'visual-fill-column-mode)
+    :prepare (setup-hook 'visual-line-mode-hook 'visual-fill-column-mode))
 
 ;; (setup-include "rainbow-delimiters"
 ;;   (global-rainbow-delimiters-mode t))
@@ -480,9 +493,13 @@
 ;; Language
 ;;;LaTeX
 (setup-expecting "tex-mode"
-  (push '("\\.tex$" . latex-mode) auto-mode-alist))
+  (push '("\\.tex$" . latex-mode) auto-mode-alist)
+  (setq latex-run-command "latexmk -pvc"))
 (setup-after "tex-mode"
   (setup-hook 'LaTeX-mode-hook
+    (visual-line-mode 1)
+    (flyspell-mode 1)
+    (reftex-mode 1)
     (outline-minor-mode 1)
     (setq-local outline-regexp "\\\\\\(sub\\)*section\\>"
                 outline-level (lambda () (- (outline-level) 7))))

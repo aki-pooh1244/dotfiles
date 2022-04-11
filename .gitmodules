@@ -97,9 +97,6 @@
 [submodule "magic-latex-buffer"]
 	path = emacs/.emacs.d/lib/magic-latex-buffer
 	url = git@github.com:zk-phi/magic-latex-buffer.git
-[submodule "magit"]
-	path = emacs/.emacs.d/lib/magit
-	url = git@github.com:magit/magit.git
 [submodule "marginalia"]
 	path = emacs/.emacs.d/lib/marginalia
 	url = git@github.com:minad/marginalia.git
@@ -193,6 +190,9 @@
 [submodule "visible-mark"]
 	path = emacs/.emacs.d/lib/visible-mark
 	url = git@github.com:emacsmirror/visible-mark.git
+[submodule "visual-fill-column"]
+	path = emacs/.emacs.d/lib/visual-fill-column
+	url = https://codeberg.org/joostkremers/visual-fill-column.git
 [submodule "visual-regexp"]
 	path = emacs/.emacs.d/lib/visual-regexp
 	url = git@github.com:benma/visual-regexp.el.git
