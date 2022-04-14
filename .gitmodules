@@ -1,9 +1,15 @@
 [submodule "ace-window"]
 	path = emacs/.emacs.d/lib/ace-window
 	url = git@github.com:abo-abo/ace-window.git
+[submodule "almost-mono-themes"]
+	path = emacs/.emacs.d/lib/almost-mono-themes
+	url = git@github.com:cryon/almost-mono-themes.git
 [submodule "anaconda-mode"]
 	path = emacs/.emacs.d/lib/anaconda-mode
 	url = git@github.com:pythonic-emacs/anaconda-mode.git
+[submodule "apropospriate-theme"]
+	path = emacs/.emacs.d/lib/apropospriate-theme
+	url = git@github.com:waymondo/apropospriate-theme.git
 [submodule "auto-compile"]
 	path = emacs/.emacs.d/lib/auto-compile
 	url = git@github.com:emacscollective/auto-compile.git
@@ -16,12 +22,18 @@
 [submodule "back-button"]
 	path = emacs/.emacs.d/lib/back-button
 	url = git@github.com:rolandwalker/back-button.git
+[submodule "basic-theme"]
+	path = emacs/.emacs.d/lib/basic-theme
+	url = git@github.com:fgeller/basic-theme.el.git
 [submodule "beacon"]
 	path = emacs/.emacs.d/lib/beacon
 	url = git@github.com:Malabarba/beacon.git
 [submodule "beginend"]
 	path = emacs/.emacs.d/lib/beginend
 	url = git@github.com:DamienCassou/beginend.git
+[submodule "berrys-theme"]
+	path = emacs/.emacs.d/lib/berrys-theme
+	url = git@github.com:vbuzin/berrys-theme.git
 [submodule "borg"]
 	path = emacs/.emacs.d/lib/borg
 	url = git@github.com:emacscollective/borg.git
@@ -76,6 +88,9 @@
 [submodule "grugru"]
 	path = emacs/.emacs.d/lib/grugru
 	url = git@github.com:ROCKTAKEY/grugru.git
+[submodule "hiwin"]
+	path = emacs/.emacs.d/lib/hiwin
+	url = git@github.com:yoshida-mediba/hiwin-mode.git
 [submodule "https://github.com/zk-phi/setup"]
 	path = emacs/.emacs.d/lib/https:/github.com/zk-phi/setup
 	url = https://github.com/zk-phi/setup
@@ -106,6 +121,9 @@
 [submodule "minions"]
 	path = emacs/.emacs.d/lib/minions
 	url = git@github.com:tarsius/minions.git
+[submodule "monotropic-theme"]
+	path = emacs/.emacs.d/lib/monotropic-theme
+	url = git@github.com:caffo/monotropic-theme.git
 [submodule "moody"]
 	path = emacs/.emacs.d/lib/moody
 	url = git@github.com:tarsius/moody.git
@@ -127,6 +145,9 @@
 [submodule "page-break-lines"]
 	path = emacs/.emacs.d/lib/page-break-lines
 	url = git@github.com:purcell/page-break-lines.git
+[submodule "paper-theme"]
+	path = emacs/.emacs.d/lib/paper-theme
+	url = git@github.com:emacsmirror/paper-theme.git
 [submodule "peep-dired"]
 	path = emacs/.emacs.d/lib/peep-dired
 	url = git@github.com:asok/peep-dired.git
@@ -172,6 +193,9 @@
 [submodule "tangotango-theme"]
 	path = emacs/.emacs.d/lib/tangotango-theme
 	url = git@github.com:juba/color-theme-tangotango.git
+[submodule "tao-theme"]
+	path = emacs/.emacs.d/lib/tao-theme
+	url = git@github.com:11111000000/tao-theme-emacs.git
 [submodule "total-lines"]
 	path = emacs/.emacs.d/lib/total-lines
 	url = git@github.com:hinrik/total-lines.git

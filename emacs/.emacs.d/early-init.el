@@ -26,7 +26,7 @@
                (cons "org" "https://orgmode.org/elpa/")
                t))
 (setq default-frame-alist
-      '((width . 185)
+      '((width . 90)
         (height . 50)))
 
 ;; End:
