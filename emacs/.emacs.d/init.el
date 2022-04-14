@@ -486,6 +486,9 @@
                "C-c t" 'visual-fill-column-mode)
     :prepare (setup-hook 'visual-line-mode-hook 'visual-fill-column-mode))
 
+(setup-include "hiwin"
+  (hiwin-activate))
+
 ;; (setup-include "rainbow-delimiters"
 ;;   (global-rainbow-delimiters-mode t))
 
@@ -527,8 +530,11 @@
 
 
 ;; Color
-(setup-include "tangotango-theme"
-  (load-theme 'tangotango t))
+;; (setup-include "tangotango-theme"
+;;   (load-theme 'tangotango t))
+(setup-include "almost-mono-themes"
+  (load-theme 'almost-mono-black t))
+
 
 
 ;; Font
