@@ -26,7 +26,7 @@ $pvc_view_file_via_temporary = 0;
 
 if ($^O eq "linux"){
     #Use Evince in Linux OS
-    $pdf_previewer = "evince";
+    $pdf_previewer = "atril";
 }
 else {
     # Use Skim as a previewer in MacOS
