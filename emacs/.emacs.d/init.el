@@ -483,11 +483,27 @@
 
 (setup-lazy '(visual-fill-column-mode) "visual-fill-column"
     :prepare (setup-keybinds nil
-               "C-c t" 'visual-fill-column-mode)
+               "C-c t" 'visual-line-mode)
     :prepare (setup-hook 'visual-line-mode-hook 'visual-fill-column-mode))
 
 (setup-include "hiwin"
   (hiwin-activate))
+
+(setup-include "elwm")
+
+(setup-lazy '(zoom-window-zoom) "zoom-window"
+  :prepare (setup-keybinds nil
+             "C-x C-z" 'zoom-window-zoom)
+  (custom-set-variables
+   '(zoom-window-mode-line-color "DarkGreen")))
+
+(setup-include "zoom"
+  (zoom-mode t)
+  (custom-set-variables
+   '(zoom-size '(0.618 . 0.618))
+   '(zoom-ignored-major-modes '(dired-mode markdown-mode))
+   '(zoom-ignored-buffer-name-regexps '("^*calc"))
+   '(zoom-ignore-predicates '((lambda () (> (count-lines (point-min) (point-max)) 20))))))
 
 ;; (setup-include "rainbow-delimiters"
 ;;   (global-rainbow-delimiters-mode t))
@@ -516,12 +532,16 @@
   )
 
 ;;;Python
-(setup-lazy '(anaconda-mode) "anaconda-mode"
-  :prepare (push '("\\.py$" . anaconda-mode) auto-mode-alist)
-  (setup-hook 'anaconda-mode-hook
-    (anaconda-eldoc-mode)
-    (pipenv-mode))
-  (setup-lazy '(pipenv-mode) "pipenv"))
+(setup-expecting "python-mode"
+  (push '("\\.py$" . anaconda-mode) auto-mode-alist))
+(setup-after "python-mode"
+  (setup-lazy '(anaconda-mode) "anaconda-mode"
+    (setup-hook 'anaconda-mode-hook
+      (anaconda-eldoc-mode)
+      (setup-lazy '(pipenv-mode) "pipenv"))))
+
+(setup-include "flycheck"
+  (global-flycheck-mode))
 
 
 ;; startup
@@ -532,8 +552,8 @@
 ;; Color
 ;; (setup-include "tangotango-theme"
 ;;   (load-theme 'tangotango t))
-(setup-include "almost-mono-themes"
-  (load-theme 'almost-mono-black t))
+(setup-include "zenburn-theme"
+  (load-theme 'zenburn t))
 
 
 

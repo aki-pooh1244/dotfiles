@@ -25,9 +25,12 @@
   (add-to-list 'package-archives
                (cons "org" "https://orgmode.org/elpa/")
                t))
-(setq default-frame-alist
-      '((width . 90)
-        (height . 50)))
+(setq initial-frame-alist '((fullscreen . maximized)))
+;; (custom-set-variables '(initial-frame-alist '((fullscreen . maximized))))
+;; (setq default-frame-alist
+;;       '((width . 90)
+;;         (height . 50)))
+(setq default-frame-alist　'((fullscreen . fullheight)))
 
 ;; End:
 ;;; early-init.el ends here

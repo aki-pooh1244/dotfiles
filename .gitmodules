@@ -70,6 +70,9 @@
 [submodule "easy-kill"]
 	path = emacs/.emacs.d/lib/easy-kill
 	url = git@github.com:leoliu/easy-kill.git
+[submodule "elwm"]
+	path = emacs/.emacs.d/lib/elwm
+	url = git@github.com:Fuco1/elwm.git
 [submodule "emacsql"]
 	path = emacs/.emacs.d/lib/emacsql
 	url = git@github.com:skeeto/emacsql.git
@@ -232,6 +235,12 @@
 [submodule "zenburn-theme"]
 	path = emacs/.emacs.d/lib/zenburn-theme
 	url = git@github.com:bbatsov/zenburn-emacs.git
+[submodule "zoom"]
+	path = emacs/.emacs.d/lib/zoom
+	url = git@github.com:cyrus-and/zoom.git
+[submodule "zoom-window"]
+	path = emacs/.emacs.d/lib/zoom-window
+	url = git@github.com:emacsorphanage/zoom-window.git
 [submodule "zop-to-char"]
 	path = emacs/.emacs.d/lib/zop-to-char
 	url = git@github.com:thierryvolpiatto/zop-to-char.git
