@@ -40,3 +40,5 @@ skk/#.skk#
 emacs/.emacs.d/undohist/
 
 emacs/.emacs.d/el-get/
+
+emacs/.emacs.d/anaconda-mode/
