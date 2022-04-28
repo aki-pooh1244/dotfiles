@@ -2,6 +2,72 @@
 
 ;;; Code:
 
+
+;; Package manager
+;; Load-Path
+(when load-file-name
+  (setq user-emacs-directory (file-name-directory lad-file-name)))
+
+;; el-get
+(add-to-list 'load-path (locate-user-emacs-file "~/.emacs.d/el-get/el-get"))
+(unless (require 'el-get nil 'noerror)
+  (with-current-buffer
+      (url-retrieve-synchronously
+       "https://raw.githubusercontent.com/dimitri/el-get/master/el-get-install.el")
+    (goto-char (point-max))
+    (eval-print-last-sexp)))
+
+
+;; package list
+(setq my:el-get-packages
+      '(; packages
+        ;; config
+        setup
+        ;; Editing
+        comment-dwim-2
+        page-break-lines
+        zop-to-char
+        viewer
+        ;; Search/Replace/Cursor
+        ;vertico
+        ;orderless
+        ;marginalia
+        ;consult
+        ;easy-kill
+        goto-chg
+        back-button
+        deadgrep
+        ;loccur
+        avy
+        ace-window
+        ;mwim
+        beginend
+        iedit
+        ;; key-bind
+        key-chord
+        smartrep
+        which-key
+        ;; window
+        elwm
+        zoom-window
+        ;; mode-line
+        smart-mode-line
+        ;; GUI
+        diff-hl
+        beacon
+        indent-guide
+        ;; color-theme
+        color-theme-zenburn
+        ;; Latex
+        magic-latex-buffer
+        ;; Python
+        anaconda-mode
+        ))
+
+(el-get 'sync my:el-get-packages)
+
+
+;; zk-phi/setup.el
 (eval-when-compile
   (require 'setup)
   ;; (require 'cl-lib)
@@ -15,10 +81,10 @@
 
 
 ;; Package manager
-(eval-and-compile ; borg
-  (add-to-list 'load-path (expand-file-name "lib/borg" user-emacs-directory))
-  (require 'borg)
-  (borg-initialize))
+;; (eval-and-compile ; borg
+;;   (add-to-list 'load-path (expand-file-name "lib/borg" user-emacs-directory))
+;;   (require 'borg)
+;;   (borg-initialize))
 
 (setup "auto-compile"
   (setq auto-compile-display-buffer nil)
@@ -388,8 +454,8 @@
 (define-key global-map (kbd "C-x -") 'split-window-vertically)
 
 (!when (eq system-type 'darwin)
-  (setq ns-command-modifier 'meta)
-  (setq ns-option-modifier 'super))
+  (setq ns-command-modifier 'super)
+  (setq ns-option-modifier 'meta))
 
 (setup
   "which-key"
@@ -570,3 +636,15 @@
     (set-face-attribute '(han kana) nil :family "Noto Sans CJK JP Regular" :height 120))))
 
 ;;; End here.
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages '(zenburn-theme)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
