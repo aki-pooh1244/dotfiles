@@ -6,7 +6,7 @@
 ;; Package manager
 ;; Load-Path
 (when load-file-name
-  (setq user-emacs-directory (file-name-directory lad-file-name)))
+  (setq user-emacs-directory (file-name-directory load-file-name)))
 
 ;; el-get
 (add-to-list 'load-path (locate-user-emacs-file "~/.emacs.d/el-get/el-get"))
@@ -28,21 +28,20 @@
         page-break-lines
         zop-to-char
         viewer
+        undohist
         ;; Search/Replace/Cursor
-        ;vertico
-        ;orderless
-        ;marginalia
-        ;consult
-        ;easy-kill
         goto-chg
         back-button
         deadgrep
-        ;loccur
         avy
         ace-window
-        ;mwim
         beginend
         iedit
+        ;; Complition
+        company-mode
+        ;; dired
+        dired-hacks
+        runner
         ;; key-bind
         key-chord
         smartrep
@@ -56,16 +55,50 @@
         diff-hl
         beacon
         indent-guide
+        sublimity
         ;; color-theme
         color-theme-zenburn
         ;; Latex
         magic-latex-buffer
         ;; Python
         anaconda-mode
+        ;; emacs-lisp
+        flycheck
         ))
 
 (el-get 'sync my:el-get-packages)
 
+;; el-get via github
+;; Search/Replace/Cursor
+(el-get-bundle minad/vertico)
+(el-get-bundle minad/consult)
+(el-get-bundle minad/marginalia)
+(el-get-bundle oantolin/orderless)
+
+(el-get-bundle leoliu/easy-kill)
+
+(el-get-bundle fourier/loccur)
+(el-get-bundle NIcolasPetton/noccur.el
+  :name noccur)
+
+(el-get-bundle alezost/mwim.el
+  :name mwim)
+(el-get-bundle ROCKTAKEY/grugru)
+
+;; dired
+(el-get-bundle asok/peep-dired)
+
+;; window
+(el-get-bundle cyrus-and/zoom)
+
+;; mode-line
+(el-get-bundle tarsius/minions)
+(el-get-bundle hinrik/total-lines)
+
+;; misc
+(el-get-bundle zk-phi/rpn-calc)
+(el-get-bundle elpa:compat)
+  
 
 ;; zk-phi/setup.el
 (eval-when-compile
@@ -86,12 +119,12 @@
 ;;   (require 'borg)
 ;;   (borg-initialize))
 
-(setup "auto-compile"
-  (setq auto-compile-display-buffer nil)
-  (setq auto-compile-mode-line-counter t)
-  (setq auto-compile-source-recreate-deletes-dest t)
-  (setq auto-compile-toggle-deletes-nonlib-dest t)
-  (setq auto-compile-updatepautoloads t))
+;; (setup "auto-compile"
+;;   (setq auto-compile-display-buffer nil)
+;;   (setq auto-compile-mode-line-counter t)
+;;   (setq auto-compile-source-recreate-deletes-dest t)
+;;   (setq auto-compile-toggle-deletes-nonlib-dest t)
+;;   (setq auto-compile-updatepautoloads t))
 
 ;; (setup "magit"
 ;;   setup-after "dash")
@@ -361,11 +394,11 @@
    (setup-lazy '(peep-dired) "peep-dired"
      :prepare (setup-keybinds dired-mode-map
                 "g" 'peep-dired))
-   (setup-lazy '(quick-preview-at-point) "quick-preview"
-     :prepare (setup-keybinds nil
-                "C-c q" 'quick-preview-at-point)
-     :prepare (setup-keybinds dired-mode-map
-                "Q" 'quick-preview-at-point))
+   ;; (setup-lazy '(quick-preview-at-point) "quick-preview"
+   ;;   :prepare (setup-keybinds nil
+   ;;              "C-c q" 'quick-preview-at-point)
+   ;;   :prepare (setup-keybinds dired-mode-map
+   ;;              "Q" 'quick-preview-at-point))
    (setup-lazy '(runner) "runner")
    ;; (setup-lazy '(dired-toggle-sudo) "dired-toggle-sudo"
    ;;   :prepare (setup-keybinds dired-mode-map
@@ -547,13 +580,13 @@
   (setup-lazy '(display-fill-column-indicator-mode) "display-fill-column-indicator"
     (setq-default display-fill-column-indicator 80)))
 
-(setup-lazy '(visual-fill-column-mode) "visual-fill-column"
-    :prepare (setup-keybinds nil
-               "C-c t" 'visual-line-mode)
-    :prepare (setup-hook 'visual-line-mode-hook 'visual-fill-column-mode))
+;; (setup-lazy '(visual-fill-column-mode) "visual-fill-column"
+;;     :prepare (setup-keybinds nil
+;;                "C-c t" 'visual-line-mode)
+;;     :prepare (setup-hook 'visual-line-mode-hook 'visual-fill-column-mode))
 
-(setup-include "hiwin"
-  (hiwin-activate))
+;; (setup-include "hiwin"
+;;   (hiwin-activate))
 
 (setup-include "elwm")
 

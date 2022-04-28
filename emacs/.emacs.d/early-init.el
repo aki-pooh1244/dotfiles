@@ -8,13 +8,9 @@
 
 (setq load-prefer-newer t)
 
-;; (let ((dir (file-name-directory (or load-file-name buffer-file-name))))
-;;   (add-to-list 'load-path (expand-file-name "lib/packed" dir))
-;;   (add-to-list 'load-path (expand-file-name "lib/auto-compile" dir))
-;;   (add-to-list 'load-path (expand-file-name "lib/https:/github.com/zk-phi/setup" dir)))
-;; (require 'auto-compile)
-;; (auto-compile-on-load-mode)
-;; (auto-compile-on-save-mode)
+(let ((dir (file-name-directory (or load-file-name buffer-file-name))))
+  (add-to-list 'load-path (expand-file-name "site-lisp" dir))
+  (add-to-list 'load-path (expand-file-name "el-get" dir)))
 
 (setq package-enable-at-startup nil)
 
