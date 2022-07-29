@@ -34,7 +34,7 @@
         back-button
         deadgrep
         avy
-        ace-window
+        ;; ace-window
         beginend
         iedit
         ;; Complition
@@ -49,6 +49,7 @@
         ;; window
         elwm
         zoom-window
+        switch-window
         ;; mode-line
         smart-mode-line
         ;; GUI
@@ -207,6 +208,10 @@
   (grugru-default-setup)
   (grugru-highlight-mode))
 
+(!-
+ (setup-include "ispell"
+   (setq ispell-program-name "aspell")))
+
 
 ;; SKK
 
@@ -254,11 +259,33 @@
   :preapre (setup-keybinds nil
              "C-'" 'avy-goto-char-timer))
 
-(setup-include "ace-window"
-  :preapre (setup-keybinds nil
-             "s-w" 'ace-window)
-  (setq aw-keys '(?j ?k ?l ?i ?o ?h ?y ?u ?p)
-        aw-leading-char-face '((t (:height 4.0 :foreground "#f1fa8c")))))
+(setup-lazy
+  '(switch-window
+    switch-window-then-split-below
+    switch-window-then-split-right
+    switch-window-then-dired
+    switch-window-then-find-file
+    switch-window-then-display-buffer
+    switch-window-then-kill-buffer
+    ) "switch-window"
+  :prepare (setup-keybinds nil
+             "C-x o" 'switch-window
+             "s-w" 'switch-window
+             "C-x 1" 'switch-window-then-maximize
+             "C-x 2" 'switch-window-then-split-below
+             "C-x 3" 'switch-window-then-split-right
+             "C-x 0" 'switch-window-then-delete
+             "C-x 4 d" 'switch-window-then-dired
+             "C-x 4 f" 'switch-window-then-find-file
+             "C-x 4 C-o" 'switch-window-then-display-buffer
+             "C-x 4 0" 'switch-window-then-kill-buffer)
+  (setq switch-window-shortcut-style 'qwerty))
+
+;; (setup-include "ace-window"
+;;   :preapre (setup-keybinds nil
+;;              "s-w" 'ace-window)
+;;   (setq aw-keys '(?j ?k ?l ?i ?o ?h ?y ?u ?p)
+;;         aw-leading-char-face '((t (:height 4.0 :foreground "#f1fa8c")))))
 
 (setup "easy-kill"
   :preapre (setup-keybinds nil
