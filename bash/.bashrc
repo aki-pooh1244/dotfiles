@@ -14,6 +14,7 @@ export FZF_DEFAULT_OPTS='--height 40% --reverse --border'
 ## bash-completion
 
 source /usr/share/bash-completion/bash_completion
+source /usr/local/share/bash-completion/completions/*
 
 ## bash option
 shopt -s autocd
