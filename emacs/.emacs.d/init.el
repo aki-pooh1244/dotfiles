@@ -212,6 +212,8 @@
  (setup-include "ispell"
    (setq ispell-program-name "aspell")))
 
+(define-key global-map [165] [92])  ;;¥の代わりにバックスラッシュを入力する
+
 
 ;; SKK
 
@@ -639,7 +641,13 @@
 ;;;LaTeX
 (setup-expecting "tex-mode"
   (push '("\\.tex$" . latex-mode) auto-mode-alist)
-  (setq latex-run-command "latexmk -pvc"))
+  (setq latex-run-command "latexmk -pvc")
+  (setq latex-run-command "cluttex --engine=lualatex --biber --synctex=1")
+  (setq latex-run-command "cluttex --engine=platex --bibtex --synctex=1")
+  (setq tex-compile-commands
+        '(("latexmk -pvc %f" "%f" "%r.pdf")
+          ("cluttex --engine=lualatex --biber --synctex=1 %f" "%f" "%r.pdf")
+          ("cluttex --engine=platex --bibtex --synctex=1 %f" "%f" "%r.pdf"))))
 (setup-after "tex-mode"
   (setup-hook 'LaTeX-mode-hook
     (visual-line-mode 1)
@@ -701,7 +709,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages '(zenburn-theme))
+ '(package-selected-packages '(compat zenburn-theme))
  '(zoom-ignore-predicates
    '((lambda nil
        (>
