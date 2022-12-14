@@ -12,9 +12,15 @@
 export FZF_DEFAULT_OPTS='--height 40% --reverse --border'
 
 ## bash-completion
+case `uname -a` in
+	Darwin* )
+	source /usr/local/share/bash-completion/completions/*
+	;;
+	Linux* )
+	source /usr/share/bash-completion/bash_completion
+	;;
+esac
 
-source /usr/share/bash-completion/bash_completion
-source /usr/local/share/bash-completion/completions/*
 
 ## bash option
 shopt -s autocd
