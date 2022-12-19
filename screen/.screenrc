@@ -1,6 +1,6 @@
 # GNU screen config
 
-# urf 8
+# utf 8
 defutf8 on
 defencoding utf8
 encoding utf8 utf8

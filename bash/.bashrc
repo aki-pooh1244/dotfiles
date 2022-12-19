@@ -82,6 +82,13 @@ alias tail='tailc'
 export LESS='-R'
 export LESSOPEN='| /usr/bin/src-hilite-lesspippe.sh %s'
 
+## screen
+#if [ $TERM != "screen" ]; then
+#	if [ $TERM != "dumb" ]; then
+#		screen -e ^z^z
+#	fi
+#fi
+
 ## banjoman/brilliant-bash (https://github.com/banjoman/brilliant-bash.git)
 ### update: update all of your packages!
 #if [ ! -z "$(which brew)" ]; then
