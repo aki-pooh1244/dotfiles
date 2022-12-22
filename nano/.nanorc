@@ -150,7 +150,7 @@ set softwrap
 set speller "aspell -x -c"
 
 ## Allow nano to be suspended (with ^Z by default).
-set suspendable
+# set suspendable
 ## (The old form of this option, 'set suspend', is deprecated.)
 
 ## Use this tab size instead of the default; it must be greater than 0.
@@ -160,7 +160,7 @@ set suspendable
 # set tabstospaces
 
 ## Save automatically on exit; don't prompt.
-set tempfile
+# set tempfile
 
 ## Snip whitespace at the end of lines when justifying or hard-wrapping.
 # set trimblanks
