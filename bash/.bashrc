@@ -15,6 +15,7 @@ export FZF_DEFAULT_OPTS='--height 40% --reverse --border'
 case `uname -a` in
 	Darwin* )
 	source /usr/local/share/bash-completion/completions/*
+	source /usr/local/etc/bash_completion.d/*
 	;;
 	Linux* )
 	source /usr/share/bash-completion/bash_completion
@@ -81,6 +82,12 @@ alias tail='tailc'
 ## less
 export LESS='-R'
 export LESSOPEN='| /usr/bin/src-hilite-lesspippe.sh %s'
+
+## tmux
+if which tmux >/dev/null 2>&1; then
+    #if not inside a tmux session, and if no session is started, start a new session
+    test -z "$TMUX" && (tmux attach || tmux new-session)
+fi
 
 ## screen
 #if [ $TERM != "screen" ]; then
