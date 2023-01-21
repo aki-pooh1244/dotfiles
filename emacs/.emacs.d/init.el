@@ -259,7 +259,7 @@
   '(avy-resume avy-goto-char-timer) "avy"
   (avy-setup-default)
   :preapre (setup-keybinds nil
-             "C-'" 'avy-goto-char-timer))
+             "M-'" 'avy-goto-char-timer))
 
 (setup-lazy
   '(switch-window
@@ -440,7 +440,7 @@
 (!-
  (setup "hippie-exp"
   :prepare (setup-keybinds nil
-             "C--" 'hippie-expand)
+             "M-/" 'hippie-expand)
   (setq hippie-expand-try-function-list
         '(try-expand-dabbrev
           try-expand-dabbrev-all-buffers
