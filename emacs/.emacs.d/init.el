@@ -29,6 +29,7 @@
         zop-to-char
         viewer
         undohist
+        pdf-tools
         ;; Search/Replace/Cursor
         goto-chg
         back-button
@@ -57,6 +58,7 @@
         beacon
         indent-guide
         sublimity
+        rainbow-delimiters
         ;; color-theme
         color-theme-zenburn
         ;; Latex
@@ -213,6 +215,12 @@
    (setq ispell-program-name "aspell")))
 
 (define-key global-map [165] [92])  ;;¥の代わりにバックスラッシュを入力する
+
+(setup-lazy
+  '(pdf-view-mode) "pdf-tools"
+  (pdf-loader-install)
+  (setup-hook 'pdf-view-mode-hook
+    (linum-mode -1)))
 
 
 ;; SKK
@@ -633,8 +641,8 @@
    '(zoom-ignored-buffer-name-regexps '("^*calc"))
    '(zoom-ignore-predicates '((lambda () (> (count-lines (point-min) (point-max)) 20))))))
 
-;; (setup-include "rainbow-delimiters"
-;;   (global-rainbow-delimiters-mode t))
+(setup-include "rainbow-delimiters"
+  (global-rainbow-delimiters-mode t))
 
 
 ;; Language
