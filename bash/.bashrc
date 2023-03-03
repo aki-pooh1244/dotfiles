@@ -22,6 +22,12 @@ case `uname -a` in
 	;;
 esac
 
+## setup for wsl
+if [[ "$(uname -r)" == *microsoft* ]]; then
+	alias open="pwsh.exe /c start"
+    	eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    	export PATH="$PATH:/home/linuxbrew/.linuxbrew/bin"
+fi
 
 ## bash option
 shopt -s autocd
