@@ -29,7 +29,7 @@
         zop-to-char
         viewer
         undohist
-        pdf-tools
+        ;; pdf-tools
         ;; Search/Replace/Cursor
         goto-chg
         back-button
@@ -216,11 +216,11 @@
 
 (define-key global-map [165] [92])  ;;¥の代わりにバックスラッシュを入力する
 
-(setup-lazy
-  '(pdf-view-mode) "pdf-tools"
-  (pdf-loader-install)
-  (setup-hook 'pdf-view-mode-hook
-    (linum-mode -1)))
+;; (setup-lazy
+;;   '(pdf-view-mode) "pdf-tools"
+;;   (pdf-loader-install)
+;;   (setup-hook 'pdf-view-mode-hook
+;;     (linum-mode -1)))
 
 
 ;; SKK
