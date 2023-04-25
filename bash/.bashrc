@@ -45,7 +45,7 @@ shopt -s histappend
 ## cd -> ls
 autols(){
     if [ "$OLDPWD" != "$PWD" ]; then
-        exa -F
+        ls
         OLDPWD="$PWD"
     fi
 }
@@ -59,17 +59,18 @@ HISTSIZE=1000
 HISTFILESIZE=10000
 
 ## alias
-alias ls='exa -F'
-alias la='exa -aF'
-alias ll='exa -alF'
-alias lsm='exa -hlAFG'
-alias tree='exa -T'
+alias ls='ls --color=auto --show-control-chars --time-style=long-iso --human-readable --classify -FH'
+alias la='ls -A'
+alias ll='ls -l'
+alias lsm='ls -hlAG'
+# alias tree='exa -T'
 alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
-#alias less='less -iRX'
-alias cd='cd -P && exa -F'
-alias up='cd ..'
+alias less='less -iRX'
+alias cd='cd -P && ls'
+# alias up='cd ..'
+alias grep='grep --color'
 
 alias estart='emacs --daemon'
 alias e='emacsclient -nw'
