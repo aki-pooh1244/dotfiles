@@ -20,7 +20,7 @@
 
 ;; package list
 (setq my:el-get-packages
-      '(; packages
+      '(;; packages
         ;; config
         setup
         ;; Editing
@@ -42,10 +42,10 @@
         company-mode
         ;; dired
         dired-hacks
-        runner
+        dired-k
         ;; key-bind
         key-chord
-        smartrep
+        ;; smartrep
         which-key
         ;; window
         elwm
@@ -63,10 +63,22 @@
         color-theme-zenburn
         ;; Latex
         magic-latex-buffer
-        ;; Python
+        ;; python
         anaconda-mode
+        ;; racket
+        racket-mode
         ;; emacs-lisp
+        elisp-slime-nav
+        ;; tools
         flycheck
+        ;; org-mode
+        ;; org-contrib
+        org-superstar
+        ;; outline-mode
+        zoutline
+        outline-magic
+        ;; eshell
+        eshell-autojump
         ))
 
 (el-get 'sync my:el-get-packages)
@@ -84,12 +96,32 @@
 (el-get-bundle NIcolasPetton/noccur.el
   :name noccur)
 
+;; outline
+
+;; eshell
+(el-get-bundle 4DA/eshell-toggle)
+(el-get-bundle akreisher/eshell-syntax-highlighting)
+(el-get-bundle xuchunyang/eshell-git-prompt)
+(el-get-bundle peterwvj/eshell-up)
+(el-get-bundle tom-tan/esh-help)
+(el-get-bundle xuchunyang/eshell-z)
+(el-get-bundle mallt/eshell-fixed-prompt-mode)
+(el-get-bundle dieggsy/esh-autosuggest)
+;; (el-get-git-clone "https://git.jamzattack.xyz/eshell-outline")
+
 (el-get-bundle alezost/mwim.el
   :name mwim)
 (el-get-bundle ROCKTAKEY/grugru)
+(el-get-bundle AmaiKinono/puni)
 
 ;; dired
 (el-get-bundle asok/peep-dired)
+(el-get-bundle fasheng/dired-toggle)
+(el-get-bundle thomp/dired-launch)
+
+;; Language
+(el-get-bundle cdominik/cdlatex)
+(el-get-bundle Malabarba/latex-extra)
 
 ;; window
 (el-get-bundle cyrus-and/zoom)
@@ -170,7 +202,9 @@
               cursor-type           'box
 	          require-final-newline t)
 
-(global-auto-revert-mode t)
+(setq global-auto-revert-mode t
+      global-auto-revert-non-file-buffers t
+      auto-revert-verbose t)
 
 (!-
  (setup-include "delsel"
@@ -216,11 +250,16 @@
 
 (define-key global-map [165] [92])  ;;¥の代わりにバックスラッシュを入力する
 
-;; (setup-lazy
-;;   '(pdf-view-mode) "pdf-tools"
-;;   (pdf-loader-install)
-;;   (setup-hook 'pdf-view-mode-hook
-;;     (linum-mode -1)))
+(setup-include "puni"
+  (puni-global-mode)
+  (setup-hook 'term-mode-hook
+    'puni-disable-puni-mode))
+
+;; outline
+(setup-hook 'outline-minor-mode-hook
+  (setup "outline-magic"
+    (setup-keybinds 'outline-minor-mode-map
+      "<C-tab>" 'outline-cycle)))
 
 
 ;; SKK
@@ -341,7 +380,7 @@
    (setup-keybinds dired-mode-map
      "(" 'dired-hide-details-mode
      ")" 'dired-hide-details-mode)
-   (dired-listing-switches "-alh")
+   (dired-listing-switches "-alh -L --group-directories-first")
    (dired-dwim-target t)
    (dired-recursive-copies 'always)
    (dired-recursive-deletes 'always)
@@ -349,12 +388,31 @@
    (dired-isearch-filenames 'dwim)
    (dired-ls-F-marks-symlinks t))
 
+ (setup-lazy '(dired-toggle) "dired-toggle"
+     :prepare (setup-keybinds
+                  "<f6>" 'dired-toggle)
+     (setq dired-toggle-window-size 20)
+     (setq dired-toggle-window-side 'left)
+     (setup-hook 'dired-toggle-mode-hook
+       (lambda () (interactive)
+         (visual-line-mode 1)
+         (setq-local visual-line-fringe-indicators '(nil right-curly-arrow))
+         (setq-local word-wrap nil))))
+
  (setup-after "dired"
    (setup-lazy '(wdired-change-to-wdired-mode) "wdired"
      :prepare (setup-keybinds dired-mode-map
                 "e" 'wdired-change-to-wdired-mode)
      (wdired-allow-to-change-permission t))
+   
+   (setup "dired-k"
+     :prepare (setup-hook 'dired-initial-position-hook
+                (dired-k)))
    (setup "dired-aux")
+   (setup "dired-launch"
+     (dired-launch-enable)
+     (setup-keybinds dired-launch-mode-map
+       "l" 'dired-launch-command))
    ;; dired-hacks starts
    (setup "dired-hacks-utils")
    (setup "dired-filter"
@@ -436,7 +494,7 @@
    ;;              "C-c q" 'quick-preview-at-point)
    ;;   :prepare (setup-keybinds dired-mode-map
    ;;              "Q" 'quick-preview-at-point))
-   (setup-lazy '(runner) "runner")
+   ;; (setup-lazy '(runner) "runner")
    ;; (setup-lazy '(dired-toggle-sudo) "dired-toggle-sudo"
    ;;   :prepare (setup-keybinds dired-mode-map
    ;;              "C-c C-s" 'dired-toggle-sudo))
@@ -657,7 +715,7 @@
           ("cluttex --engine=lualatex --biber --synctex=1 %f" "%f" "%r.pdf")
           ("cluttex --engine=platex --bibtex --synctex=1 %f" "%f" "%r.pdf"))))
 (setup-after "tex-mode"
-  (setup-hook 'LaTeX-mode-hook
+  (setup-hook 'latex-mode-hook
     (visual-line-mode 1)
     (flyspell-mode 1)
     (reftex-mode 1)
@@ -668,10 +726,13 @@
     :prepare (setup-hook 'latex-mode-hook 'magic-latex-buffer)
     (setq magic-latex-enable-block-highlight t
           magic-latex-enable-pretty-symbols  t
-          magic-latex-enable-block-align     t
-          magic-latex-enable-inline-image    t
+          magic-latex-enable-block-align     nil
+          magic-latex-enable-inline-image    nil
           magic-latex-enable-minibuffer-echo t))
-  )
+  (setup-lazy '(latex-extra-mode) "latex-extra"
+    :prepare (setup-hook 'latex-mode-hook 'latex-extra-mode))
+  (setup-lazy '(cdlatex-mode) "cdlatex"
+    :prepare (setup-hook 'latex-mod-hook 'turn-on-cdlatex)))
 
 ;;;Python
 (setup-expecting "python-mode"
@@ -682,8 +743,119 @@
       (anaconda-eldoc-mode)
       (setup-lazy '(pipenv-mode) "pipenv"))))
 
+;; emacs-lisp
+(setup-expecting "emacs-lisp-mode"
+  (setup-hook '(emacs-lisp-mode-hook ielm-mode-hook)
+    (elisp-slime-nav-mode)))
+
+;; Racket lang
+(setup-expecting "racket-mode"
+  (push '("\\.scrbl$" . scribble-mode) auto-mode-alist)
+  (push '("\\.rkt$" . racket-mode) auto-mode-alist))
+(setup-after "racket-mode"
+  (setup-lazy '(scribble-mode) "scribble")
+  (setup-lazy '(racket-mode) "racket-mode"))
+
+
+;; Tools
 (setup-include "flycheck"
   (global-flycheck-mode))
+
+
+;; org-mode
+(setup "org"
+  (require 'org-loaddefs)
+  (setup-keybinds nil
+    "C-c c" 'org-capture
+    "C-c a" 'org-agenda
+    "C-c l" 'org-store-link
+    "C-c b" 'org-iswitchb)
+  
+  (setq org-directory "~/Dropbox/org/")
+  
+  (setq org-startup-folded t
+        org-startup-indented t
+        org-startup-with-inline-images t
+        org-src-fontify-natively t
+        org-src-tab-acts-natively t)
+  
+  ;; Capture
+  (setq org-capture-templates
+        '(("t" "TODO" entry (file+headline "~/Dropbox/org/todo.org" "Tasks")
+           "* TODO %?\n %i\n %a")
+          ("j" "Journal" entry (file+datetree "~/Dropbox/org/journal.org")
+           "* %\nEntered on %U\n %i\n %a")
+          ("s" "Someday" entry (file+datetree "~/Dropbox/org/someday.org")
+           "* %\nEntered on %U\n %i\n %a")))
+  
+  ;; TODO
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "STARTED(s)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+  (setq org-todo-keyword-faces
+        (quote (("TODO" :foreground "red" :weight bold)
+                ("STARTED" :foreground "cyan" :weight bold)
+                ("DONE" :foreground "green" :weight bold)
+                ("CANCELLED" :foreground "forest green" :weight bold))))
+
+  (setq org-enforce-todo-dependencies t
+        org-log-done-with-time t
+        org-clock-out-when-done t
+        org-use-fast-todo-selection t
+        org-clock-out-remove-zero-time-clocks t)
+  
+  (setq org-clock-in-switch-to-state 'org-clock-in-to-started)
+
+  (setq org-archive-location "archive.org::")
+
+  ;; Agenda
+  (setq org-agenda-files (concat org-directory "todo.org" "journal.org" "someday.org"))
+  (setq org-agenda-span 'day
+        org-agenda-time-leading-zero t)
+
+  ;; Third-party
+  (setup "org-superstar"
+    (org-superstar-mode 1))
+
+  ;; def function
+  (defun show-org-buffer (file)
+    "Show an org-file on the current buffer"
+    (interactive)
+    (if (get-buffer file)
+        (let ((biffer (get-buffer file)))
+          (switch-to-buffer buffer)
+          (message "%s" file))
+      (find-file (concat "~/Dropbox/org/" file))))
+  (setup-keybinds nil
+    "C-M-c" '(lambda () (interactive)
+               (show-org-buffer "journal.org")))
+
+  (defun org-clock-in-to-started (state)
+    (if (or (string= state "TODO")
+            (string= state "WAITING"))
+        "STARTED"))
+)
+
+;; Eshell
+(setup-lazy '(eshell-toggle) "eshell-toggle"
+  :prepare (setup-keybinds nil
+             "M-t" 'eshell-toggle)
+  (setq eshell-toggle-size-fraction 3
+        eshell-toggle-default-directory "~/"
+        eshell-toggle-run-command nil))
+
+(setup-after "eshell"
+  (setup "eshell-syntax-highlighting"
+    (eshell-syntax-highlighting-global-mode +1))
+  (setup "eshell-git-prompt"
+    (eshell-git-prompt-use-theme 'default))
+  (setup "eshell-up"
+    (setq eshell-up-print-parent-dir t))
+  (setup "eshell-autojump")
+  (setup "esh-help"
+    (setup-esh-help-eldoc))
+  (setup "eshell-z")
+  (setup "eshell-fixed-prompt")
+  (setup "esh-autosuggest"))
 
 
 ;; startup
@@ -710,6 +882,11 @@
     (set-face-attribute 'default nil :family "IBM Plex Mono" :height 120))
    ((member "Noto Sans CJK JP" (font-family-list))
     (set-face-attribute '(han kana) nil :family "Noto Sans CJK JP Regular" :height 120))))
+
+(!when (eq system-type 'windows-nt)
+  (!cond
+   ((member "PlemolJP" (font-family-list))
+    (set-face-attribute 'default nil :family "PlemolJP" :height 120))))
 
 ;;; End here.
 (custom-set-variables
