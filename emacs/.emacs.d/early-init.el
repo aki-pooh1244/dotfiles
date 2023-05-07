@@ -26,7 +26,7 @@
 ;; (setq default-frame-alist
 ;;       '((width . 90)
 ;;         (height . 50)))
-(setq default-frame-alist　'((fullscreen . fullheight)))
+(setq default-frame-alist '((fullscreen . fullheight)))
 
 ;; End:
 ;;; early-init.el ends here
