@@ -76,7 +76,8 @@
         org-superstar
         ;; outline-mode
         zoutline
-        outline-magic
+        ;; outline-magic
+        outshine
         ;; eshell
         eshell-autojump
         ))
@@ -256,10 +257,12 @@
     'puni-disable-puni-mode))
 
 ;; outline
-(setup-hook 'outline-minor-mode-hook
-  (setup "outline-magic"
-    (setup-keybinds 'outline-minor-mode-map
-      "<C-tab>" 'outline-cycle)))
+(setup-include "outline"
+  (defvar outline-minor-mode-prefix "\M-#"))
+;; (setup-hook 'outline-minor-mode-hook
+;;   (setup "outline-magic"
+;;     (setup-keybinds 'outline-minor-mode-map
+;;       "<C-tab>" 'outline-cycle)))
 
 
 ;; SKK
@@ -389,7 +392,7 @@
    (dired-ls-F-marks-symlinks t))
 
  (setup-lazy '(dired-toggle) "dired-toggle"
-     :prepare (setup-keybinds
+     :prepare (setup-keybinds nil
                   "<f6>" 'dired-toggle)
      (setq dired-toggle-window-size 20)
      (setq dired-toggle-window-side 'left)
@@ -713,26 +716,45 @@
   (setq tex-compile-commands
         '(("latexmk -pvc %f" "%f" "%r.pdf")
           ("cluttex --engine=lualatex --biber --synctex=1 %f" "%f" "%r.pdf")
-          ("cluttex --engine=platex --bibtex --synctex=1 %f" "%f" "%r.pdf"))))
-(setup-after "tex-mode"
+          ("cluttex --engine=platex --bibtex --synctex=1 %f" "%f" "%r.pdf")))
   (setup-hook 'latex-mode-hook
-    (visual-line-mode 1)
-    (flyspell-mode 1)
-    (reftex-mode 1)
-    (outline-minor-mode 1)
+    (setq visual-line-mode 1)
+    (setq flyspell-mode 1)
+    (setq reftex-mode 1)
+    (setq outline-minor-mode 1)
     (setq-local outline-regexp "\\\\\\(sub\\)*section\\>"
                 outline-level (lambda () (- (outline-level) 7))))
   (setup-lazy '(magic-latex-buffer) "magic-latex-buffer"
     :prepare (setup-hook 'latex-mode-hook 'magic-latex-buffer)
     (setq magic-latex-enable-block-highlight t
           magic-latex-enable-pretty-symbols  t
-          magic-latex-enable-block-align     nil
-          magic-latex-enable-inline-image    nil
+          magic-latex-enable-block-align     t
+          magic-latex-enable-inline-image    t
           magic-latex-enable-minibuffer-echo t))
   (setup-lazy '(latex-extra-mode) "latex-extra"
     :prepare (setup-hook 'latex-mode-hook 'latex-extra-mode))
   (setup-lazy '(cdlatex-mode) "cdlatex"
-    :prepare (setup-hook 'latex-mod-hook 'turn-on-cdlatex)))
+    :prepare (setup-hook 'latex-mode-hook 'turn-on-cdlatex)))
+;; (setup-after "tex-mode"
+  ;; (setup-hook 'latex-mode-hook
+  ;;   (setq visual-line-mode 1)
+  ;;   (setq flyspell-mode 1)
+  ;;   (setq reftex-mode 1)
+  ;;   (setq outline-minor-mode 1)
+  ;;   (setq-local outline-regexp "\\\\\\(sub\\)*section\\>"
+  ;;               outline-level (lambda () (- (outline-level) 7))))
+  ;; (setup-lazy '(magic-latex-buffer) "magic-latex-buffer"
+  ;;   :prepare (setup-hook 'latex-mode-hook 'magic-latex-buffer)
+  ;;   (setq magic-latex-enable-block-highlight t
+  ;;         magic-latex-enable-pretty-symbols  t
+  ;;         magic-latex-enable-block-align     t
+  ;;         magic-latex-enable-inline-image    t
+  ;;         magic-latex-enable-minibuffer-echo t))
+  ;; (setup-lazy '(latex-extra-mode) "latex-extra"
+  ;;   :prepare (setup-hook 'latex-mode-hook 'latex-extra-mode))
+  ;; (setup-lazy '(cdlatex-mode) "cdlatex"
+  ;;   :prepare (setup-hook 'latex-mode-hook 'turn-on-cdlatex))
+;; )
 
 ;;;Python
 (setup-expecting "python-mode"
@@ -833,7 +855,10 @@
     (if (or (string= state "TODO")
             (string= state "WAITING"))
         "STARTED"))
-)
+
+  ;; org-babel
+  (setup "ox-latex")
+  )
 
 ;; Eshell
 (setup-lazy '(eshell-toggle) "eshell-toggle"
