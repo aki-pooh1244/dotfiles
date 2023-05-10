@@ -35,6 +35,7 @@
         back-button
         deadgrep
         avy
+        dumb-jump
         ;; ace-window
         beginend
         iedit
@@ -123,6 +124,7 @@
 ;; Language
 (el-get-bundle cdominik/cdlatex)
 (el-get-bundle Malabarba/latex-extra)
+(el-get-bundle hasu/emacs-ob-racket)
 
 ;; window
 (el-get-bundle cyrus-and/zoom)
@@ -309,7 +311,9 @@
   '(avy-resume avy-goto-char-timer) "avy"
   (avy-setup-default)
   :preapre (setup-keybinds nil
-             "M-'" 'avy-goto-char-timer))
+             "M-'" 'avy-goto-char-timer
+             "<f7>" 'avy-resume)
+  )
 
 (setup-lazy
   '(switch-window
@@ -374,6 +378,11 @@
 
 (setup-include "beginend"
   (beginend-global-mode))
+
+;; (setup-lazy '(dumb-jump-go dumb-jump-back) "dumb-jump"
+;;   :prepare (setup-keybinds nil
+;;              "<f11>" 'dumb-jump-go
+;;              "<f12>" 'dumb-jump-back))
 
 
 ;; filer
@@ -703,12 +712,12 @@
    '(zoom-ignore-predicates '((lambda () (> (count-lines (point-min) (point-max)) 20))))))
 
 (setup-include "rainbow-delimiters"
-  (global-rainbow-delimiters-mode t))
+  (setq global-rainbow-delimiters-mode t))
 
 
 ;; Language
 ;;;LaTeX
-(setup-expecting "tex-mode"
+(setup-expecting "latex-mode"
   (push '("\\.tex$" . latex-mode) auto-mode-alist)
   (setq latex-run-command "latexmk -pvc")
   (setq latex-run-command "cluttex --engine=lualatex --biber --synctex=1")
@@ -721,9 +730,10 @@
     (setq visual-line-mode 1)
     (setq flyspell-mode 1)
     (setq reftex-mode 1)
-    (setq outline-minor-mode 1)
-    (setq-local outline-regexp "\\\\\\(sub\\)*section\\>"
-                outline-level (lambda () (- (outline-level) 7))))
+    ;; (setq outline-minor-mode 1)
+    ;; (setq-local outline-regexp "\\\\\\(sub\\)*section\\>"
+    ;;             outline-level (lambda () (- (outline-level) 7)))
+    )
   (setup-lazy '(magic-latex-buffer) "magic-latex-buffer"
     :prepare (setup-hook 'latex-mode-hook 'magic-latex-buffer)
     (setq magic-latex-enable-block-highlight t
@@ -773,8 +783,7 @@
 ;; Racket lang
 (setup-expecting "racket-mode"
   (push '("\\.scrbl$" . scribble-mode) auto-mode-alist)
-  (push '("\\.rkt$" . racket-mode) auto-mode-alist))
-(setup-after "racket-mode"
+  (push '("\\.rkt$" . racket-mode) auto-mode-alist)
   (setup-lazy '(scribble-mode) "scribble")
   (setup-lazy '(racket-mode) "racket-mode"))
 
@@ -804,20 +813,21 @@
   ;; Capture
   (setq org-capture-templates
         '(("t" "TODO" entry (file+headline "~/Dropbox/org/todo.org" "Tasks")
-           "* TODO %?\n %i\n %a")
+           "* TODO %?\n %u\n %i\n")
           ("j" "Journal" entry (file+datetree "~/Dropbox/org/journal.org")
-           "* %\nEntered on %U\n %i\n %a")
-          ("s" "Someday" entry (file+datetree "~/Dropbox/org/someday.org")
-           "* %\nEntered on %U\n %i\n %a")))
+           "* %\nEntered on %U\n %i\n")
+          ("s" "snippets" entry (file "~/Dropbox/org/snippets.org")
+           "* %?\n %U\n %a")))
   
   ;; TODO
   (setq org-todo-keywords
-        '((sequence "TODO(t)" "STARTED(s)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+        '((sequence "TODO(t)" "STARTED(s)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)" "|" "SOMEDAY(p)")))
   (setq org-todo-keyword-faces
         (quote (("TODO" :foreground "red" :weight bold)
                 ("STARTED" :foreground "cyan" :weight bold)
                 ("DONE" :foreground "green" :weight bold)
-                ("CANCELLED" :foreground "forest green" :weight bold))))
+                ("CANCELLED" :foreground "forest green" :weight bold)
+                ("SOMEDAY" :foreground "blue" :weight bold))))
 
   (setq org-enforce-todo-dependencies t
         org-log-done-with-time t
@@ -830,20 +840,20 @@
   (setq org-archive-location "archive.org::")
 
   ;; Agenda
-  (setq org-agenda-files (concat org-directory "todo.org" "journal.org" "someday.org"))
+  (setq org-agenda-files (list org-directory))
   (setq org-agenda-span 'day
         org-agenda-time-leading-zero t)
 
   ;; Third-party
   (setup "org-superstar"
-    (org-superstar-mode 1))
+    (setq org-superstar-mode 1))
 
   ;; def function
   (defun show-org-buffer (file)
     "Show an org-file on the current buffer"
     (interactive)
     (if (get-buffer file)
-        (let ((biffer (get-buffer file)))
+        (let ((buffer (get-buffer file)))
           (switch-to-buffer buffer)
           (message "%s" file))
       (find-file (concat "~/Dropbox/org/" file))))
@@ -857,6 +867,14 @@
         "STARTED"))
 
   ;; org-babel
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (racket . t)
+     (python . t)
+     (dot . t)
+     (latex . t)
+     ))
   (setup "ox-latex")
   )
 
