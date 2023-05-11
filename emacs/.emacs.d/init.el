@@ -77,8 +77,6 @@
         org-superstar
         ;; outline-mode
         zoutline
-        ;; outline-magic
-        outshine
         ;; eshell
         eshell-autojump
         ))
@@ -99,6 +97,7 @@
   :name noccur)
 
 ;; outline
+
 
 ;; eshell
 (el-get-bundle 4DA/eshell-toggle)
@@ -259,12 +258,10 @@
     'puni-disable-puni-mode))
 
 ;; outline
-(setup-include "outline"
-  (defvar outline-minor-mode-prefix "\M-#"))
-;; (setup-hook 'outline-minor-mode-hook
-;;   (setup "outline-magic"
-;;     (setup-keybinds 'outline-minor-mode-map
-;;       "<C-tab>" 'outline-cycle)))
+(setup-hook 'outline-minor-mode-hook
+  (setup "outline-magic"
+    (setup-keybinds nil
+      "<C-tab>" 'outline-cycle)))
 
 
 ;; SKK
@@ -309,10 +306,10 @@
 
 (setup-lazy
   '(avy-resume avy-goto-char-timer) "avy"
-  (avy-setup-default)
   :preapre (setup-keybinds nil
              "M-'" 'avy-goto-char-timer
              "<f7>" 'avy-resume)
+  (avy-setup-default)
   )
 
 (setup-lazy
@@ -730,21 +727,22 @@
     (setq visual-line-mode 1)
     (setq flyspell-mode 1)
     (setq reftex-mode 1)
-    ;; (setq outline-minor-mode 1)
-    ;; (setq-local outline-regexp "\\\\\\(sub\\)*section\\>"
-    ;;             outline-level (lambda () (- (outline-level) 7)))
+    (outline-minor-mode)
+    (setq-local outline-regexp "\\\\\\(sub\\)*section\\>"
+                outline-level (lambda () (- (outline-level) 7)))
     )
-  (setup-lazy '(magic-latex-buffer) "magic-latex-buffer"
+  )
+(setup-lazy '(magic-latex-buffer) "magic-latex-buffer"
     :prepare (setup-hook 'latex-mode-hook 'magic-latex-buffer)
     (setq magic-latex-enable-block-highlight t
           magic-latex-enable-pretty-symbols  t
           magic-latex-enable-block-align     t
           magic-latex-enable-inline-image    t
           magic-latex-enable-minibuffer-echo t))
-  (setup-lazy '(latex-extra-mode) "latex-extra"
+(setup-lazy '(latex-extra-mode) "latex-extra"
     :prepare (setup-hook 'latex-mode-hook 'latex-extra-mode))
-  (setup-lazy '(cdlatex-mode) "cdlatex"
-    :prepare (setup-hook 'latex-mode-hook 'turn-on-cdlatex)))
+(setup-lazy '(cdlatex-mode) "cdlatex"
+    :prepare (setup-hook 'latex-mode-hook 'turn-on-cdlatex))
 ;; (setup-after "tex-mode"
   ;; (setup-hook 'latex-mode-hook
   ;;   (setq visual-line-mode 1)
@@ -831,6 +829,7 @@
 
   (setq org-enforce-todo-dependencies t
         org-log-done-with-time t
+        org-log-done t
         org-clock-out-when-done t
         org-use-fast-todo-selection t
         org-clock-out-remove-zero-time-clocks t)
