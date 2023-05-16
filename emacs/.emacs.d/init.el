@@ -39,6 +39,8 @@
         ;; ace-window
         beginend
         iedit
+        visual-regexp
+        visual-regexp-steroids
         ;; Complition
         company-mode
         ;; dired
@@ -77,6 +79,7 @@
         org-superstar
         ;; outline-mode
         zoutline
+        outline-magic
         ;; eshell
         eshell-autojump
         ))
@@ -234,9 +237,9 @@
 
 (setup-include "viewer"
   (viewer-stay-in-setup)
-  ;; (setq viewer-modeline-color-unwritable "tomato"
-  ;;       viewer-modeline-color-view "orange")
-  ;; (viewer-change-modeline-color-setup)
+  (setq viewer-modeline-color-unwritable "tomato"
+        viewer-modeline-color-view "orange")
+  (viewer-change-modeline-color-setup)
   (viewer-aggressive-setup t))
 
 (setup-lazy
@@ -259,9 +262,10 @@
 
 ;; outline
 (setup-hook 'outline-minor-mode-hook
-  (setup "outline-magic"
+  )
+(setup "outline-magic"
     (setup-keybinds nil
-      "<C-tab>" 'outline-cycle)))
+      "<C-tab>" 'outline-cycle))
 
 
 ;; SKK
@@ -304,11 +308,10 @@
              "M-y" 'consult-yank-pop))
 
 
-(setup-lazy
-  '(avy-resume avy-goto-char-timer) "avy"
-  :preapre (setup-keybinds nil
-             "M-'" 'avy-goto-char-timer
-             "<f7>" 'avy-resume)
+(setup-include "avy"
+  (setup-keybinds nil
+    "M-'" 'avy-goto-char-timer
+    "<f7>" 'avy-resume)
   (avy-setup-default)
   )
 
@@ -380,6 +383,13 @@
 ;;   :prepare (setup-keybinds nil
 ;;              "<f11>" 'dumb-jump-go
 ;;              "<f12>" 'dumb-jump-back))
+
+(setup-include "visual-regexp"
+  (setup-keybinds nil
+    "M-%" 'vr/query-replace
+    "C-M-r" 'vr/isearch-backward
+    "C-M-s" 'vr/isearch-forward))
+;; (setup-include "visual-regexp-steroids")
 
 
 ;; filer
@@ -723,7 +733,9 @@
         '(("latexmk -pvc %f" "%f" "%r.pdf")
           ("cluttex --engine=lualatex --biber --synctex=1 %f" "%f" "%r.pdf")
           ("cluttex --engine=platex --bibtex --synctex=1 %f" "%f" "%r.pdf")))
-  (setup-hook 'latex-mode-hook
+  
+  )
+(setup-hook 'latex-mode-hook
     (setq visual-line-mode 1)
     (setq flyspell-mode 1)
     (setq reftex-mode 1)
@@ -731,7 +743,6 @@
     (setq-local outline-regexp "\\\\\\(sub\\)*section\\>"
                 outline-level (lambda () (- (outline-level) 7)))
     )
-  )
 (setup-lazy '(magic-latex-buffer) "magic-latex-buffer"
     :prepare (setup-hook 'latex-mode-hook 'magic-latex-buffer)
     (setq magic-latex-enable-block-highlight t
@@ -810,10 +821,10 @@
   
   ;; Capture
   (setq org-capture-templates
-        '(("t" "TODO" entry (file+headline "~/Dropbox/org/todo.org" "Tasks")
+        '(("t" "TODO" entry (file "~/Dropbox/org/todo.org")
            "* TODO %?\n %u\n %i\n")
           ("j" "Journal" entry (file+datetree "~/Dropbox/org/journal.org")
-           "* %\nEntered on %U\n %i\n")
+           "* %?\nEntered on %U\n %i\n")
           ("s" "snippets" entry (file "~/Dropbox/org/snippets.org")
            "* %?\n %U\n %a")))
   
@@ -845,7 +856,7 @@
 
   ;; Third-party
   (setup "org-superstar"
-    (setq org-superstar-mode 1))
+    (setq org-superstar-mode t))
 
   ;; def function
   (defun show-org-buffer (file)
