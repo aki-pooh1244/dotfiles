@@ -23,6 +23,7 @@
       '(;; packages
         ;; config
         setup
+        exec-path-from-shell
         ;; Editing
         comment-dwim-2
         page-break-lines
@@ -41,6 +42,7 @@
         iedit
         visual-regexp
         visual-regexp-steroids
+        migemo
         ;; Complition
         company-mode
         ;; dired
@@ -391,6 +393,16 @@
     "C-M-s" 'vr/isearch-forward))
 ;; (setup-include "visual-regexp-steroids")
 
+;; (setup-include "migemo"
+;;   (setq migemo-command "cmigemo"
+;;         migemo-options '("-q" "--emacs" "-i" "\a")
+;;         migemo-user-dictionary nil
+;;         migemo-regex-dictionary nil
+;;         migemo-coding-system 'utf-8-unix)
+;;   (setq migemo-dictinary
+;;         (cond ((eq system-type 'windows-nt) "dict/utf-8/migemo-dict")
+;;               ((eq system-type 'gnu/linux) "/usr/share/cmigemo/utf-8/migemo-dict"))))
+
 
 ;; filer
 
@@ -679,7 +691,8 @@
 
 (column-number-mode t)
 
-(global-linum-mode t)
+(global-display-line-numbers-mode t)
+;; (global-linum-mode t)
 
 (size-indication-mode t)
 
