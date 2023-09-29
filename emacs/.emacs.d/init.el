@@ -566,7 +566,8 @@
 
 (ffap-bindings)
 
-(defalias 'yes-or-no-p 'y-or-n-p)
+;; (defalias 'yes-or-no-p 'y-or-n-p)
+(setq use-short-answers t)
 (define-key query-replace-map (kbd "SPC") nil)
 
 (prefer-coding-system 'utf-8-unix)
