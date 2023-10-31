@@ -241,7 +241,7 @@
   (viewer-stay-in-setup)
   (setq viewer-modeline-color-unwritable "tomato"
         viewer-modeline-color-view "orange")
-  (viewer-change-modeline-color-setup)
+  ;; (viewer-change-modeline-color-setup)
   (viewer-aggressive-setup t))
 
 (setup-lazy
@@ -738,36 +738,56 @@
 
 ;; Language
 ;;;LaTeX
-(setup-expecting "latex-mode"
-  (push '("\\.tex$" . latex-mode) auto-mode-alist)
-  (setq latex-run-command "latexmk -pvc")
-  (setq latex-run-command "cluttex --engine=lualatex --biber --synctex=1")
-  (setq latex-run-command "cluttex --engine=platex --bibtex --synctex=1")
-  (setq tex-compile-commands
-        '(("latexmk -pvc %f" "%f" "%r.pdf")
-          ("cluttex --engine=lualatex --biber --synctex=1 %f" "%f" "%r.pdf")
-          ("cluttex --engine=platex --bibtex --synctex=1 %f" "%f" "%r.pdf")))
-  
-  )
-(setup-hook 'latex-mode-hook
-    (setq visual-line-mode 1)
-    (setq flyspell-mode 1)
-    (setq reftex-mode 1)
-    (outline-minor-mode)
+(setup-expecting "tex-mode"
+  (push '("\\.tex$" . latex-mode) auto-mode-alist))
+
+(setup-after "tex-mode"
+  (push "Verbatim" tex-verbatim-environments)
+  (push "BVerbatim" tex-verbatim-environments)
+  (push "lstlisting" tex-verbatim-environments)
+  (setup-hook 'LaTeX-mode-hook
+    (visual-line-mode 1)
+    (flyspell-mode 1)
+    (reftex-mode 1)
+    (bibtex-mode 1)
+    (outline-minor-mode 1)
     (setq-local outline-regexp "\\\\\\(sub\\)*section\\>"
-                outline-level (lambda () (- (outline-level) 7)))
-    )
-(setup-lazy '(magic-latex-buffer) "magic-latex-buffer"
+                outline-level  (lambda () (- (outline-level) 7))))
+  (setup-lazy '(magic-latex-buffer) "magic-latex-buffer"
     :prepare (setup-hook 'latex-mode-hook 'magic-latex-buffer)
-    (setq magic-latex-enable-block-highlight t
-          magic-latex-enable-pretty-symbols  t
-          magic-latex-enable-block-align     t
-          magic-latex-enable-inline-image    t
-          magic-latex-enable-minibuffer-echo t))
-(setup-lazy '(latex-extra-mode) "latex-extra"
-    :prepare (setup-hook 'latex-mode-hook 'latex-extra-mode))
-(setup-lazy '(cdlatex-mode) "cdlatex"
-    :prepare (setup-hook 'latex-mode-hook 'turn-on-cdlatex))
+    (setq magic-latex-enable-inline-image nil))
+  (setup-lazy '(cdlatex-mode) "cdlatex"
+    :prepare (setup-hook 'latex-mode-hook 'turn-on-cdlatex)))
+;; (setup-expecting "latex-mode"
+;;   (push '("\\.tex$" . latex-mode) auto-mode-alist)
+;;   (setq latex-run-command "latexmk -pvc")
+;;   (setq latex-run-command "cluttex --engine=lualatex --biber --synctex=1")
+;;   (setq latex-run-command "cluttex --engine=platex --bibtex --synctex=1")
+;;   (setq tex-compile-commands
+;;         '(("latexmk -pvc %f" "%f" "%r.pdf")
+;;           ("cluttex --engine=lualatex --biber --synctex=1 %f" "%f" "%r.pdf")
+;;           ("cluttex --engine=platex --bibtex --synctex=1 %f" "%f" "%r.pdf")))
+  
+;;   )
+;; (setup-hook 'latex-mode-hook
+;;     (setq visual-line-mode 1)
+;;     (setq flyspell-mode 1)
+;;     (setq reftex-mode 1)
+;;     (outline-minor-mode)
+;;     (setq-local outline-regexp "\\\\\\(sub\\)*section\\>"
+;;                 outline-level (lambda () (- (outline-level) 7)))
+;;     )
+;; (setup-lazy '(magic-latex-buffer) "magic-latex-buffer"
+;;     :prepare (setup-hook 'latex-mode-hook 'magic-latex-buffer)
+;;     (setq magic-latex-enable-block-highlight t
+;;           magic-latex-enable-pretty-symbols  t
+;;           magic-latex-enable-block-align     t
+;;           magic-latex-enable-inline-image    t
+;;           magic-latex-enable-minibuffer-echo t))
+;; (setup-lazy '(latex-extra-mode) "latex-extra"
+;;     :prepare (setup-hook 'latex-mode-hook 'latex-extra-mode))
+;; (setup-lazy '(cdlatex-mode) "cdlatex"
+;;     :prepare (setup-hook 'latex-mode-hook 'turn-on-cdlatex))
 ;; (setup-after "tex-mode"
   ;; (setup-hook 'latex-mode-hook
   ;;   (setq visual-line-mode 1)
@@ -953,7 +973,7 @@
 (!when (eq system-type 'windows-nt)
   (!cond
    ((member "PlemolJP" (font-family-list))
-    (set-face-attribute 'default nil :family "PlemolJP" :height 120))))
+    (set-face-attribute 'default nil :family "PlemolJP" :height 130))))
 
 ;;; End here.
 (custom-set-variables
