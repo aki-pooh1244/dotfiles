@@ -236,12 +236,12 @@
   :prepare (setup-keybinds nil
              "M-z" 'zop-up-to-char))
 
-(setup-include "viewer"
-  (viewer-stay-in-setup)
-  (setq viewer-modeline-color-unwritable "tomato"
-        viewer-modeline-color-view "orange")
-  ;; (viewer-change-modeline-color-setup)
-  (viewer-aggressive-setup t))
+;; (setup-include "viewer"
+;;   (viewer-stay-in-setup)
+;;   (setq viewer-modeline-color-unwritable "tomato"
+;;         viewer-modeline-color-view "orange")
+;;   ;; (viewer-change-modeline-color-setup)
+;;   (viewer-aggressive-setup t))
 
 (setup-lazy
   '(grugru) "grugru"
@@ -644,7 +644,7 @@
         key-chord-safety-interval-forward  0.25)
   (key-chord-mode 1))
 
-(setup "meow"
+(setup-include "meow"
   (defun meow-setup ()
     (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
     (meow-motion-overwrite-define-key
