@@ -260,11 +260,28 @@
     'puni-disable-puni-mode))
 
 ;; + | outline
-(setup-hook 'outline-minor-mode-hook
-  )
-(setup "outline-magic"
-    (setup-keybinds nil
-      "<C-tab>" 'outline-cycle))
+(setup-lazy '(outline-minor-mode) "outline")
+(setup-expecting "outline"
+  (defvar my-outline-minimum-heading-len 10000)
+  (setup-hook 'find-file-hook
+    (when (and buffer-file-name (string-match "init\\.el" buffer-file-name))
+      (outline-minor-mode 1)
+      (setq-local outline-regexp (concat "^\\(\s*" (regexp-quote comment-start)
+                                         "[" (regexp-quote comment-start) "]*\\)"
+                                         "\s?\\(\s*\\++\\)\s")
+                  outline-level  (lambda ()
+                                   (setq-local my-outline-minimum-heading-len
+                                               (min my-outline-minimum-heading-len
+                                                    (- (match-end 0) (match-beginning 0))))
+                                   (- (match-end 0) (match-beginning 0)
+                                      my-outline-minimum-heading-len)))))
+  (setup-lazy '(outline-cycle) "outline-magic"
+    :prepare (setup-after "outline"
+               (setup-keybinds nil "<C-tab>" 'outline-cycle))))
+
+;; (setup "outline-magic"
+;;     (setup-keybinds nil
+;;       "<C-tab>" 'outline-cycle))
 
 
 ;; + | SKK
