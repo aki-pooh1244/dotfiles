@@ -1,9 +1,9 @@
 ;;; init.el -- Emacs configuration file
 
-;;; Code:
+;;  + Code :
 
 
-;; Package manager
+;; + Package manager :
 ;; Load-Path
 (when load-file-name
   (setq user-emacs-directory (file-name-directory load-file-name)))
@@ -18,7 +18,7 @@
     (eval-print-last-sexp)))
 
 
-;; package list
+;; + | package list
 (setq my:el-get-packages
       '(;; packages
         ;; config
@@ -88,7 +88,7 @@
 
 (el-get 'sync my:el-get-packages)
 
-;; el-get via github
+;; + | el-get via github
 ;; Search/Replace/Cursor
 (el-get-bundle minad/vertico)
 (el-get-bundle minad/consult)
@@ -100,9 +100,6 @@
 (el-get-bundle fourier/loccur)
 (el-get-bundle NIcolasPetton/noccur.el
   :name noccur)
-
-;; outline
-
 
 ;; eshell
 (el-get-bundle 4DA/eshell-toggle)
@@ -142,7 +139,7 @@
 (el-get-bundle elpa:compat)
   
 
-;; zk-phi/setup.el
+;; + | zk-phi/setup.el
 (eval-when-compile
   (require 'setup)
   ;; (require 'cl-lib)
@@ -177,7 +174,7 @@
 ;; 			  'append))
 
 
-;; Directory
+;; + Directory :
 
 (eval-and-compile
   (defconst my-data-directory "~/.emacs.d/data/"
@@ -195,8 +192,8 @@
   "Directory to save backup files.")
 
 
-;; Editing
-
+;; + Editing :
+;; + | misc
 (setq show-paren-style 'parethesis)
 (show-paren-mode +1)
 (electric-pair-mode +1)
@@ -262,7 +259,7 @@
   (setup-hook 'term-mode-hook
     'puni-disable-puni-mode))
 
-;; outline
+;; + | outline
 (setup-hook 'outline-minor-mode-hook
   )
 (setup "outline-magic"
@@ -270,7 +267,7 @@
       "<C-tab>" 'outline-cycle))
 
 
-;; SKK
+;; + | SKK
 
 ;; (!-
 ;;  (setup-lazy
@@ -279,7 +276,7 @@
 ;;      "C-x j" 'skk-mode)))
 
 
-;; Search/Replace/Cursor
+;; + | Search/Replace/Cursor
 
 (!-
  (setup "vertico"
@@ -404,8 +401,8 @@
 ;;               ((eq system-type 'gnu/linux) "/usr/share/cmigemo/utf-8/migemo-dict"))))
 
 
-;; filer
-
+;; + Dired :
+;; + | dired-main
 (!-
  (setup-include "dired"
    (setup-keybinds dired-mode-map
@@ -429,7 +426,7 @@
          (visual-line-mode 1)
          (setq-local visual-line-fringe-indicators '(nil right-curly-arrow))
          (setq-local word-wrap nil))))
-
+ ;; + | 3rd-party
  (setup-after "dired"
    (setup-lazy '(wdired-change-to-wdired-mode) "wdired"
      :prepare (setup-keybinds dired-mode-map
@@ -532,7 +529,7 @@
    ))
 
 
-;; Completion
+;; + Completion :
 
 (!-
  (setup "hippie-exp"
@@ -562,7 +559,7 @@
    (global-company-mode)))
 
 
-;; Misc
+;; + Misc :
 
 (ffap-bindings)
 
@@ -594,7 +591,7 @@
                            orig-fg))))
 
 
-;; Save/Backup/Undo
+;; + Save/Backup/Undo :
 
 (setup "saveplace"
   (save-place-mode t))
@@ -608,7 +605,7 @@
   (undohist-initialize))
 
 
-;; Keybinds
+;; + Keybinds :
 
 (define-key global-map (kbd "C-x |") 'split-window-horizontally)
 (define-key global-map (kbd "C-x -") 'split-window-vertically)
@@ -620,7 +617,7 @@
 (setup
   "which-key"
   (which-key-mode))
-
+;; + | key-chord
 (setup "key-chord"
   (setq key-chord-two-keys-delay 0.15
         key-chord-one-key-delay 0.15
@@ -629,7 +626,7 @@
   (key-chord-mode 1))
 
 
-;; GUI
+;; + GUI :
 
 (!when (eq window-system 'ns)
   (push '(ns-transparent-titlebar . t) default-frame-alist))
@@ -657,6 +654,8 @@
 
 (setup "diff-hl"
   (global-diff-hl-mode))
+
+;; + | modeline
 
 ;; (setup "moody"
 ;;   (setq x-underline-at-descent-line t)
@@ -695,6 +694,7 @@
 (global-display-line-numbers-mode t)
 ;; (global-linum-mode t)
 
+;; + | others
 (size-indication-mode t)
 
 (setup-lazy '(indent-guide-mode) "indent-guide"
@@ -716,6 +716,7 @@
 ;; (setup-include "hiwin"
 ;;   (hiwin-activate))
 
+;; + | flame
 (setup-include "elwm")
 
 (setup-lazy '(zoom-window-zoom) "zoom-window"
@@ -736,8 +737,8 @@
   (setq global-rainbow-delimiters-mode t))
 
 
-;; Language
-;;;LaTeX
+;; + Language :
+;; + | LaTeX
 (setup-expecting "tex-mode"
   (push '("\\.tex$" . latex-mode) auto-mode-alist))
 
@@ -745,7 +746,7 @@
   (push "Verbatim" tex-verbatim-environments)
   (push "BVerbatim" tex-verbatim-environments)
   (push "lstlisting" tex-verbatim-environments)
-  (setup-hook 'LaTeX-mode-hook
+  (setup-hook 'latex-mode-hook
     (visual-line-mode 1)
     (flyspell-mode 1)
     (reftex-mode 1)
@@ -757,7 +758,9 @@
     :prepare (setup-hook 'latex-mode-hook 'magic-latex-buffer)
     (setq magic-latex-enable-inline-image nil))
   (setup-lazy '(cdlatex-mode) "cdlatex"
-    :prepare (setup-hook 'latex-mode-hook 'turn-on-cdlatex)))
+    :prepare (setup-hook 'latex-mode-hook 'turn-on-cdlatex))
+  (setup-lazy '(reftex-mode) "reftex"
+    :prepare (setup-hook 'latex-mode-hook 'turn-on-reftex)))
 ;; (setup-expecting "latex-mode"
 ;;   (push '("\\.tex$" . latex-mode) auto-mode-alist)
 ;;   (setq latex-run-command "latexmk -pvc")
@@ -809,7 +812,7 @@
   ;;   :prepare (setup-hook 'latex-mode-hook 'turn-on-cdlatex))
 ;; )
 
-;;;Python
+;; + | Python
 (setup-expecting "python-mode"
   (push '("\\.py$" . anaconda-mode) auto-mode-alist))
 (setup-after "python-mode"
@@ -818,12 +821,12 @@
       (anaconda-eldoc-mode)
       (setup-lazy '(pipenv-mode) "pipenv"))))
 
-;; emacs-lisp
+;; + | emacs-lisp
 (setup-expecting "emacs-lisp-mode"
   (setup-hook '(emacs-lisp-mode-hook ielm-mode-hook)
     (elisp-slime-nav-mode)))
 
-;; Racket lang
+;; + | Racket-lang
 (setup-expecting "racket-mode"
   (push '("\\.scrbl$" . scribble-mode) auto-mode-alist)
   (push '("\\.rkt$" . racket-mode) auto-mode-alist)
@@ -831,12 +834,13 @@
   (setup-lazy '(racket-mode) "racket-mode"))
 
 
-;; Tools
+;; + Tools :
 (setup-include "flycheck"
   (global-flycheck-mode))
 
 
-;; org-mode
+;; + org-mode :
+;; + | org
 (setup "org"
   (require 'org-loaddefs)
   (setup-keybinds nil
@@ -853,7 +857,7 @@
         org-src-fontify-natively t
         org-src-tab-acts-natively t)
   
-  ;; Capture
+  ;;  + Capture
   (setq org-capture-templates
         '(("t" "TODO" entry (file "~/Dropbox/org/todo.org")
            "* TODO %?\n %u\n %i\n")
@@ -862,7 +866,7 @@
           ("s" "snippets" entry (file "~/Dropbox/org/snippets.org")
            "* %?\n %U\n %a")))
   
-  ;; TODO
+  ;;  + TODO
   (setq org-todo-keywords
         '((sequence "TODO(t)" "STARTED(s)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)" "|" "SOMEDAY(p)")))
   (setq org-todo-keyword-faces
@@ -883,16 +887,16 @@
 
   (setq org-archive-location "archive.org::")
 
-  ;; Agenda
+  ;;  + Agenda
   (setq org-agenda-files (list org-directory))
   (setq org-agenda-span 'day
         org-agenda-time-leading-zero t)
 
-  ;; Third-party
+  ;;  + Third-party
   (setup "org-superstar"
     (setq org-superstar-mode t))
 
-  ;; def function
+  ;;  + def function
   (defun show-org-buffer (file)
     "Show an org-file on the current buffer"
     (interactive)
@@ -910,7 +914,7 @@
             (string= state "WAITING"))
         "STARTED"))
 
-  ;; org-babel
+  ;;  + org-babel
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
@@ -922,7 +926,7 @@
   (setup "ox-latex")
   )
 
-;; Eshell
+;; + Eshell :
 (setup-lazy '(eshell-toggle) "eshell-toggle"
   :prepare (setup-keybinds nil
              "M-t" 'eshell-toggle)
@@ -945,12 +949,12 @@
   (setup "esh-autosuggest"))
 
 
-;; startup
+;; + startup :
 (setq inhibit-startup-screen t
       initial-scratch-message "")
 
 
-;; Color
+;; + Color :
 ;; (setup-include "tangotango-theme"
 ;;   (load-theme 'tangotango t))
 (setup-include "zenburn-theme"
@@ -958,7 +962,7 @@
 
 
 
-;; Font
+;; + Font :
 (!when (eq system-type 'darwin)
   (!cond
    ((member "IBM Plex Mono" (font-family-list))
