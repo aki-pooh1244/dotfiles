@@ -134,6 +134,7 @@
 
 ;; mode-line
 (el-get-bundle tarsius/minions)
+(el-get-bundle tarsius/moody)
 (el-get-bundle hinrik/total-lines)
 
 ;; misc
@@ -763,13 +764,7 @@
 (setup "diff-hl"
   (global-diff-hl-mode))
 
-;; + | modeline
-
-;; (setup "moody"
-;;   (setq x-underline-at-descent-line t)
-;;   (moody-replace-mode-line-buffer-identification)
-;;   (moody-replace-vc-mode)
-;;   (moody-replace-eldoc-minibuffer-message-function))
+;; + | mode-line
 
 (setup-include "minions"
   (minions-mode t))
@@ -781,21 +776,27 @@
                         '((:eval (format " (%d)" (- total-lines 1))))))
   )
 
-(setup-include "smart-mode-line"
-  (setq sml/theme 'respectful)
-  (setq sml/no-confirm-load-theme t)
-  (setq sml/modified-char "*")
-  ;; (setq sml/mode-width 20)
-  ;; (setq sml/extra-filler -10)
-  (setq sml/shorten-directory t)
-  (add-to-list 'sml/replacer-regexp-list
-               '("^~/git_projects/aki-pooh1244/dotfiles/emacs/.emacs.d" ":ED:")
-               t)
-  (add-to-list 'sml/replacer-regexp-list
-               '("^~/git_projects/aki-pooh1244/" ":MyGit:") t)
-  (add-to-list 'sml/replacer-regexp-list
-               '("^~/git_projects/" ":Git:") t)
-  (sml/setup))
+(setup-include "moody"
+  (setq x-underline-at-descent-line t)
+  (moody-replace-mode-line-buffer-identification)
+  (moody-replace-vc-mode)
+  (moody-replace-eldoc-minibuffer-message-function))
+
+;; (setup-include "smart-mode-line"
+;;   (setq sml/theme 'respectful)
+;;   (setq sml/no-confirm-load-theme t)
+;;   (setq sml/modified-char "*")
+;;   ;; (setq sml/mode-width 20)
+;;   ;; (setq sml/extra-filler -10)
+;;   (setq sml/shorten-directory t)
+;;   (add-to-list 'sml/replacer-regexp-list
+;;                '("^~/git_projects/aki-pooh1244/dotfiles/emacs/.emacs.d" ":ED:")
+;;                t)
+;;   (add-to-list 'sml/replacer-regexp-list
+;;                '("^~/git_projects/aki-pooh1244/" ":MyGit:") t)
+;;   (add-to-list 'sml/replacer-regexp-list
+;;                '("^~/git_projects/" ":Git:") t)
+;;   (sml/setup))
 
 (column-number-mode t)
 
