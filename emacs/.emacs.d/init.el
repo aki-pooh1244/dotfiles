@@ -732,6 +732,7 @@
      '("'" . repeat)
      '("<escape>" . ignore)))
   (meow-setup)
+  (meow-setup-indicator)
   (meow-global-mode 1))
 
 
