@@ -101,6 +101,10 @@
 (el-get-bundle NIcolasPetton/noccur.el
   :name noccur)
 
+(el-get-bundle minad/corfu)
+(el-get-bundle minad/cape)
+(el-get-bundle minad/affe)
+
 ;; eshell
 (el-get-bundle 4DA/eshell-toggle)
 (el-get-bundle akreisher/eshell-syntax-highlighting)
@@ -568,15 +572,25 @@
           try-complete-lisp-symbol
           yas-hippie-try-expand))))
 
-(!-
- (setup "company"
-   (setq company-idle-delay 0
-         company-require-match 'never
-         company-dabbrev-downcase nil
-         company-minimum-prefix-length 2
-         company-selection-wrap-around t
-         company-tooltip-align-annotations t)
-   (global-company-mode)))
+;; (!-
+;;  ;; (setup "company"
+;;  ;;   (setq company-idle-delay 0
+;;  ;;         company-require-match 'never
+;;  ;;         company-dabbrev-downcase nil
+;;  ;;         company-minimum-prefix-length 2
+;;  ;;         company-selection-wrap-around t
+;;  ;;         company-tooltip-align-annotations t)
+;;  ;;   (global-company-mode))
+;;  (setup "corfu"
+;;    (setq corfu-cycle t
+;;          corfu-auto t
+;;          corfu-quit-no-match 'separator
+;;          corfu-quit-at-boundary nil
+;;          corfu-scroll-margin 2)
+;;    (global-corfu-mode))
+;;  (setup "cape"
+;;    )
+;;  )
 
 
 ;; + Misc :
