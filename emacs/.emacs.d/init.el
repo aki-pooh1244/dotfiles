@@ -90,7 +90,7 @@
 
 ;; + | el-get via github
 ;; Search/Replace/Cursor
-(el-get-bundle minad/vertico)
+;; (el-get-bundle minad/vertico)
 (el-get-bundle minad/consult)
 (el-get-bundle minad/marginalia)
 (el-get-bundle oantolin/orderless)
@@ -101,9 +101,9 @@
 (el-get-bundle NIcolasPetton/noccur.el
   :name noccur)
 
-(el-get-bundle minad/corfu)
-(el-get-bundle minad/cape)
-(el-get-bundle minad/affe)
+;; (el-get-bundle minad/corfu)
+;; (el-get-bundle minad/cape)
+;; (el-get-bundle minad/affe)
 
 ;; eshell
 (el-get-bundle 4DA/eshell-toggle)
@@ -302,20 +302,26 @@
 
 ;; + | Search/Replace/Cursor
 
+(fido-vertical-mode 1)
 (!-
- (setup "vertico"
-   (vertico-mode))
+ ;; (setup "vertico"
+ ;;   (vertico-mode))
  (setup "orderless"
   (setq completion-styles '(orderless)
         completion-category-defaults nil
-        completion-category-overrides '((file (styles partial-completion))))))
-
-(setup-after "vertico"
-  (setup "marginalia"
+        completion-category-overrides '((file (styles partial-completion)))))
+ (setup "marginalia"
     :prepare (setup-keybinds minibuffer-local-map
                "M-A" 'marginalia-cycle)
     ;; (setq marginalia-align-offset 25)
     (marginalia-mode +1)))
+
+;; (setup-after "vertico"
+;;   (setup "marginalia"
+;;     :prepare (setup-keybinds minibuffer-local-map
+;;                "M-A" 'marginalia-cycle)
+;;     ;; (setq marginalia-align-offset 25)
+;;     (marginalia-mode +1)))
 
 (setup-lazy
   '(consult-line consult-buffer consult-multi-occur) "consult"
