@@ -593,7 +593,14 @@
 ;;          corfu-quit-no-match 'separator
 ;;          corfu-quit-at-boundary nil
 ;;          corfu-scroll-margin 2)
-;;    (global-corfu-mode))
+;;    (global-corfu-mode)
+;;    (defun corfu-enable-always-in-minibuffer ()
+;;      "Enable Corfu in the minibuffer if Vertico/Mct are not active."
+;;      (unless (or (bound-and-true-p mct--active)
+;;                  (bound-and-true-p vertico--input))
+;;        (corfu-mode 1)))
+;;    (setup-hook 'minibuffer-setup-hook
+;;      #'corfu-enable-always-in-minibuffer 1))
 ;;  (setup "cape"
 ;;    )
 ;;  )
