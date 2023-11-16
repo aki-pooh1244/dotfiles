@@ -224,12 +224,12 @@
 (setup-lazy
   '(comment-dwim-2) "comment-dwim-2"
   :prepare (setup-keybinds nil
-	         "M-;" 'comment-dwim-2))
+	         "C-;" 'comment-dwim-2))
 
 (setup-lazy
   '(iedit-mode) "iedit"
   :prepare (setup-keybinds nil
-	         "C-;" 'iedit-mode))
+	         "M-;" 'iedit-mode))
 
 (!-
  (setup-include "page-ext")
