@@ -302,7 +302,7 @@
 
 ;; + | Search/Replace/Cursor
 
-(fido-vertical-mode 1)
+(fido-vertical-mode)
 (!-
  ;; (setup "vertico"
  ;;   (vertico-mode))
