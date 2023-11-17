@@ -303,14 +303,21 @@
 
 ;; + | Search/Replace/Cursor
 
-(fido-vertical-mode)
+(fido-vertical-mode 1)
+(setup-keybinds nil
+  "C-x C-b" 'bs-show)
+
+(setup-include "browse-kill-ring"
+  (setup-keybinds nil
+    "M-Y" 'browse-kill-ring))
+
 (!-
  ;; (setup "vertico"
  ;;   (vertico-mode))
  (setup "orderless"
-  (setq completion-styles '(orderless)
+  (setq completion-styles '(orderless basic)
         completion-category-defaults nil
-        completion-category-overrides '((file (styles partial-completion)))))
+        completion-category-overrides '((file (styles basic partial-completion)))))
  (setup "marginalia"
     :prepare (setup-keybinds minibuffer-local-map
                "M-A" 'marginalia-cycle)
@@ -324,18 +331,18 @@
 ;;     ;; (setq marginalia-align-offset 25)
 ;;     (marginalia-mode +1)))
 
-(setup-lazy
-  '(consult-line consult-buffer consult-multi-occur) "consult"
-  :prepare (setup-keybinds nil
-             ;; C-x binds
-             "C-x b" 'consult-buffer
-             "C-x 4 b" 'consult-buffer-other-window
-             "C-x 5 b" 'consult-buffer-other-frame
-             ;; C- binds
-             "C-s" 'consult-line
+;; (setup-lazy
+;;   '(consult-line consult-buffer consult-multi-occur) "consult"
+;;   :prepare (setup-keybinds nil
+;;              ;; C-x binds
+;;              "C-x b" 'consult-buffer
+;;              "C-x 4 b" 'consult-buffer-other-window
+;;              "C-x 5 b" 'consult-buffer-other-frame
+;;              ;; C- binds
+;;              "C-s" 'consult-line
              
-             ;; M- binds
-             "M-y" 'consult-yank-pop))
+;;              ;; M- binds
+;;              "M-y" 'consult-yank-pop))
 
 
 (setup-include "avy"
