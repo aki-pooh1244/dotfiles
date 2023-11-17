@@ -28,13 +28,14 @@
         comment-dwim-2
         page-break-lines
         zop-to-char
-        viewer
+        ;; viewer
         undohist
         ;; pdf-tools
         ;; Search/Replace/Cursor
         goto-chg
         back-button
         deadgrep
+        browse-kill-ring
         avy
         dumb-jump
         ;; ace-window
@@ -42,7 +43,7 @@
         iedit
         visual-regexp
         visual-regexp-steroids
-        migemo
+        ;; migemo
         ;; Complition
         company-mode
         ;; dired
