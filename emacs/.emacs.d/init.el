@@ -1105,6 +1105,16 @@
 ;;   (load-theme 'tangotango t))
 ;; (setup-include "zenburn-theme"
 ;;   (load-theme 'zenburn t))
+(setq modus-themes-italic-constructs t
+      modus-themes-bold-constructs t
+      modus-themes-region 'bg-only
+      modus-themes-mode-line '(moody borderless)
+      modus-themes-paren-match 'intense-bold
+      modus-themes-diffs 'deuteranopia
+      modus-themes-variable-pitch-ui t
+      modus-themes-custom-auto-reload t)
+(setup-keybinds nil
+  "<f9>" 'modus-themes-toggle)
 (load-theme 'modus-operandi)
 
 
