@@ -1103,9 +1103,9 @@
 ;; + Color :
 ;; (setup-include "tangotango-theme"
 ;;   (load-theme 'tangotango t))
-(setup-include "zenburn-theme"
-  (load-theme 'zenburn t))
-
+;; (setup-include "zenburn-theme"
+;;   (load-theme 'zenburn t))
+(load-theme 'modus-operandi)
 
 
 ;; + Font :
