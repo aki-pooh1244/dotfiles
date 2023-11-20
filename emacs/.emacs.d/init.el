@@ -1075,11 +1075,12 @@
 (setup-lazy '(eshell-toggle) "eshell-toggle"
   :prepare (setup-keybinds nil
              "M-t" 'eshell-toggle)
-  (setq eshell-toggle-size-fraction 3
+  (setq eshell-toggle-size-fraction 2
         eshell-toggle-default-directory "~/"
+        ;; eshell-toggle-use-projectile-root t
         eshell-toggle-run-command nil))
 
-(setup-after "eshell"
+(setup-hook 'eshell-mode-hook
   (setup "eshell-syntax-highlighting"
     (eshell-syntax-highlighting-global-mode +1))
   (setup "eshell-git-prompt"
