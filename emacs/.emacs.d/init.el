@@ -66,7 +66,7 @@
         sublimity
         rainbow-delimiters
         ;; color-theme
-        color-theme-zenburn
+        ;; color-theme-zenburn
         ;; Latex
         magic-latex-buffer
         ;; python
@@ -92,7 +92,7 @@
 ;; + | el-get via github
 ;; Search/Replace/Cursor
 ;; (el-get-bundle minad/vertico)
-(el-get-bundle minad/consult)
+;; (el-get-bundle minad/consult)
 (el-get-bundle minad/marginalia)
 (el-get-bundle oantolin/orderless)
 
