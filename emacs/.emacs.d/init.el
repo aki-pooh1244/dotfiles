@@ -843,16 +843,16 @@
 ;; + | others
 (size-indication-mode t)
 
-(setup-lazy '(indent-guide-mode) "indent-guide"
-  (set-face-background 'indent-guide-face "lightpink"))
-
 (setup-include "beacon"
   (beacon-mode 1)
   (setq beacon-color "lightpink"))
 
 (setup-hook 'prog-mode-hook
-  (setup-lazy '(display-fill-column-indicator-mode) "display-fill-column-indicator"
-    (setq-default display-fill-column-indicator 80)))
+  (setup-lazy '(display-fill-column-indicator-mode) "displ
+ay-fill-column-indicator"
+    (setq-default display-fill-column-indicator 80))
+  (setup "indent-guide"
+    (set-face-background 'indent-guide-face "lightpink")))
 
 ;; (setup-lazy '(visual-fill-column-mode) "visual-fill-column"
 ;;     :prepare (setup-keybinds nil
