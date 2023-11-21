@@ -803,7 +803,8 @@
 ;; + | mode-line
 
 (setup-include "minions"
-  (minions-mode t))
+  (minions-mode t)
+  (setq minions-mode-line-lighter ";+"))
 
 (setup-include "total-lines"
   (global-total-lines-mode t)
