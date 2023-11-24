@@ -58,7 +58,7 @@
         zoom-window
         switch-window
         ;; mode-line
-        smart-mode-line
+        ;; smart-mode-line
         ;; GUI
         diff-hl
         beacon
@@ -813,11 +813,11 @@
                         '((:eval (format " (%d)" (- total-lines 1))))))
   )
 
-(setup-include "moody"
-  (setq x-underline-at-descent-line t)
-  (moody-replace-mode-line-buffer-identification)
-  (moody-replace-vc-mode)
-  (moody-replace-eldoc-minibuffer-message-function))
+;; (setup-include "moody"
+;;   (setq x-underline-at-descent-line t)
+;;   (moody-replace-mode-line-buffer-identification)
+;;   (moody-replace-vc-mode)
+;;   (moody-replace-eldoc-minibuffer-message-function))
 
 ;; (setup-include "smart-mode-line"
 ;;   (setq sml/theme 'respectful)
