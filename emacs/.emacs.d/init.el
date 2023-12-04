@@ -45,7 +45,7 @@
         visual-regexp-steroids
         ;; migemo
         ;; Complition
-        company-mode
+        ;; company-mode
         ;; dired
         dired-hacks
         dired-k
@@ -102,9 +102,12 @@
 (el-get-bundle NIcolasPetton/noccur.el
   :name noccur)
 
-;; (el-get-bundle minad/corfu)
-;; (el-get-bundle minad/cape)
-;; (el-get-bundle minad/affe)
+(el-get-bundle minad/corfu)
+;; (el-get-bundle akib/emacs-corfu-terminal)
+(el-get-bundle minad/cape)
+(el-get-bundle minad/affe)
+(el-get-bundle minad/tempel)
+(el-get-bundle Crandel/tempel-collection)
 
 ;; eshell
 (el-get-bundle 4DA/eshell-toggle)
@@ -595,23 +598,46 @@
 ;;  ;;         company-selection-wrap-around t
 ;;  ;;         company-tooltip-align-annotations t)
 ;;  ;;   (global-company-mode))
-;;  (setup "corfu"
-;;    (setq corfu-cycle t
-;;          corfu-auto t
-;;          corfu-quit-no-match 'separator
-;;          corfu-quit-at-boundary nil
-;;          corfu-scroll-margin 2)
-;;    (global-corfu-mode)
-;;    (defun corfu-enable-always-in-minibuffer ()
-;;      "Enable Corfu in the minibuffer if Vertico/Mct are not active."
-;;      (unless (or (bound-and-true-p mct--active)
-;;                  (bound-and-true-p vertico--input))
-;;        (corfu-mode 1)))
-;;    (setup-hook 'minibuffer-setup-hook
-;;      #'corfu-enable-always-in-minibuffer 1))
-;;  (setup "cape"
-;;    )
-;;  )
+
+(setup-include "tempel"
+  (defun tempel-setup-capf()
+    (setq-local completion-at-point-functions
+                (cons #'tempel-expand
+                      completion-at-point-functions)))
+  (setup-hook 'prog-mode-hook
+    'tempel-setup-capf)
+  (setup-hook 'text-mode-hook
+    'tempel-setup-capf)
+  (setup-hook 'org-mode-hook
+    'tempel-setup-capf)
+  (setup-hook 'latex-mode-hook
+    'tempel-setup-capf))
+(setup-after "tempel"
+  (setup "tempel-collection"))
+    
+(setup-include "corfu"
+  (setq corfu-cycle t
+        corfu-auto t
+        corfu-auto-prefix 1
+        corfu-quit-no-match 'separator
+        corfu-quit-at-boundary nil
+        corfu-scroll-margin 2)
+  (global-corfu-mode)
+  (defun corfu-enable-always-in-minibuffer ()
+    "Enable Corfu in the minibuffer if Vertico/Mct are not active."
+    (unless (or (bound-and-true-p mct--active)
+                (bound-and-true-p vertico--input))
+      (corfu-mode 1)))
+  (setup-hook 'minibuffer-setup-hook
+    #'corfu-enable-always-in-minibuffer 1))
+(setup-include "cape"
+  (setq-local completion-at-point-functions
+              (list (cape-super-capf
+                     #'cape-file
+                     #'cape-dabbrev
+                     #'cape-abbrev
+                     #'cape-tex))))
+
 
 
 ;; + Misc :
