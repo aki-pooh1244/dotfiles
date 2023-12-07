@@ -912,12 +912,45 @@ ay-fill-column-indicator"
 ;; + Language :
 ;; + | LaTeX
 (setup-expecting "tex-mode"
-  (push '("\\.tex$" . latex-mode) auto-mode-alist))
+  (push '("\\.tex$" . latex-mode) auto-mode-alist)
+  (setq tex-default-mode 'latex-mode))
 
 (setup-after "tex-mode"
   (push "Verbatim" tex-verbatim-environments)
   (push "BVerbatim" tex-verbatim-environments)
   (push "lstlisting" tex-verbatim-environments)
+  (setq tex-start-commands "\\nonstopmode\\input")
+  (setq tex-run-command "lualatex -synctex=1 -interaction=nonstopmode")
+  (setq tex-print-file-extension ".pdf")
+  (setq tex-dvi-view-command "start SumatraPDF -reuse-instance")
+  (setq tex-compile-commands
+        '(("lualatex -synctex=1 -interaction=nonstopmode %f" "%f" "%r.pdf")
+          ("cluttex --engine=lualatex --biber --synctex=1 %f")
+          ("cluttex --engine=platex --bibtex --synctex=1 %f")
+          ("cluttex --engine=lualatex --synctex=1 %f")
+          ("cluttex --engine=platex --synctex=1 %f")))
+  (defun sumatrapdf-forward-search ()
+    (interactive)
+    (let* ((ctf (buffer-name))
+           (mtf (tex-main-file))
+           (pf (concat (car (split-string mtf "\\.")) ".pdf"))
+           (ln (format "%d" (line-number-at-pos)))
+           (cmd "rundll32 shell32, ShellExec_RunDLL SumatraPDF")
+           (args (concat "-reuse-instance \"" pf "\" -forward-search \"" ctf "\" " ln)))
+      (message (concat cmd " " args))
+      (process-query-on-exit-flag
+       (start-process-shell-command "sumatrapdf" nil cmd args))))
+  (defun fwdsumatrapdf-forward-search ()
+  (interactive)
+  (let* ((ctf (buffer-name))
+         (mtf (tex-main-file))
+         (pf (concat (car (split-string mtf "\\.")) ".pdf"))
+         (ln (format "%d" (line-number-at-pos)))
+         (cmd "fwdsumatrapdf")
+         (args (concat "\"" pf "\" \"" ctf "\" " ln)))
+    (message (concat cmd " " args))
+    (process-query-on-exit-flag
+     (start-process-shell-command "fwdsumatrapdf" nil cmd args))))
   (setup-hook 'latex-mode-hook
     (visual-line-mode 1)
     (flyspell-mode 1)
@@ -925,7 +958,11 @@ ay-fill-column-indicator"
     (bibtex-mode 1)
     (outline-minor-mode 1)
     (setq-local outline-regexp "\\\\\\(sub\\)*section\\>"
-                outline-level  (lambda () (- (outline-level) 7))))
+                outline-level  (lambda () (- (outline-level) 7)))
+    (lambda ()
+      (define-key latex-mode-map (kbd "C-c s") 'sumatrapdf-forward-search))
+    (lambda ()
+      (define-key latex-mode-map (kbd "C-c f") 'fwdsumatrapdf-forward-search)))
   (setup-lazy '(magic-latex-buffer) "magic-latex-buffer"
     :prepare (setup-hook 'latex-mode-hook 'magic-latex-buffer)
     (setq magic-latex-enable-inline-image nil))
@@ -933,56 +970,6 @@ ay-fill-column-indicator"
     :prepare (setup-hook 'latex-mode-hook 'turn-on-cdlatex))
   (setup-lazy '(reftex-mode) "reftex"
     :prepare (setup-hook 'latex-mode-hook 'turn-on-reftex)))
-;; (setup-expecting "latex-mode"
-;;   (push '("\\.tex$" . latex-mode) auto-mode-alist)
-;;   (setq latex-run-command "latexmk -pvc")
-;;   (setq latex-run-command "cluttex --engine=lualatex --biber --synctex=1")
-;;   (setq latex-run-command "cluttex --engine=platex --bibtex --synctex=1")
-;;   (setq tex-compile-commands
-;;         '(("latexmk -pvc %f" "%f" "%r.pdf")
-;;           ("cluttex --engine=lualatex --biber --synctex=1 %f" "%f" "%r.pdf")
-;;           ("cluttex --engine=platex --bibtex --synctex=1 %f" "%f" "%r.pdf")))
-  
-;;   )
-;; (setup-hook 'latex-mode-hook
-;;     (setq visual-line-mode 1)
-;;     (setq flyspell-mode 1)
-;;     (setq reftex-mode 1)
-;;     (outline-minor-mode)
-;;     (setq-local outline-regexp "\\\\\\(sub\\)*section\\>"
-;;                 outline-level (lambda () (- (outline-level) 7)))
-;;     )
-;; (setup-lazy '(magic-latex-buffer) "magic-latex-buffer"
-;;     :prepare (setup-hook 'latex-mode-hook 'magic-latex-buffer)
-;;     (setq magic-latex-enable-block-highlight t
-;;           magic-latex-enable-pretty-symbols  t
-;;           magic-latex-enable-block-align     t
-;;           magic-latex-enable-inline-image    t
-;;           magic-latex-enable-minibuffer-echo t))
-;; (setup-lazy '(latex-extra-mode) "latex-extra"
-;;     :prepare (setup-hook 'latex-mode-hook 'latex-extra-mode))
-;; (setup-lazy '(cdlatex-mode) "cdlatex"
-;;     :prepare (setup-hook 'latex-mode-hook 'turn-on-cdlatex))
-;; (setup-after "tex-mode"
-  ;; (setup-hook 'latex-mode-hook
-  ;;   (setq visual-line-mode 1)
-  ;;   (setq flyspell-mode 1)
-  ;;   (setq reftex-mode 1)
-  ;;   (setq outline-minor-mode 1)
-  ;;   (setq-local outline-regexp "\\\\\\(sub\\)*section\\>"
-  ;;               outline-level (lambda () (- (outline-level) 7))))
-  ;; (setup-lazy '(magic-latex-buffer) "magic-latex-buffer"
-  ;;   :prepare (setup-hook 'latex-mode-hook 'magic-latex-buffer)
-  ;;   (setq magic-latex-enable-block-highlight t
-  ;;         magic-latex-enable-pretty-symbols  t
-  ;;         magic-latex-enable-block-align     t
-  ;;         magic-latex-enable-inline-image    t
-  ;;         magic-latex-enable-minibuffer-echo t))
-  ;; (setup-lazy '(latex-extra-mode) "latex-extra"
-  ;;   :prepare (setup-hook 'latex-mode-hook 'latex-extra-mode))
-  ;; (setup-lazy '(cdlatex-mode) "cdlatex"
-  ;;   :prepare (setup-hook 'latex-mode-hook 'turn-on-cdlatex))
-;; )
 
 ;; + | Python
 (setup-expecting "python-mode"
