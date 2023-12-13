@@ -218,7 +218,7 @@
 	          require-final-newline t)
 
 (setq global-auto-revert-mode t
-      global-auto-revert-non-file-buffers t
+      ;; global-auto-revert-non-file-buffers t
       auto-revert-verbose t)
 
 (!-
@@ -228,12 +228,12 @@
 (setup-lazy
   '(comment-dwim-2) "comment-dwim-2"
   :prepare (setup-keybinds nil
-	         "C-;" 'comment-dwim-2))
+	         "M-;" 'comment-dwim-2))
 
 (setup-lazy
   '(iedit-mode) "iedit"
   :prepare (setup-keybinds nil
-	         "M-;" 'iedit-mode))
+	         "C-;" 'iedit-mode))
 
 (!-
  (setup-include "page-ext")
