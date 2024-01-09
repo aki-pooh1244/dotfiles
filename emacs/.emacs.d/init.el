@@ -1156,6 +1156,7 @@ ay-fill-column-indicator"
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages '(compat zenburn-theme))
+ '(warning-suppress-log-types '((modus-themes)))
  '(zoom-ignore-predicates
    '((lambda nil
        (>
