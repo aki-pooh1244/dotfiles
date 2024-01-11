@@ -217,9 +217,10 @@
               cursor-type           'box
 	          require-final-newline t)
 
-(setq global-auto-revert-mode t
+(setq global-auto-revert-mode 1
       ;; global-auto-revert-non-file-buffers t
-      auto-revert-verbose t)
+      ;; auto-revert-verbose t
+)
 
 (!-
  (setup-include "delsel"
