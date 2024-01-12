@@ -827,6 +827,17 @@
 (setup "diff-hl"
   (global-diff-hl-mode))
 
+;; + | tab-bar mode
+
+(desktop-save-mode +1)
+(tab-bar-mode +1)
+(tab-bar-history-mode +1)
+(setq tab-bar-tab-hints t
+      tab-bar-new-button-show nil
+      tab-bar-close-button-show nil
+      tab-bar-show 1
+      tab-bar-tab-name-function 'tab-bar-tab-name-current-with-count)
+
 ;; + | mode-line
 
 (setup-include "minions"
