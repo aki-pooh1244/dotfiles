@@ -692,9 +692,6 @@
 
 ;; + Keybinds :
 
-(define-key global-map (kbd "C-x |") 'split-window-horizontally)
-(define-key global-map (kbd "C-x -") 'split-window-vertically)
-
 (!when (eq system-type 'darwin)
   (setq ns-command-modifier 'super)
   (setq ns-option-modifier 'meta))
