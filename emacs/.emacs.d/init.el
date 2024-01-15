@@ -1009,7 +1009,10 @@ ay-fill-column-indicator"
 
 ;; + Tools :
 (setup-include "flycheck"
-  (global-flycheck-mode))
+  (global-flycheck-mode +1))
+
+(setup "flyspell"
+  (setq-default ispell-program-name "aspell"))
 
 
 ;; + org-mode :
