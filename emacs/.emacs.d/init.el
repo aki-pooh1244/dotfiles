@@ -65,6 +65,7 @@
         indent-guide
         sublimity
         rainbow-delimiters
+        olivetti
         ;; color-theme
         ;; color-theme-zenburn
         ;; Latex
