@@ -938,10 +938,10 @@ ay-fill-column-indicator"
   (setq tex-dvi-view-command "start SumatraPDF -reuse-instance")
   (setq tex-compile-commands
         '(("cluttex --engine=lualatex --biber --synctex=1 %f")
-          ("cluttex --engine=platex --bibtex --synctex=1 %f")
+          ("cluttex --engine=uplatex --bibtex=upbibtex --synctex=1 %f")
           ("cluttex --engine=uplatex --biber --synctex=1 %f")
           ("cluttex --engine=lualatex --synctex=1 %f")
-          ("cluttex --engine=platex --synctex=1 %f")
+          ("cluttex --engine=uplatex --synctex=1 %f")
           ("lualatex -synctex=1 -interaction=nonstopmode %f" "%f" "%r.pdf")))
   (defun sumatrapdf-forward-search ()
     (interactive)
