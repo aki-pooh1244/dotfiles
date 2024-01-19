@@ -1012,7 +1012,9 @@ ay-fill-column-indicator"
   (global-flycheck-mode +1))
 
 (setup "flyspell"
-  (setq-default ispell-program-name "aspell"))
+  (setq-default ispell-program-name "aspell")
+  (with-eval-after-load "ispell"
+    (setq ispell-local-dictionary "en_US")))
 
 
 ;; + org-mode :
