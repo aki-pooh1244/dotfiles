@@ -1105,6 +1105,17 @@ ay-fill-column-indicator"
   )
 
 ;; + Eshell :
+;; (setup-lazy '(sehll-pop) "shell-pop"
+;;   :prepare (setup-keybinds nil
+;;              "M-t" 'shell-pop)
+;;   (setq shell-pop-default-directory "~/"
+;;         shell-pop-shell-type '("eshell" "eshell*" (lambda nil (eshell)))
+;;         shell-pop-universal-key "M-t"
+;;         shell-pop-full-span t
+;;         shell-pop-window-size 30
+;;         shell-pop-autocd-to-working-dir t
+;;         shell-pop-restore-window-configuration t
+;;         shell-pop-cleanup-buffer-at-process-exit t))
 (setup-lazy '(eshell-toggle) "eshell-toggle"
   :prepare (setup-keybinds nil
              "M-t" 'eshell-toggle)
