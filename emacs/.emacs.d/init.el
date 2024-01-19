@@ -1109,9 +1109,9 @@ ay-fill-column-indicator"
   :prepare (setup-keybinds nil
              "M-t" 'eshell-toggle)
   (setq eshell-toggle-size-fraction 2
-        eshell-toggle-default-directory "~/"
+        eshell-toggle-default-directory "~/"))
         ;; eshell-toggle-use-projectile-root t
-        eshell-toggle-run-command nil))
+        ;; eshell-toggle-run-command nil))
 
 (setup-hook 'eshell-mode-hook
   (setup "eshell-syntax-highlighting"
