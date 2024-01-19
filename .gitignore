@@ -48,3 +48,7 @@ emacs/.emacs.d/elpa/
 emacs/.emacs.d/server/
 
 emacs/.emacs.d/bookmarks
+
+emacs/.emacs.d/.emacs.desktop.lock
+
+emacs/.emacs.d/.emacs.desktop
