@@ -58,6 +58,7 @@
 (straight-use-package 'iedit)
 (straight-use-package 'visual-regexp)
 (straight-use-package 'visual-regexp-steroids)
+(straight-use-package 'consult)
 (straight-use-package 'marginalia)
 (straight-use-package 'orderless)
 (straight-use-package 'easy-kill)
@@ -282,9 +283,9 @@
 (setup-keybinds nil
   "C-x C-b" 'bs-show)
 
-(setup-include "browse-kill-ring"
-  (setup-keybinds nil
-    "M-Y" 'browse-kill-ring))
+;; (setup-include "browse-kill-ring"
+;;   (setup-keybinds nil
+;;     "M-Y" 'browse-kill-ring))
 
 (!-
  ;; (setup "vertico"
@@ -306,18 +307,18 @@
 ;;     ;; (setq marginalia-align-offset 25)
 ;;     (marginalia-mode +1)))
 
-;; (setup-lazy
-;;   '(consult-line consult-buffer consult-multi-occur) "consult"
-;;   :prepare (setup-keybinds nil
-;;              ;; C-x binds
-;;              "C-x b" 'consult-buffer
-;;              "C-x 4 b" 'consult-buffer-other-window
-;;              "C-x 5 b" 'consult-buffer-other-frame
-;;              ;; C- binds
-;;              "C-s" 'consult-line
+(setup-lazy
+  '(consult-line consult-buffer consult-multi-occur) "consult"
+  :prepare (setup-keybinds nil
+             ;; C-x binds
+             "C-x b" 'consult-buffer
+             "C-x 4 b" 'consult-buffer-other-window
+             "C-x 5 b" 'consult-buffer-other-frame
+             ;; C- binds
+             "C-s" 'consult-line
              
-;;              ;; M- binds
-;;              "M-y" 'consult-yank-pop))
+             ;; M- binds
+             "M-Y" 'consult-yank-pop))
 
 
 (setup-include "avy"
