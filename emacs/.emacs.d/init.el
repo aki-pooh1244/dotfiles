@@ -137,7 +137,7 @@
 ;; + | zk-phi/setup.el
 (eval-when-compile
   (require 'setup)
-  ;; (require 'cl-lib)
+  (require 'cl-lib)
   (setq setup-silent                    t
         setup-delay-interval            0.5
         setup-enable-gc-threshold-hacks t
