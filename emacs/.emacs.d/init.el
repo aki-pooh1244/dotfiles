@@ -384,7 +384,7 @@
              "C-O"     'loccur-previous-match
              "M-s C-o" 'loccur-isearch))
 
-(setup-lazy '(noccur-project noccur-dired) "noccur")
+;; (setup-lazy '(noccur-project noccur-dired) "noccur")
 
 (setup-include "mwim"
   :prepare (setup-keybinds nil
