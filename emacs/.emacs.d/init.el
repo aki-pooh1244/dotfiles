@@ -8,147 +8,130 @@
 (when load-file-name
   (setq user-emacs-directory (file-name-directory load-file-name)))
 
-;; el-get
-(add-to-list 'load-path (locate-user-emacs-file "~/.emacs.d/el-get/el-get"))
-(unless (require 'el-get nil 'noerror)
-  (with-current-buffer
-      (url-retrieve-synchronously
-       "https://raw.githubusercontent.com/dimitri/el-get/master/el-get-install.el")
-    (goto-char (point-max))
-    (eval-print-last-sexp)))
+;; + | straight.el
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name
+        "straight/repos/straight.el/bootstrap.el"
+        (or (bound-and-true-p straight-base-dir)
+            user-emacs-directory)))
+      (bootstrap-version 7))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+;; + | el-get
+;; (add-to-list 'load-path (locate-user-emacs-file "~/.emacs.d/el-get/el-get"))
+;; (unless (require 'el-get nil 'noerror)
+;;   (with-current-buffer
+;;       (url-retrieve-synchronously
+;;        "https://raw.githubusercontent.com/dimitri/el-get/master/el-get-install.el")
+;;     (goto-char (point-max))
+;;     (eval-print-last-sexp)))
 
 
 ;; + | package list
-(setq my:el-get-packages
-      '(;; packages
-        ;; config
-        setup
-        exec-path-from-shell
-        ;; Editing
-        comment-dwim-2
-        page-break-lines
-        zop-to-char
-        ;; viewer
-        undohist
-        ;; pdf-tools
-        ;; Search/Replace/Cursor
-        goto-chg
-        back-button
-        deadgrep
-        browse-kill-ring
-        avy
-        dumb-jump
-        ;; ace-window
-        beginend
-        iedit
-        visual-regexp
-        visual-regexp-steroids
-        ;; migemo
-        ;; Complition
-        ;; company-mode
-        ;; dired
-        dired-hacks
-        dired-k
-        ;; key-bind
-        key-chord
-        ;; smartrep
-        which-key
-        ;; window
-        elwm
-        zoom-window
-        switch-window
-        ;; mode-line
-        ;; smart-mode-line
-        ;; GUI
-        diff-hl
-        beacon
-        indent-guide
-        sublimity
-        rainbow-delimiters
-        olivetti
-        ;; color-theme
-        ;; color-theme-zenburn
-        ;; Latex
-        magic-latex-buffer
-        ;; python
-        anaconda-mode
-        ;; racket
-        racket-mode
-        ;; emacs-lisp
-        elisp-slime-nav
-        ;; tools
-        flycheck
-        ;; org-mode
-        ;; org-contrib
-        org-superstar
-        ;; outline-mode
-        zoutline
-        outline-magic
-        ;; eshell
-        eshell-autojump
-        ))
+;;   + config
+(straight-use-package
+ '(setup :type git :host github :repo "zk-phi/setup"))
+(straight-use-package 'exec-path-from-shell)
+;;   + editing
+(straight-use-package 'comment-dwim-2)
+(straight-use-package 'page-break-lines)
+(straight-use-package 'zop-to-char)
+(straight-use-package 'undohist)
+(straight-use-package 'puni)
+(straight-use-package 'grugru)
+;;   + search/replace/cursor
+(straight-use-package 'goto-chg)
+(straight-use-package 'back-button)
+(straight-use-package 'deadgrep)
+;; (straight-use-package 'browse-kill-ring)
+(straight-use-package 'avy)
+(straight-use-package 'dumb-jump)
+(straight-use-package 'beginend)
+(straight-use-package 'iedit)
+(straight-use-package 'visual-regexp)
+(straight-use-package 'visual-regexp-steroids)
+(straight-use-package 'marginalia)
+(straight-use-package 'orderless)
+(straight-use-package 'easy-kill)
+(straight-use-package 'loccur)
+;; (straight-use-package 'noccurr.el)
+(straight-use-package 'mwim)
+;;   + completion
+(straight-use-package 'corfu)
+;; (straight-use-package 'emacs-corfu-terminal)
+(straight-use-package 'cape)
+(straight-use-package 'affe)
+(straight-use-package 'tempel)
+(straight-use-package 'tempel-collection)
+;;   + dired
+(straight-use-package 'dired-hacks)
+(straight-use-package 'dired-k)
+(straight-use-package 'peep-dired)
+(straight-use-package 'dired-toggle)
+(straight-use-package 'dired-launch)
+;;   + key-bind
+;; (straight-use-package 'key-chord)
+(straight-use-package 'which-key)
+(straight-use-package 'meow)
+;;   + window manager
+(straight-use-package 'elwm)
+(straight-use-package 'zoom-window)
+(straight-use-package 'switch-window)
+(straight-use-package 'zoom)
+;;   + GUI
+(straight-use-package 'diff-hl)
+(straight-use-package 'beacon)
+(straight-use-package 'indent-guide)
+;; (straight-use-package 'sublimity)
+(straight-use-package 'rainbow-delimiters)
+(straight-use-package 'olivetti)
+;;   + mode-line
+(straight-use-package 'minions)
+;; (straight-use-package 'moody)
+(straight-use-package 'total-lines)
+;;   + languages
+;; latex
+(straight-use-package 'magic-latex-buffer)
+(straight-use-package 'cdlatex)
+(straight-use-package 'latex-extra)
+;; python
+(straight-use-package 'anaconda-mode)
+;; racket
+(straight-use-package 'racket-mode)
+;; (straight-use-package 'emacs-ob-racket)
+;; emacs-lisp
+(straight-use-package 'elisp-slime-nav)
+;;   + tools
+(straight-use-package 'flycheck)
+(straight-use-package 'rpn-calc)
+(straight-use-package 'compat)
+;;   + org-mode
+(straight-use-package 'org-mode)
+(straight-use-package 'org-contrib)
+(straight-use-package 'org-superstar)
+;;   + outline-mode
+;; (straight-use-package 'zoutline)
+(straight-use-package 'outline-magic)
+;;   + eshell
+(straight-use-package 'eshell-autojump)
+(straight-use-package 'eshell-toggle)
+(straight-use-package 'eshell-syntax-highlighting)
+(straight-use-package 'eshell-git-prompt)
+(straight-use-package 'eshell-up)
+(straight-use-package 'esh-help)
+(straight-use-package 'eshell-z)
+;; (straight-use-package 'eshell-fixed-prompt-mode)
+(straight-use-package 'esh-autosuggest)
+;; (straight-use-package 'eshell-outline)
 
-(el-get 'sync my:el-get-packages)
-
-;; + | el-get via github
-;; Search/Replace/Cursor
-;; (el-get-bundle minad/vertico)
-;; (el-get-bundle minad/consult)
-(el-get-bundle minad/marginalia)
-(el-get-bundle oantolin/orderless)
-
-(el-get-bundle leoliu/easy-kill)
-
-(el-get-bundle fourier/loccur)
-(el-get-bundle NIcolasPetton/noccur.el
-  :name noccur)
-
-(el-get-bundle minad/corfu)
-;; (el-get-bundle akib/emacs-corfu-terminal)
-(el-get-bundle minad/cape)
-(el-get-bundle minad/affe)
-(el-get-bundle minad/tempel)
-(el-get-bundle Crandel/tempel-collection)
-
-;; eshell
-(el-get-bundle 4DA/eshell-toggle)
-(el-get-bundle akreisher/eshell-syntax-highlighting)
-(el-get-bundle xuchunyang/eshell-git-prompt)
-(el-get-bundle peterwvj/eshell-up)
-(el-get-bundle tom-tan/esh-help)
-(el-get-bundle xuchunyang/eshell-z)
-(el-get-bundle mallt/eshell-fixed-prompt-mode)
-(el-get-bundle dieggsy/esh-autosuggest)
-;; (el-get-git-clone "https://git.jamzattack.xyz/eshell-outline")
-
-(el-get-bundle alezost/mwim.el
-  :name mwim)
-(el-get-bundle ROCKTAKEY/grugru)
-(el-get-bundle AmaiKinono/puni)
-
-(el-get-bundle meow-edit/meow)
-
-;; dired
-(el-get-bundle asok/peep-dired)
-(el-get-bundle fasheng/dired-toggle)
-(el-get-bundle thomp/dired-launch)
-
-;; Language
-(el-get-bundle cdominik/cdlatex)
-(el-get-bundle Malabarba/latex-extra)
-(el-get-bundle hasu/emacs-ob-racket)
-
-;; window
-(el-get-bundle cyrus-and/zoom)
-
-;; mode-line
-(el-get-bundle tarsius/minions)
-(el-get-bundle tarsius/moody)
-(el-get-bundle hinrik/total-lines)
-
-;; misc
-(el-get-bundle zk-phi/rpn-calc)
-(el-get-bundle elpa:compat)
   
 
 ;; + | zk-phi/setup.el
