@@ -1130,6 +1130,11 @@ ay-fill-column-indicator"
 (setq inhibit-startup-screen t
       initial-scratch-message "")
 
+;; + server :
+(require 'server)
+(unless (server-running-p)
+  (server-start))
+
 
 ;; + Color :
 ;; (setup-include "tangotango-theme"
