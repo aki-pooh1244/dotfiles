@@ -164,19 +164,6 @@
 (setup-initialize)
 
 
-;; Package manager
-;; (eval-and-compile ; borg
-;;   (add-to-list 'load-path (expand-file-name "lib/borg" user-emacs-directory))
-;;   (require 'borg)
-;;   (borg-initialize))
-
-;; (setup "auto-compile"
-;;   (setq auto-compile-display-buffer nil)
-;;   (setq auto-compile-mode-line-counter t)
-;;   (setq auto-compile-source-recreate-deletes-dest t)
-;;   (setq auto-compile-toggle-deletes-nonlib-dest t)
-;;   (setq auto-compile-updatepautoloads t))
-
 ;; (setup "magit"
 ;;   setup-after "dash")
 ;; (with-eval-after-load 'magit
