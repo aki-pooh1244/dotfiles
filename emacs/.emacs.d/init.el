@@ -1105,7 +1105,7 @@
   (setup "esh-help"
     (setup-esh-help-eldoc))
   (setup "eshell-z")
-  (setup "eshell-fixed-prompt")
+  ;; (setup "eshell-fixed-prompt")
   (setup "esh-autosuggest"))
 
 
