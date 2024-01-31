@@ -91,7 +91,7 @@
 (straight-use-package 'diff-hl)
 (straight-use-package 'beacon)
 (straight-use-package 'indent-guide)
-;; (straight-use-package 'sublimity)
+(straight-use-package 'sublimity)
 (straight-use-package 'rainbow-delimiters)
 (straight-use-package 'olivetti)
 ;;   + mode-line
@@ -672,12 +672,12 @@
   "which-key"
   (which-key-mode))
 ;; + | key-chord
-(setup "key-chord"
-  (setq key-chord-two-keys-delay 0.15
-        key-chord-one-key-delay 0.15
-        key-chord-safety-interval-backward 0.1
-        key-chord-safety-interval-forward  0.25)
-  (key-chord-mode 1))
+;; (setup "key-chord"
+;;   (setq key-chord-two-keys-delay 0.15
+;;         key-chord-one-key-delay 0.15
+;;         key-chord-safety-interval-backward 0.1
+;;         key-chord-safety-interval-forward  0.25)
+;;   (key-chord-mode 1))
 
 (setup-include "meow"
   (defun meow-setup ()
@@ -858,8 +858,7 @@
   (setq beacon-color "lightpink"))
 
 (setup-hook 'prog-mode-hook
-  (setup-lazy '(display-fill-column-indicator-mode) "displ
-ay-fill-column-indicator"
+  (setup-lazy '(display-fill-column-indicator-mode) "display-fill-column-indicator"
     (setq-default display-fill-column-indicator 80))
   (setup "indent-guide"
     (set-face-background 'indent-guide-face "lightpink")))
