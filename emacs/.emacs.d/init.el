@@ -102,7 +102,6 @@
 ;; latex
 (straight-use-package 'magic-latex-buffer)
 (straight-use-package 'cdlatex)
-(straight-use-package 'latex-extra)
 ;; python
 (straight-use-package 'anaconda-mode)
 ;; racket
@@ -586,7 +585,7 @@
     'tempel-setup-capf)
   (setup-hook 'org-mode-hook
     'tempel-setup-capf)
-  (setup-hook 'latex-mode-hook
+  (setup-hook 'tex-mode-hook
     'tempel-setup-capf))
 (setup-after "tempel"
   (setup "tempel-collection"))
@@ -895,8 +894,8 @@
 ;; + Language :
 ;; + | LaTeX
 (setup-expecting "tex-mode"
-  (push '("\\.tex$" . latex-mode) auto-mode-alist)
-  (setq tex-default-mode 'latex-mode))
+  (push '("\\.tex$" . tex-mode) auto-mode-alist)
+  (setq tex-default-mode 'tex-mode))
 
 (setup-after "tex-mode"
   (push "Verbatim" tex-verbatim-environments)
@@ -935,7 +934,7 @@
     (message (concat cmd " " args))
     (process-query-on-exit-flag
      (start-process-shell-command "fwdsumatrapdf" nil cmd args))))
-  (setup-hook 'latex-mode-hook
+  (setup-hook 'tex-mode-hook
     (visual-line-mode 1)
     (flyspell-mode 1)
     (reftex-mode 1)
@@ -948,12 +947,12 @@
     (lambda ()
       (define-key latex-mode-map (kbd "C-c f") 'fwdsumatrapdf-forward-search)))
   (setup-lazy '(magic-latex-buffer) "magic-latex-buffer"
-    :prepare (setup-hook 'latex-mode-hook 'magic-latex-buffer)
+    :prepare (setup-hook 'tex-mode-hook 'magic-latex-buffer)
     (setq magic-latex-enable-inline-image nil))
   (setup-lazy '(cdlatex-mode) "cdlatex"
-    :prepare (setup-hook 'latex-mode-hook 'turn-on-cdlatex))
+    :prepare (setup-hook 'tex-mode-hook 'turn-on-cdlatex))
   (setup-lazy '(reftex-mode) "reftex"
-    :prepare (setup-hook 'latex-mode-hook 'turn-on-reftex)))
+    :prepare (setup-hook 'tex-mode-hook 'turn-on-reftex)))
 
 ;; + | Python
 (setup-expecting "python-mode"
