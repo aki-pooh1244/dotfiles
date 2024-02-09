@@ -1066,7 +1066,7 @@
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
-     (racket . t)
+     ;; (racket . t)
      (python . t)
      (dot . t)
      (latex . t)
