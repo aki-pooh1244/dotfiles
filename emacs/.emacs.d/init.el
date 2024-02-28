@@ -591,6 +591,13 @@
   (setup "tempel-collection"))
     
 (setup-include "corfu"
+  (setup-keybinds corfu-map
+    "C-n" 'corfu-next
+    "C-p" 'corfu-previous
+    "<escape>" 'corfu-quit
+    "<return>" 'corfu-insert
+    "M-d" 'corfu-show-documentation
+    "M-l" 'corfu-show-location)
   (setq corfu-cycle t
         corfu-auto t
         corfu-auto-prefix 1
@@ -606,8 +613,25 @@
   (setup-hook 'minibuffer-setup-hook
     #'corfu-enable-always-in-minibuffer 1))
 (setup-include "cape"
+  (setup-keybinds nil
+    "M-p p" 'completion-at-point
+    "M-p t" 'complete-tag
+    "M-p d" 'cape-dabbrev
+    "M-p h" 'cape-history
+    "M-p f" 'cape-file
+    "M-p k" 'cape-keyword
+    "M-p s" 'cape-symbol
+    "M-p a" 'cape-abbrev
+    "M-p i" 'cape-ispell
+    "M-p l" 'cape-line
+    "M-p w" 'cape-dict
+    "M-p \\" 'cape-tex
+    "M-p _" 'cape-tex
+    "M-p ^" 'cape-tex
+    "M-p &" 'cape-sgml
+    "M-p r" 'cape-rfc1345)
   (setq-local completion-at-point-functions
-              (list (cape-super-capf
+              (list (cape-capf-super
                      #'cape-file
                      #'cape-dabbrev
                      #'cape-abbrev
