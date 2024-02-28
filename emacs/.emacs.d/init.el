@@ -646,6 +646,11 @@
                                          'mode-line fg))
                            orig-fg))))
 
+(setup-include "recentf"
+  (recentf-mode 1)
+  (setq recentf-max-saved-items 30
+        recentf-max-menu-items 30))
+
 
 ;; + Save/Backup/Undo :
 
