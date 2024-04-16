@@ -985,7 +985,8 @@
 
 ;; + | Python
 (setup-expecting "python-mode"
-  (push '("\\.py$" . anaconda-mode) auto-mode-alist))
+  (push '("\\.py$" . anaconda-mode) auto-mode-alist)
+  (setq python-shell-interpreter "/c/Windows/py.exe"))
 (setup-after "python-mode"
   (setup-lazy '(anaconda-mode) "anaconda-mode"
     (setup-hook 'anaconda-mode-hook
