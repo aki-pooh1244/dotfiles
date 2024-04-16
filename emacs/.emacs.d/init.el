@@ -113,6 +113,7 @@
 (straight-use-package 'flycheck)
 (straight-use-package 'rpn-calc)
 (straight-use-package 'compat)
+(straight-use-package 'atomic-chrome)
 ;;   + org-mode
 (straight-use-package 'org-mode)
 (straight-use-package 'org-contrib)
@@ -1014,6 +1015,9 @@
   (setq-default ispell-program-name "aspell")
   (with-eval-after-load "ispell"
     (setq ispell-local-dictionary "en_US")))
+
+(setup-include "atomic-chrome"
+  (atomic-chrome-start-server))
 
 
 ;; + org-mode :
