@@ -52,3 +52,5 @@ emacs/.emacs.d/bookmarks
 emacs/.emacs.d/.emacs.desktop.lock
 
 emacs/.emacs.d/.emacs.desktop
+
+emacs/.emacs.d/org-persist/
