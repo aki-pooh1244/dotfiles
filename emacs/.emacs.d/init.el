@@ -1175,12 +1175,16 @@
   (!cond
    ((member "IBM Plex Mono" (font-family-list))
     (set-face-attribute 'default nil :family "IBM Plex Mono" :height 140))))
+;; (!when (eq system-type 'gnu/linux)
+;;   (!cond
+;;    ((member "IBM Plex Mono" (font-family-list))
+;;     (set-face-attribute 'default nil :family "IBM Plex Mono" :height 120))
+;;    ((member "Noto Sans CJK JP" (font-family-list))
+;;     (set-face-attribute '(han kana) nil :family "Noto Sans CJK JP Regular" :height 120))))
 (!when (eq system-type 'gnu/linux)
   (!cond
-   ((member "IBM Plex Mono" (font-family-list))
-    (set-face-attribute 'default nil :family "IBM Plex Mono" :height 120))
-   ((member "Noto Sans CJK JP" (font-family-list))
-    (set-face-attribute '(han kana) nil :family "Noto Sans CJK JP Regular" :height 120))))
+   ((member "PlemolJP" (font-family-list))
+    (set-face-attribute 'default nil :family "PlemolJP" :height 120))))
 
 (!when (eq system-type 'windows-nt)
   (!cond
