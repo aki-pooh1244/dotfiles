@@ -901,7 +901,7 @@
 ;;   (hiwin-activate))
 
 ;; + | flame
-(setup-include "elwm")
+;; (setup-include "elwm")
 
 (setup-lazy '(zoom-window-zoom) "zoom-window"
   :prepare (setup-keybinds nil
@@ -918,7 +918,7 @@
    '(zoom-ignore-predicates '((lambda () (> (count-lines (point-min) (point-max)) 20))))))
 
 (setup-include "rainbow-delimiters"
-  (setq global-rainbow-delimiters-mode t))
+  (setq rainbow-delimiters-mode t))
 
 
 ;; + Language :
@@ -987,7 +987,7 @@
 ;; + | Python
 (setup-expecting "python-mode"
   (push '("\\.py$" . anaconda-mode) auto-mode-alist)
-  (setq python-shell-interpreter "/c/Windows/py.exe"))
+  (setq python-shell-interpreter "~/AppData/Local/Programs/Python/Python312/python.exe"))
 (setup-after "python-mode"
   (setup-lazy '(anaconda-mode) "anaconda-mode"
     (setup-hook 'anaconda-mode-hook
