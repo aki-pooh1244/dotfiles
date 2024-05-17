@@ -987,7 +987,8 @@
 ;; + | Python
 (setup-expecting "python-mode"
   (push '("\\.py$" . anaconda-mode) auto-mode-alist)
-  (setq python-shell-interpreter "~/AppData/Local/Programs/Python/Python312/python.exe"))
+  (!when (eq system-type 'windows-nt)
+    (setq python-shell-interpreter "~/AppData/Local/Programs/Python/Python312/python.exe")))
 (setup-after "python-mode"
   (setup-lazy '(anaconda-mode) "anaconda-mode"
     (setup-hook 'anaconda-mode-hook
