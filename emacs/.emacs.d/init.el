@@ -115,7 +115,7 @@
 (straight-use-package 'compat)
 (straight-use-package 'atomic-chrome)
 ;;   + org-mode
-(straight-use-package 'org-mode)
+;; (straight-use-package 'org-mode)
 (straight-use-package 'org-contrib)
 (straight-use-package 'org-superstar)
 ;;   + outline-mode
