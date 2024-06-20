@@ -121,6 +121,8 @@
 ;;   + outline-mode
 ;; (straight-use-package 'zoutline)
 (straight-use-package 'outline-magic)
+(straight-use-package
+ '(outli :type git :host github :repo "jdtsmith/outli"))
 ;;   + eshell
 (straight-use-package 'eshell-autojump)
 (straight-use-package 'eshell-toggle)
