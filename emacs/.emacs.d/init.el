@@ -994,7 +994,15 @@
   (setup-lazy '(anaconda-mode) "anaconda-mode"
     (setup-hook 'anaconda-mode-hook
       (anaconda-eldoc-mode)
-      (setup-lazy '(pipenv-mode) "pipenv"))))
+      (setup-lazy '(pipenv-mode) "pipenv")))
+  (setup-hook 'python-mode-hook
+    (outline-minor-mode 1)
+    (setq-local outline-regexp "[ \t]*# \\|[ \t]+\\(class\\|def\\|if\\|elif\\|else\\|while\\|for\\|try\\|except\\|with\\) "
+                outline-level (let (buffer-invisibility-spec)
+                                (save-excursion
+                                  (skip-chars-forward "    ")
+                                  (current-column))))
+    (hide-sublevels 1)))
 
 ;; + | emacs-lisp
 (setup-expecting "emacs-lisp-mode"
