@@ -937,6 +937,7 @@
   (setq tex-dvi-view-command "start SumatraPDF -reuse-instance")
   (setq tex-compile-commands
         '(("cluttex --engine=lualatex --biber --synctex=1 %f")
+          ("cluttex --engine=pdflatex --synctex=1 %f")
           ("cluttex --engine=uplatex --bibtex=upbibtex --synctex=1 %f")
           ("cluttex --engine=uplatex --biber --synctex=1 %f")
           ("cluttex --engine=lualatex --synctex=1 %f")
