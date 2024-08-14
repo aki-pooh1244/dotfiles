@@ -56,3 +56,5 @@ emacs/.emacs.d/.emacs.desktop
 emacs/.emacs.d/org-persist/
 
 *.el#
+
+emacs/.emacs.d/lib/
