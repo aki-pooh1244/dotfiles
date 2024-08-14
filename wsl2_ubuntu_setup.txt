@@ -1,0 +1,105 @@
+* wsl2 ubuntu setup
+wsl --install Ubuntu
+wsl --unregister Ubuntu
+
+sudo apt update
+sudo apt upgrade
+
+mkdir -v tmp git_projects
+sudo apt install stow
+
+** install fish
+sudo apt-add-repository ppa:fish-shell/release-3
+sudo apt update
+sudo apt install fish
+chsh -s /usr/bin/fish
+
+curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
+fisher install
+jorgebucaran/fisher
+jethrokuan/z
+jethrokuan/fzf
+0rax/fish-bd
+
+sudo apt install fzf
+
+sudo apt install buid-essential
+
+** install emacs
+wget http://ftp.jaist.ac.jp/pub/GNU/emacs/emacs-29.3.tar.gz
+tar xvzf emacs-29.3.tar.gz
+cd emacs-29.3
+sudo apt install autoconf
+sudo apt install libtiff-dev libgif-dev libjpeg-dev libpng-dev libxpm-dev\
+                 libncurses-dev libgtk-3-dev libgnutls28-dev libgccjit-11-dev\
+                 libwebkit2gtk-4.1-dev
+./configure --with-mailutils --with-modules --with-xwidgets\
+            --with-native-compilation
+make
+sudo make install
+
+** install gitkraken
+wget https://release.gitkraken.com/linux/gitkraken-amd64.deb
+sudo apt install ./gitkraken-amd64.deb
+
+** install texlive
+wget https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
+tar xvzf install-tl-unx.tar.gz
+cd ./install-tl-20240515
+sudo ./install-tl
+sudo /usr/local/texlive/2024/bin/x86_64-linux/tlmgr path add
+(sudo tlmgr path remove)
+sudo tlmgr update --self --all
+sudo tlmgr install latexdiff cluttex
+
+** install racket
+wget https://download.racket-lang.org/installers/8.13/racket-8.13-x86_64-linux-cs.sh
+sudo sh racket-8.13-x86_64-linux-cs.sh
+install to /usr/local/... 
+
+** my config
+git clone https://github.com/aki-pooh1244/dotfiles.git
+cd dotfiles
+stow -v -t /home/aiwata emacs
+
+** setup wsl2 remote desktop environment
+sudo apt-mark hold acpid acpi-support
+sudo apt install lubuntu-desktop
+sudo apt install unzip
+wget https://www.c-nergy.be/downloads/xRDP/xrdp-installer-1.5.zip
+unzip xrdp-installer-1.5.zip
+chmod +x  ~/Downloads/xrdp-installer-1.5.sh
+./xrdp-installer-1.5.sh -s -l
+sudo sed -i -e '/FuseMountName/s/thinclient_drives/shared-drives/g' /etc/xrdp/sesman.ini
+sudo systemctl restart xrdp
+
+** Japanese
+sudo apt install fcitx5-mozc
+
+** python
+*** install pyenv
+curl https://pyenv.run | bash
+set -Ux PYENV_ROOT $HOME/.pyenv
+fish_add_path $PYENV_ROOT/bin
+pyenv init - | source
+
+pyenv install 3.12.3
+pyenv global 3.12.3
+
+pip install numpy scipy pandas ipython jupyterlab astropy
+
+** Poetry
+curl -sSL https://install.python-poetry.org | python3 -
+
+** install softwares
+sudo add-apt-repository ppa:flatpak/stable
+sudo apt update
+sudo apt install flatpak
+flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+*** Veusz
+sudo add-apt-repository ppa:jeremysanders/ppa
+sudo apt update
+sudo apt install veusz
+*** labplot
+sudo flatpak install flathub org.kde.labplot2
+flatpak run org.kde.labplot2
