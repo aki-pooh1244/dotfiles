@@ -31,7 +31,7 @@ tar xvzf emacs-29.3.tar.gz
 cd emacs-29.3
 sudo apt install autoconf
 sudo apt install libtiff-dev libgif-dev libjpeg-dev libpng-dev libxpm-dev\
-                 libncurses-dev libgtk-3-dev libgnutls28-dev libgccjit-11-dev\
+                 libncurses-dev libgtk-3-dev libgnutls28-dev libgccjit-13-dev\
                  libwebkit2gtk-4.1-dev
 ./configure --with-mailutils --with-modules --with-xwidgets\
             --with-native-compilation
@@ -77,27 +77,38 @@ sudo systemctl restart xrdp
 sudo apt install fcitx5-mozc
 
 ** python
-*** install pyenv
+*** uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
+source $HOME/.cargo/env.fish
+echo 'uv generate-shell-completion fish | source' >> ~/.config/fish/config.fish
+uv python list
+uv python install 3.1x
+uv init project-dir
+uv add numpy...
+
+*** install pyenv (no use)
 curl https://pyenv.run | bash
 set -Ux PYENV_ROOT $HOME/.pyenv
 fish_add_path $PYENV_ROOT/bin
 pyenv init - | source
-
 pyenv install 3.12.3
 pyenv global 3.12.3
-
 pip install numpy scipy pandas ipython jupyterlab astropy
-
-** Poetry
+** Poetry (no use)
 curl -sSL https://install.python-poetry.org | python3 -
 
+** julia-lang
+curl -fsSL https://install.julialang.org | sh
+fish_add_path $HOME/.juliaup/bin
+
 ** install softwares
+sudo apt install gfortran
 sudo add-apt-repository ppa:flatpak/stable
 sudo apt update
 sudo apt install flatpak
 flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 *** Veusz
-sudo add-apt-repository ppa:jeremysanders/ppa
+??? sudo add-apt-repository ppa:jeremysanders/ppa
 sudo apt update
 sudo apt install veusz
 *** labplot
