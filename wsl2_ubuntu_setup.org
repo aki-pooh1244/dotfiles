@@ -94,12 +94,21 @@ pyenv init - | source
 pyenv install 3.12.3
 pyenv global 3.12.3
 pip install numpy scipy pandas ipython jupyterlab astropy
-** Poetry (no use)
+*** Poetry (no use)
 curl -sSL https://install.python-poetry.org | python3 -
 
 ** julia-lang
 curl -fsSL https://install.julialang.org | sh
 fish_add_path $HOME/.juliaup/bin
+
+** clojure
+sudo apt install rlwrap openjdk-21-jdk
+curl -L -O https://github.com/clojure/brew-install/releases/latest/download/linux-install.sh
+chmod +x linux-install.sh
+sudo bash ./linux-install.sh
+*** babashka
+bash
+bash < <(curl -s https://raw.githubusercontent.com/babashka/babashka/master/install)
 
 ** install softwares
 sudo apt install gfortran
@@ -109,7 +118,7 @@ sudo apt install flatpak
 flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 *** Veusz
 ??? sudo add-apt-repository ppa:jeremysanders/ppa
-sudo apt update
+??? sudo apt update
 sudo apt install veusz
 *** labplot
 sudo flatpak install flathub org.kde.labplot2
