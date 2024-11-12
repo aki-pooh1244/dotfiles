@@ -61,7 +61,11 @@
 ;;   (add-hook 'text-mode-hook 'flyspell-mode)
 ;;   (add-hook 'prog-mode-hook 'flyspell-prog-mode))
 
-;; (use-package outli)
+(use-package outli
+   :load-path "./site-lisp/outli.el"
+   :bind (:map outli-mode-map
+               ("C-c C-p" . (lambda () (interactive) (outline-back-to-heading))))
+   :hook ((prog-mode text-mode) . outli-mode))
 
 (use-package visual-regexp
   :bind (("C-c r" . vr/replace)
@@ -70,6 +74,19 @@
 
 (use-package loccur
   :bind (("C-M-o" . loccur)))
+
+(use-package migemo
+  :config
+  (setq migemo-command "cmigemo"
+        migemo-options '("-q" "--emacs")
+        migemo-coding-system 'utf-8-unix
+        migemo-dictioary "/usr/share/migemo/utf-8/migemo-dict"
+        migemo-user-dictionary 'nil
+        migemo-regex-dictionary 'nil)
+  (when (and (processp migemo-process)
+             (eq (process-status migemo-process) 'run))
+    (migemo-kill))
+  (migemo-init))
 
 ;; + File
 (use-package dired
@@ -290,7 +307,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(loccur visual-regexp-steroids visual-regexp outli julia-snail julia-repl julia-mode eat magit evil puni meow mwim undohist which-key exec-path-from-shell comment-dwim-2 comment-dwim2 compat)))
+   '(migemo outshine loccur visual-regexp-steroids visual-regexp outli julia-snail julia-repl julia-mode eat magit evil puni meow mwim undohist which-key exec-path-from-shell comment-dwim-2 comment-dwim2 compat)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
