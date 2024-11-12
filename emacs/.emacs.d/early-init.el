@@ -26,5 +26,8 @@
       warning-suppress-log-types '((comp) (bytecomp))
       native-comp-async-report-warnings-errors 'silent)
 
+(let ((dir (file-name-directory (or load-file-name buffer-file-name))))
+  (add-to-list 'load-path (expand-file-name "site-lisp" dir)))
+
 ;;; early-init.el ends here.
 
