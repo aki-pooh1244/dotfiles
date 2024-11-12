@@ -109,6 +109,12 @@ sudo bash ./linux-install.sh
 *** babashka
 bash
 bash < <(curl -s https://raw.githubusercontent.com/babashka/babashka/master/install)
+** FAC
+git clone https://github.com/flexible-atomic-code/fac.git
+./configure PYTHON=/usr/bin/python3
+sudo apt install python3-pip python3.12-dev (for Python.h)
+make pfac
+make install-pfac
 
 ** install softwares
 sudo apt install gfortran
