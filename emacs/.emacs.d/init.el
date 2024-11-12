@@ -63,6 +63,14 @@
 
 ;; (use-package outli)
 
+(use-package visual-regexp
+  :bind (("C-c r" . vr/replace)
+         ("C-c q" . vr/query-replace)))
+(use-package visual-regexp-steroids)
+
+(use-package loccur
+  :bind (("C-M-o" . loccur)))
+
 ;; + File
 (use-package dired
   :ensure nil
@@ -282,7 +290,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(outli julia-snail julia-repl julia-mode eat magit evil puni meow mwim undohist which-key exec-path-from-shell comment-dwim-2 comment-dwim2 compat)))
+   '(loccur visual-regexp-steroids visual-regexp outli julia-snail julia-repl julia-mode eat magit evil puni meow mwim undohist which-key exec-path-from-shell comment-dwim-2 comment-dwim2 compat)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
