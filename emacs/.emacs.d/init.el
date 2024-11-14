@@ -156,11 +156,21 @@
   (eat-kill-buffer-on-exit t))
 
 ;; + Language
+(use-package eglot
+  :ensure nil
+  :config
+  (add-to-list 'eglot-server-programs
+               '(julia-mode . ("julia" "-e using LanguageServer, LanguageServer.SymbolServer; runserver()"))))
 ;; |- Julia
-(use-package julia-mode)
-(use-package julia-repl
-  :hook (julia-mode.julia-repl-mode))
-(use-package julia-snail)
+(use-package julia-mode
+  :hook (julia-mode . eglot-ensure))
+;; (use-package julia-repl
+;;   :hook (julia-mode . julia-repl-mode))
+(use-package julia-snail
+  :custom
+  (julia-snail-terminal-type :eat)
+  :hook
+  (julia-mode . julia-snail-mode))
 (set-language-environment "UTF-8")
 
 ;; + UI
@@ -192,6 +202,10 @@
 (use-package which-key
   :config
   (which-key-mode))
+
+(use-package diff-hl
+  :config
+  (global-diff-hl-mode))
 
 ;; + Keybind
 (use-package meow
@@ -307,7 +321,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(migemo outshine loccur visual-regexp-steroids visual-regexp outli julia-snail julia-repl julia-mode eat magit evil puni meow mwim undohist which-key exec-path-from-shell comment-dwim-2 comment-dwim2 compat)))
+   '(diff-hl migemo outshine loccur visual-regexp-steroids visual-regexp outli julia-snail julia-repl julia-mode eat magit evil puni meow mwim undohist which-key exec-path-from-shell comment-dwim-2 comment-dwim2 compat)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
