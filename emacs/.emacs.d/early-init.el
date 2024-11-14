@@ -13,9 +13,9 @@
       default-frame-alist '((tool-bar-lines . 0)
 		                    (menu-bar-lines . 0)
 		                    (vertical-scroll-bars)
-		                    (width . 100)
-		                    (height . 55)
-		                    ;; (fullscreen . maximized)
+		                    ;; (width . 100)
+		                    ;; (height . 55)
+		                    (fullscreen . maximized)
 		                    ))
 
 (setq gc-cons-threshold (* 10 128 1024 1024)
