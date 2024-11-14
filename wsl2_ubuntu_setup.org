@@ -73,6 +73,16 @@ chmod +x  ~/Downloads/xrdp-installer-1.5.sh
 sudo sed -i -e '/FuseMountName/s/thinclient_drives/shared-drives/g' /etc/xrdp/sesman.ini
 sudo systemctl restart xrdp
 
+** font
+sudo apt install fontconfig
+sudo touch /etc/fonts/local.conf
+<?xml version="1.0"?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<fontconfig>
+    <dir>/mnt/c/Windows/Fonts</dir>
+</fontconfig>
+sudo fc-cache -fv
+
 ** Japanese
 sudo apt install fcitx5-mozc
 
@@ -129,3 +139,6 @@ sudo apt install veusz
 *** labplot
 sudo flatpak install flathub org.kde.labplot2
 flatpak run org.kde.labplot2
+*** misc
+sudo apt install gnuplot
+
