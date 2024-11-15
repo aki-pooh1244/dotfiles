@@ -56,10 +56,10 @@
   :config
   (puni-global-mode))
 
-;; (use-package flyspell
-;;   :config
-;;   (add-hook 'text-mode-hook 'flyspell-mode)
-;;   (add-hook 'prog-mode-hook 'flyspell-prog-mode))
+(use-package flyspell
+  :config
+  (add-hook 'text-mode-hook 'flyspell-mode)
+  (add-hook 'prog-mode-hook 'flyspell-prog-mode))
 
 (use-package outli
    :load-path "./site-lisp/outli.el"
@@ -94,6 +94,11 @@
 (use-package avy
   :bind (("M-'" . avy-goto-char-timer)
          ("<f7>" . avy-resume)))
+
+(use-package dmacro
+  :bind ("C-S-e" . dmacro-key)
+  :config
+  (global-dmacro-mode))
 
 ;; + File
 (use-package dired
@@ -363,7 +368,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(marginalia switch-window avy goto-chg page-break-lines markdown-mode diff-hl migemo outshine loccur visual-regexp-steroids visual-regexp outli julia-snail julia-repl julia-mode eat magit evil puni meow mwim undohist which-key exec-path-from-shell comment-dwim-2 compat)))
+   '(dmacro marginalia switch-window avy goto-chg page-break-lines markdown-mode diff-hl migemo outshine loccur visual-regexp-steroids visual-regexp outli julia-snail julia-repl julia-mode eat magit evil puni meow mwim undohist which-key exec-path-from-shell comment-dwim-2 compat)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
