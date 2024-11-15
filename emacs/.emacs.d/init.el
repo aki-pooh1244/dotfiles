@@ -46,7 +46,7 @@
 (setq show-trailing-whitespace t)
 
 (use-package comment-dwim-2
-  :bind ("C-;" . comment-dwim-2))
+  :bind ("M-;" . comment-dwim-2))
 
 (use-package mwim
   :bind (("C-a" . mwim-beginning)
@@ -88,6 +88,13 @@
     (migemo-kill))
   (migemo-init))
 
+(use-package goto-chg
+  :bind (("<f8>" . goto-last-change)
+         ("<M-f8>" . goto-last-change-reverse)))
+(use-package avy
+  :bind (("M-'" . avy-goto-char-timer)
+         ("<f7>" . avy-resume)))
+
 ;; + File
 (use-package dired
   :ensure nil
@@ -110,6 +117,11 @@
 ;; + Completion
 (fido-vertical-mode 1)
 (ffap-bindings)
+(use-package marginalia
+  :bind (:map minibuffer-local-map
+              ("M-A" . marginalia-cycle))
+  :config
+  (marginalia-mode +1))
 
 (use-package recentf
   :ensure nil
@@ -173,6 +185,13 @@
   (julia-mode . julia-snail-mode))
 (set-language-environment "UTF-8")
 
+;; |- Markdown
+(use-package markdown-mode
+  :mode ("README\\.md\\'" . gfm-mode)
+  :init (setq markdown-command "multimarkdown")
+  :bind (:map markdown-mode-map
+              ("C-c C-e" . markdown-do)))
+
 ;; + UI
 ;; |- mode-line
 (column-number-mode t)
@@ -206,6 +225,29 @@
 (use-package diff-hl
   :config
   (global-diff-hl-mode))
+
+(use-package page-ext
+  :ensure nil)
+(use-package page-break-lines
+  :config
+  (global-page-break-lines-mode))
+
+(use-package switch-window
+  :bind (("C-x o" . switch-window)
+         ("s-w" . switch-window)
+         ("C-x 1" . switch-window-then-maximize)
+         ("C-x 2" . switch-window-then-split-below)
+         ("C-x 3" . switch-window-then-split-right)
+         ("C-x 0" . switch-window-then-delete)
+         ("C-x 4 d" . switch-window-then-dired)
+         ("C-x 4 f" . switch-window-then-find-file)
+         ("C-x 4 r" . switch-window-then-find-file-read-only)
+         ("C-x 4 C-o" . switch-window-then-display-buffer)
+         ("C-x 4 0" . switch-window-then-kill-buffer))
+  :config
+  (setq switch-window-shortcut-style 'qwerty
+        switch-window-auto-resize-window t
+        switch-window-mouse-mode))
 
 ;; + Keybind
 (use-package meow
@@ -321,7 +363,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(diff-hl migemo outshine loccur visual-regexp-steroids visual-regexp outli julia-snail julia-repl julia-mode eat magit evil puni meow mwim undohist which-key exec-path-from-shell comment-dwim-2 comment-dwim2 compat)))
+   '(marginalia switch-window avy goto-chg page-break-lines markdown-mode diff-hl migemo outshine loccur visual-regexp-steroids visual-regexp outli julia-snail julia-repl julia-mode eat magit evil puni meow mwim undohist which-key exec-path-from-shell comment-dwim-2 compat)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
