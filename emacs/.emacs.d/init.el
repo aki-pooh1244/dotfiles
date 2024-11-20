@@ -53,8 +53,7 @@
          ("C-e" . mwim-end)))
 
 (use-package puni
-  :config
-  (puni-global-mode))
+  :init (puni-global-mode))
 
 (use-package flyspell
   :config
@@ -178,6 +177,7 @@
   :config
   (add-to-list 'eglot-server-programs
                '(julia-mode . ("julia" "-e using LanguageServer, LanguageServer.SymbolServer; runserver()"))))
+
 ;; |- Julia
 (use-package julia-mode
   :hook (julia-mode . eglot-ensure))
@@ -211,6 +211,9 @@
   :init (setq markdown-command "multimarkdown")
   :bind (:map markdown-mode-map
               ("C-c C-e" . markdown-do)))
+
+;; |- Racket
+(use-package racket-mode)
 
 ;; + UI
 ;; |- mode-line
@@ -382,7 +385,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(cider clojure-mode clojue-mode dmacro marginalia switch-window avy goto-chg page-break-lines markdown-mode diff-hl migemo outshine loccur visual-regexp-steroids visual-regexp outli julia-snail julia-repl julia-mode eat magit evil puni meow mwim undohist which-key exec-path-from-shell comment-dwim-2 compat)))
+   '(eglot-booster racket-mode cider clojure-mode clojue-mode dmacro marginalia switch-window avy goto-chg page-break-lines markdown-mode diff-hl migemo outshine loccur visual-regexp-steroids visual-regexp outli julia-snail julia-repl julia-mode eat magit evil puni meow mwim undohist which-key exec-path-from-shell comment-dwim-2 compat)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
