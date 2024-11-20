@@ -190,6 +190,21 @@
   (julia-mode . julia-snail-mode))
 (set-language-environment "UTF-8")
 
+;; |- Clojure
+(use-package clojure-mode)
+(use-package cider
+  :hook (cider-mode . eldoc-mode)
+  :config
+  (setq nrepl-log-messages t
+        cider-repl-display-in-current-window t
+        cider-repl-use-pretty-printing t
+        cider-repl-use-clojure-font-lock t
+        cider-overlays-use-font-lock t
+        cider-repl-result-prefix ";; => "
+        cider-repl-wrap-history t
+        cider-repl-history-size 3000
+        cider-prompt-save-file-on-load 'always-save))
+
 ;; |- Markdown
 (use-package markdown-mode
   :mode ("README\\.md\\'" . gfm-mode)
@@ -368,7 +383,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(dmacro marginalia switch-window avy goto-chg page-break-lines markdown-mode diff-hl migemo outshine loccur visual-regexp-steroids visual-regexp outli julia-snail julia-repl julia-mode eat magit evil puni meow mwim undohist which-key exec-path-from-shell comment-dwim-2 compat)))
+   '(cider clojure-mode clojue-mode dmacro marginalia switch-window avy goto-chg page-break-lines markdown-mode diff-hl migemo outshine loccur visual-regexp-steroids visual-regexp outli julia-snail julia-repl julia-mode eat magit evil puni meow mwim undohist which-key exec-path-from-shell comment-dwim-2 compat)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
