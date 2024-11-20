@@ -239,12 +239,10 @@
   (setq-default display-fill-column-indicator 80))
 
 (use-package which-key
-  :config
-  (which-key-mode))
+  :init (which-key-mode))
 
 (use-package diff-hl
-  :config
-  (global-diff-hl-mode))
+  :init (global-diff-hl-mode))
 
 (use-package page-ext
   :ensure nil)
@@ -266,8 +264,7 @@
          ("C-x 4 0" . switch-window-then-kill-buffer))
   :config
   (setq switch-window-shortcut-style 'qwerty
-        switch-window-auto-resize-window t
-        switch-window-mouse-mode))
+        switch-window-auto-resize-window t))
 
 ;; + Keybind
 (use-package meow
@@ -365,6 +362,8 @@
    '("<escape>" . ignore)))
 (meow-setup)
 (meow-global-mode 1)
+
+(global-unset-key (kbd "C-z"))
 
 ;; + Theme
 (load-theme 'modus-operandi)
