@@ -191,17 +191,23 @@
 (set-language-environment "UTF-8")
 
 ;; |- Clojure
-(use-package clojure-mode)
+(use-package clojure-mode
+  :mode (("\\.clj\\'" . clojure-mode)
+         ("\\.edn\\'" . clojure-mode))
+  :hook (clojure-mode . eldoc-mode))
 (use-package cider
-  :hook (cider-mode . eldoc-mode)
+  :hook ((cider-mode . eldoc-mode)
+         (cider-mode . clj-refactor-mode))
   :bind (("C-c u" . cider-user-ns)
          ("C-M-r" . cider-refresh))
   :config
   (setq nrepl-log-messages t
-        cider-repl-display-in-current-window t
+        ;; cider-repl-display-in-current-window t
         cider-align-forms-automatically t
         cider-repl-use-pretty-printing t
         cider-repl-use-clojure-font-lock t
+        cider-font-lock-dynamically '(macro core function var)
+        nrepl-hide-special-buffers t
         cider-overlays-use-font-lock t
         cider-repl-result-prefix ";; => "
         cider-repl-wrap-history t
@@ -211,6 +217,7 @@
         cider-auto-select-error-buffer t
         cider-repl-history-file "~/.emacs.d/cider-history"
         cider-repl-pop-to-buffer-on-connect t)
+  (cider-repl-toggle-pretty-printing)
   (defun cider-start-http-server ()
     (interactive)
     (cider-load-buffer)
@@ -225,7 +232,6 @@
     (interactive)
     (cider-repl-set-ns "user")))
 (use-package clj-refactor
-  :hook (clojure-mode)
   :config
   (cljr-add-keybindings-with-prefix "C-c C-m"))
 
