@@ -194,16 +194,40 @@
 (use-package clojure-mode)
 (use-package cider
   :hook (cider-mode . eldoc-mode)
+  :bind (("C-c u" . cider-user-ns)
+         ("C-M-r" . cider-refresh))
   :config
   (setq nrepl-log-messages t
         cider-repl-display-in-current-window t
+        cider-align-forms-automatically t
         cider-repl-use-pretty-printing t
         cider-repl-use-clojure-font-lock t
         cider-overlays-use-font-lock t
         cider-repl-result-prefix ";; => "
         cider-repl-wrap-history t
         cider-repl-history-size 3000
-        cider-prompt-save-file-on-load 'always-save))
+        cider-prompt-save-file-on-load 'always-save
+        cider-show-error-buffer t
+        cider-auto-select-error-buffer t
+        cider-repl-history-file "~/.emacs.d/cider-history"
+        cider-repl-pop-to-buffer-on-connect t)
+  (defun cider-start-http-server ()
+    (interactive)
+    (cider-load-buffer)
+    (let ((ns (cider-current-ns)))
+      (cider-repl-set-ns ns)
+      (cider-interactive-eval (format "(println '(def server (%s/start))) (println 'server)" ns))
+      (cider-interactive-eval (format "(def server (%s/start)) (println server)" ns))))
+  (defun cider-refresh ()
+    (interactive)
+    (cider-interactive-eval (format "(user/reset)")))
+  (defun cider-user-ns ()
+    (interactive)
+    (cider-repl-set-ns "user")))
+(use-package clj-refactor
+  :hook (clojure-mode)
+  :config
+  (cljr-add-keybindings-with-prefix "C-c C-m"))
 
 ;; |- Markdown
 (use-package markdown-mode
@@ -386,7 +410,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(eglot-booster racket-mode cider clojure-mode clojue-mode dmacro marginalia switch-window avy goto-chg page-break-lines markdown-mode diff-hl migemo outshine loccur visual-regexp-steroids visual-regexp outli julia-snail julia-repl julia-mode eat magit evil puni meow mwim undohist which-key exec-path-from-shell comment-dwim-2 compat)))
+   '(clj-refactor eglot-booster racket-mode cider clojure-mode clojue-mode dmacro marginalia switch-window avy goto-chg page-break-lines markdown-mode diff-hl migemo outshine loccur visual-regexp-steroids visual-regexp outli julia-snail julia-repl julia-mode eat magit evil puni meow mwim undohist which-key exec-path-from-shell comment-dwim-2 compat)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
