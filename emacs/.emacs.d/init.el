@@ -298,7 +298,8 @@
          ("C-x 4 0" . switch-window-then-kill-buffer))
   :config
   (setq switch-window-shortcut-style 'qwerty
-        switch-window-auto-resize-window t))
+        switch-window-auto-resize-window t
+        switch-window-default-window-size 0.6))
 
 ;; + Keybind
 (use-package meow
