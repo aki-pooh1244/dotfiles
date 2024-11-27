@@ -202,7 +202,7 @@
          ("C-M-r" . cider-refresh))
   :config
   (setq nrepl-log-messages t
-        ;; cider-repl-display-in-current-window t
+        cider-repl-display-in-current-window t
         cider-align-forms-automatically t
         cider-repl-use-pretty-printing t
         cider-repl-use-clojure-font-lock t
