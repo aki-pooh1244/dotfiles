@@ -216,7 +216,8 @@
         cider-show-error-buffer t
         cider-auto-select-error-buffer t
         cider-repl-history-file "~/.emacs.d/cider-history"
-        cider-repl-pop-to-buffer-on-connect t)
+        cider-repl-pop-to-buffer-on-connect t
+        cider-jack-in-default "clojure-clj")
   (cider-repl-toggle-pretty-printing)
   (defun cider-start-http-server ()
     (interactive)
