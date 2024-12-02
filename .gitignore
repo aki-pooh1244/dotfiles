@@ -58,3 +58,6 @@ emacs/.emacs.d/org-persist/
 *.el#
 
 emacs/.emacs.d/lib/
+/emacs/.emacs.d/tramp
+/emacs/.emacs.d/cider-history
+/emacs/.emacs.d/racket-mode/
