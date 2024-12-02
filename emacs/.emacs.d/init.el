@@ -260,13 +260,17 @@
 (setq visible-bell t)
 (global-font-lock-mode t)
 
-(tab-bar-mode +1)
-(tab-bar-history-mode +1)
-(setq tab-bar-tab-hints t
+(use-package tab-bar-mode
+  :ensure nil
+  :init (tab-bar-mode +1)
+  :config
+  (tab-bar-history-mode +1)
+  (setq tab-bar-tab-hints t
       tab-bar-new-button-show nil
       tab-bar-close-button-show nil
       tab-bar-show 1
-      tab-bar-tab-name-function 'tab-bar-tab-name-current-with-count)
+      tab-bar-tab-name-function 'tab-bar-tab-name-current-with-count))
+
 
 (use-package display-fill-column-indicator
   :hook (prog-mode.display-fill-column-indicator-mode)
