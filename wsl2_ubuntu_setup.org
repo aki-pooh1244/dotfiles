@@ -87,7 +87,13 @@ sudo fc-cache -fv
 sudo apt install fcitx5-mozc
 
 ** python
-*** uv
+*** miniforge
+wget "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
+bash Miniforge3-$(uname)-$(uname -m).sh
+bash
+conda init fish
+
+*** uv (no use...?)
 curl -LsSf https://astral.sh/uv/install.sh | sh
 source $HOME/.cargo/env.fish
 echo 'uv generate-shell-completion fish | source' >> ~/.config/fish/config.fish
