@@ -1,5 +1,5 @@
 ;;; init.el -- Emacs configuration file -*- lexical-binding: t; -*-
-
+;; Last-modified: <2025-01-20 10:47:18 JST>
 ;;; Comment:
 
 ;;; Code:
@@ -305,6 +305,13 @@
   (setq switch-window-shortcut-style 'qwerty
         switch-window-auto-resize-window t
         switch-window-default-window-size 0.6))
+(use-package time-stamp
+  :ensure nil
+  :init
+  (add-hook 'before-save-hook 'time-stamp)
+  :config
+  (setq time-stamp-pattern "8/Last-modified:[ \t]+\\\\?[\"<]+%:y-%02m-%02d %02H:%02M:%02S %Z\\\\?[\">]"
+        ))
 
 ;; + Keybind
 (use-package meow
