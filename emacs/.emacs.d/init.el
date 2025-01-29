@@ -1,5 +1,5 @@
 ;;; init.el -- Emacs configuration file -*- lexical-binding: t; -*-
-;; Last-modified: <2025-01-20 10:47:18 JST>
+;; Last-modified: <2025-01-29 13:28:14 JST>
 ;;; Comment:
 
 ;;; Code:
@@ -95,7 +95,8 @@
          ("<f7>" . avy-resume)))
 
 (use-package dmacro
-  :bind ("C-S-e" . dmacro-key)
+  :bind (("C-s-e" . dmacro-key)
+         ("C-t" . dmacro-exec))
   :config
   (global-dmacro-mode))
 
