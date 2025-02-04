@@ -1,5 +1,5 @@
 ;;; init.el -- Emacs configuration file -*- lexical-binding: t; -*-
-;; Last-modified: <2025-01-29 13:28:14 JST>
+;; Last-modified: <2025-02-03 10:52:13 JST>
 ;;; Comment:
 
 ;;; Code:
@@ -248,6 +248,10 @@
 ;; |- Racket
 (use-package racket-mode)
 
+;; |- lua
+(use-package lua-mode
+  :mode ("\\.lua$" . lua-mode))
+
 ;; + UI
 ;; |- mode-line
 (column-number-mode t)
@@ -430,7 +434,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(clj-refactor eglot-booster racket-mode cider clojure-mode clojue-mode dmacro marginalia switch-window avy goto-chg page-break-lines markdown-mode diff-hl migemo outshine loccur visual-regexp-steroids visual-regexp outli julia-snail julia-repl julia-mode eat magit evil puni meow mwim undohist which-key exec-path-from-shell comment-dwim-2 compat)))
+   '(lua-mode clj-refactor eglot-booster racket-mode cider clojure-mode clojue-mode dmacro marginalia switch-window avy goto-chg page-break-lines markdown-mode diff-hl migemo outshine loccur visual-regexp-steroids visual-regexp outli julia-snail julia-repl julia-mode eat magit evil puni meow mwim undohist which-key exec-path-from-shell comment-dwim-2 compat)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
