@@ -1,5 +1,5 @@
 ;;; init.el -- Emacs configuration file -*- lexical-binding: t; -*-
-;; Last-modified: <2025-02-03 10:52:13 JST>
+;; Last-modified: <2025-02-12 14:54:18 JST>
 ;;; Comment:
 
 ;;; Code:
@@ -308,8 +308,9 @@
          ("C-x 4 0" . switch-window-then-kill-buffer))
   :config
   (setq switch-window-shortcut-style 'qwerty
-        switch-window-auto-resize-window t
-        switch-window-default-window-size 0.6))
+        switch-window-auto-resize-window nil
+        switch-window-default-window-size 0.5
+        switch-window-minibuffer-shortcut ?z))
 (use-package time-stamp
   :ensure nil
   :init
