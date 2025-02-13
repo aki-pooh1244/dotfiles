@@ -1,5 +1,5 @@
 ;;; init.el -- Emacs configuration file -*- lexical-binding: t; -*-
-;; Last-modified: <2025-02-12 14:54:18 JST>
+;; Last-modified: <2025-02-13 14:28:05 JST>
 ;;; Comment:
 
 ;;; Code:
@@ -276,6 +276,31 @@
       tab-bar-show 1
       tab-bar-tab-name-function 'tab-bar-tab-name-current-with-count))
 
+;; (use-package dired-sidebar
+;;   :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
+;;   :commands (dired-sidebar-toggle-sidebar)
+;;   :init
+;;   (add-hook 'dired-sidebar-mode-hook
+;;             (lambda ()
+;;               (unless (file-remote-p default-directory)
+;;                 (auto-revert-mode))))
+;;   :config
+;;   (push 'toggle-window-split dired-sidebar-toggle-hidden-commands)
+;;   (push 'rotate-windows dired-sidebar-toggle-hidden-commands)
+;;   (setq dired-sidebar-subtree-line-prefix "__"
+;;         dired-sidebar-theme 'vscode
+;;         dired-sidebar-use-term-integration t
+;;         dired-sidebar-use-custom-font t))
+(use-package ibuffer-sidebar
+  :bind (("C-x C-n" . ibuffer-sidebar-toggle-sidebar))
+  :commands (ibuffer-sidebar-toggle-sidebar)
+  :config
+  (setq ibuffer-sidebar-use-custom-font t))
+(defun sidebar-toggle ()
+  "Toggle both `dired-sidebar' and `ibuffer-sidebar'."
+  (interactive)
+  (dired-sidebar-toggle-sidebar)
+  (ibuffer-sidebar-toggle-sidebar))
 
 (use-package display-fill-column-indicator
   :hook (prog-mode.display-fill-column-indicator-mode)
@@ -435,7 +460,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(lua-mode clj-refactor eglot-booster racket-mode cider clojure-mode clojue-mode dmacro marginalia switch-window avy goto-chg page-break-lines markdown-mode diff-hl migemo outshine loccur visual-regexp-steroids visual-regexp outli julia-snail julia-repl julia-mode eat magit evil puni meow mwim undohist which-key exec-path-from-shell comment-dwim-2 compat)))
+   '(ibuffer-sidebar dired-sidebar lua-mode clj-refactor eglot-booster racket-mode cider clojure-mode clojue-mode dmacro marginalia switch-window avy goto-chg page-break-lines markdown-mode diff-hl migemo outshine loccur visual-regexp-steroids visual-regexp outli julia-snail julia-repl julia-mode eat magit evil puni meow mwim undohist which-key exec-path-from-shell comment-dwim-2 compat)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
