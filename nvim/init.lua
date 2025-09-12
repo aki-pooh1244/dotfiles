@@ -23,12 +23,48 @@ vim.opt.rtp:prepend(lazypath)
 -- This is also a good place to setup other settings (vim.opt)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.encoding = "utf-8"
+vim.opt.fileencodings = "utf-8,euc-jp,cp932"
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
+vim.opt.smartindent = true
+vim.opt.softtabstop = 4
+vim.opt.laststatus = 3
+vim.opt.showmatch = true
+vim.opt.wrapscan = true
+vim.opt.hlsearch = true
+vim.opt.incsearch = true
+vim.opt.showcmd = true
+vim.opt.showmode = true
+vim.opt.clipboard = "unnamedplus"
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+vim.opt.autoread = true
+-- vim.opt.mouse = true
+
+vim.cmd "colorscheme desert"
 
 -- Setup lazy.nvim
 require("lazy").setup({
 	spec = {
 		-- add your plugins here
 		{ "nvim-mini/mini.nvim", version = false },
+    { "smoka7/hop.nvim",
+      version = "*",
+      config = function()
+        require('hop').setup { 
+            multi_windows = true,
+        }
+      end,
+      keys = {
+          { mode = "", 'f', '<Cmd>HopChar2<CR>' },
+          { mode = "", 'F', '<Cmd>HopPattern<CR>' }
+      },
+      opts = {
+        keys = "etovxqpdygfblzhckisuran" } },
 	},
 	-- Configure any other settings here. See the documentatin for more details.
 	-- colorscheme that will be used when installing plugins.
