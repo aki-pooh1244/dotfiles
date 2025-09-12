@@ -61,3 +61,5 @@ emacs/.emacs.d/lib/
 /emacs/.emacs.d/tramp
 /emacs/.emacs.d/cider-history
 /emacs/.emacs.d/racket-mode/
+
+nvim/lazy-lock.json
