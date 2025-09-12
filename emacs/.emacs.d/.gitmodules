@@ -1,2 +1,0 @@
-[submodule "emacsql"]
-	no-byte-compile = emacsql-pg.el
