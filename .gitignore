@@ -63,3 +63,5 @@ emacs/.emacs.d/lib/
 /emacs/.emacs.d/racket-mode/
 
 nvim/lazy-lock.json
+
+.vscode/
