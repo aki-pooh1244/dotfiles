@@ -79,6 +79,8 @@ vim.keymap.set({'i', 'c'}, '<C-h>', '<BS>')
 	
 vim.keymap.set('v', 'p', '"_dP')
 
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
 if vim.g.vscode then
 	vim.o.timeout = false
 	local vscode = require('vscode')
@@ -90,8 +92,6 @@ else
 	vim.keymap.set({'n', 'i'}, '<C-z>', vim.cmd.undo)
 	vim.keymap.set({'n', 'v'}, '<leader>h', vim.cmd.nohlsearch)
 end
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.encoding = "utf-8"
