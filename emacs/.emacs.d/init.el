@@ -1,5 +1,5 @@
 ;;; init.el -- Emacs configuration file -*- lexical-binding: t; -*-
-;; Last-modified: <2025-06-13 12:23:21 東京 (標準時)>
+;; Last-modified: <2026-02-16 10:19:16 JST>
 ;;; Comment:
 
 ;;; Code:
@@ -444,7 +444,7 @@
 (global-unset-key (kbd "C-z"))
 
 ;; + Theme
-(load-theme 'modus-operandi)
+(load-theme 'modus-operandi-tinted)
 
 ;; + Font
 (set-face-attribute 'default nil :family "PlemolJP" :height 120)
